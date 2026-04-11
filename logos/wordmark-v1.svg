@@ -1,19 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 120" width="600" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 100" width="520" height="100">
   <defs>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="gld" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#D4AF37"/>
-      <stop offset="50%" stop-color="#C9A84C"/>
-      <stop offset="100%" stop-color="#B8952F"/>
+      <stop offset="100%" stop-color="#B89530"/>
     </linearGradient>
   </defs>
   <!-- Star -->
-  <g transform="translate(32, 60)">
-    <polygon points="0,-28 6.5,-9 27,-9 10.5,4 17,23 0,12 -17,23 -10.5,4 -27,-9 -6.5,-9" fill="url(#goldGrad)"/>
-  </g>
+  <polygon points="22,8 26,20 39,20 29,27 32,39 22,31 12,39 15,27 5,20 18,20" fill="url(#gld)"/>
   <!-- GUNTHER -->
-  <text x="72" y="52" font-family="'Arial Black', Impact, sans-serif" font-weight="900" font-size="42" fill="#FFFFFF" letter-spacing="6">GUNTHER</text>
+  <text x="52" y="40" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="36" fill="#FFFFFF" letter-spacing="4">GUNTHER</text>
   <!-- Red bar -->
-  <rect x="72" y="58" width="260" height="3" fill="#BF0A30" rx="1.5"/>
+  <rect x="52" y="47" width="200" height="2.5" fill="#BF0A30" rx="1"/>
   <!-- EAGLEMAN -->
-  <text x="72" y="98" font-family="'Arial Black', Impact, sans-serif" font-weight="900" font-size="42" fill="url(#goldGrad)" letter-spacing="6">EAGLEMAN</text>
+  <text x="52" y="82" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="36" fill="url(#gld)" letter-spacing="4">EAGLEMAN</text>
 </svg>

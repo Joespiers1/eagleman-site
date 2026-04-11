@@ -1,24 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <defs>
-    <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="mg3" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#D4AF37"/>
-      <stop offset="100%" stop-color="#A8862A"/>
+      <stop offset="100%" stop-color="#B89530"/>
     </linearGradient>
   </defs>
-  <!-- Square with cut corners (octagon-ish) -->
-  <polygon points="80,20 432,20 492,80 492,432 432,492 80,492 20,432 20,80" fill="#0A1628" stroke="url(#g3)" stroke-width="5"/>
-  <!-- Inner border -->
-  <polygon points="95,38 417,38 470,95 470,417 417,474 95,474 38,417 38,95" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
-  <!-- Red top bar -->
-  <polygon points="80,20 432,20 492,80 492,60 432,4 80,4 20,60 20,80" fill="#BF0A30" opacity="0.8"/>
-  <!-- G letter - custom block style -->
-  <text x="138" y="340" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="220" fill="url(#g3)">G</text>
-  <!-- E letter -->
-  <text x="295" y="340" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="220" fill="url(#g3)">E</text>
-  <!-- Horizontal red line through middle -->
-  <rect x="60" y="250" width="392" height="4" fill="#BF0A30" opacity="0.5"/>
-  <!-- Top star -->
-  <g transform="translate(256, 55)">
-    <polygon points="0,-16 3.7,-5.2 15.2,-5.2 6,1.8 9.5,12 0,6.8 -9.5,12 -6,1.8 -15.2,-5.2 -3.7,-5.2" fill="#FFFFFF"/>
-  </g>
+  <!-- Octagon -->
+  <polygon points="120,20 280,20 380,120 380,280 280,380 120,380 20,280 20,120" fill="#0A1628" stroke="url(#mg3)" stroke-width="4"/>
+  <!-- Red top edge -->
+  <polygon points="120,20 280,20 380,120 380,108 280,10 120,10 20,108 20,120" fill="#BF0A30"/>
+  <!-- Star top center -->
+  <polygon points="200,52 203,61 213,61 205,67 208,76 200,70 192,76 195,67 187,61 197,61" fill="#FFFFFF"/>
+  <!-- GE centered -->
+  <text x="200" y="258" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="155" fill="url(#mg3)" letter-spacing="2">GE</text>
 </svg>

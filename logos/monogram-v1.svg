@@ -1,26 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 440" width="400" height="440">
   <defs>
-    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0D1B2E"/>
-      <stop offset="100%" stop-color="#0A1628"/>
-    </linearGradient>
-    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="mg1" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#D4AF37"/>
-      <stop offset="100%" stop-color="#B8952F"/>
+      <stop offset="100%" stop-color="#B89530"/>
     </linearGradient>
   </defs>
-  <!-- Shield -->
-  <path d="M256,20 L466,100 L466,280 C466,380 370,460 256,496 C142,460 46,380 46,280 L46,100 Z" fill="url(#bg1)" stroke="url(#g1)" stroke-width="5"/>
-  <!-- Red bar top -->
-  <path d="M256,20 L466,100 L466,115 L256,38 L46,115 L46,100 Z" fill="#BF0A30"/>
-  <!-- Star -->
-  <g transform="translate(256, 125)">
-    <polygon points="0,-30 7,-10 28,-10 11,4 18,24 0,13 -18,24 -11,4 -28,-10 -7,-10" fill="url(#g1)"/>
-  </g>
-  <!-- G -->
-  <text x="148" y="370" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="200" fill="url(#g1)">G</text>
-  <!-- E -->
-  <text x="300" y="370" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="200" fill="url(#g1)">E</text>
-  <!-- Small star bottom -->
-  <polygon points="256,444 259,452 268,452 261,457 263,466 256,461 249,466 251,457 244,452 253,452" fill="#BF0A30" transform="translate(0, -10)"/>
+  <!-- Shield path -->
+  <path d="M200,16 L370,80 L370,240 C370,330 290,390 200,420 C110,390 30,330 30,240 L30,80 Z" fill="#0A1628" stroke="url(#mg1)" stroke-width="4"/>
+  <!-- Red top bar -->
+  <path d="M200,16 L370,80 L370,92 L200,30 L30,92 L30,80 Z" fill="#BF0A30"/>
+  <!-- Star above letters -->
+  <polygon points="200,110 204,122 217,122 207,129 210,141 200,134 190,141 193,129 183,122 196,122" fill="url(#mg1)"/>
+  <!-- GE text - serif, centered -->
+  <text x="200" y="310" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-weight="700" font-size="160" fill="url(#mg1)" letter-spacing="2">GE</text>
+  <!-- Small red star bottom -->
+  <polygon points="200,368 203,375 210,375 204,379 207,386 200,382 193,386 196,379 190,375 197,375" fill="#BF0A30"/>
 </svg>
