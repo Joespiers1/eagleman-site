@@ -4,475 +4,341 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Logo Editor — Gunther Eagleman</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Georgia&family=Oswald:wght@700&family=Playfair+Display:wght@700;900&family=Bebas+Neue&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Oswald:wght@700&family=Playfair+Display:wght@700;900&family=Bebas+Neue&family=Montserrat:wght@700;900&family=Cinzel:wght@700;900&family=Libre+Baskerville:wght@700&display=swap" rel="stylesheet">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Inter',sans-serif;background:#0A0D12;color:#fff;display:flex;height:100vh;overflow:hidden}
-
-    /* Sidebar */
-    .sidebar{width:340px;background:#12161E;border-right:1px solid #1E2330;display:flex;flex-direction:column;overflow-y:auto}
-    .sidebar-header{padding:16px 20px;border-bottom:1px solid #1E2330;font-size:0.85rem;font-weight:800;color:#C9A84C;text-transform:uppercase;letter-spacing:1px}
-    .tab-bar{display:flex;border-bottom:1px solid #1E2330}
-    .tab{flex:1;padding:10px;text-align:center;font-size:0.75rem;font-weight:700;color:#667;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
-    .tab:hover{color:#fff}
-    .tab.active{color:#C9A84C;border-bottom-color:#C9A84C}
+    .sidebar{width:360px;background:#12161E;border-right:1px solid #1E2330;display:flex;flex-direction:column}
+    .sidebar-header{padding:16px 20px;border-bottom:1px solid #1E2330;font-size:.85rem;font-weight:800;color:#C9A84C;text-transform:uppercase;letter-spacing:1px}
     .controls{flex:1;overflow-y:auto;padding:16px 20px}
-    .ctrl-section{margin-bottom:20px}
-    .ctrl-section h4{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#667;margin-bottom:10px}
-    .ctrl-row{margin-bottom:12px}
-    .ctrl-row label{display:block;font-size:0.75rem;font-weight:600;color:#8899AA;margin-bottom:4px}
-    .ctrl-row input[type="text"],.ctrl-row input[type="number"],.ctrl-row select{width:100%;padding:8px 10px;background:#1A1D27;border:1px solid #2E3340;border-radius:6px;color:#fff;font-size:0.85rem;outline:none}
-    .ctrl-row input:focus,.ctrl-row select:focus{border-color:#C9A84C}
-    .ctrl-row input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:#2E3340;border-radius:2px;outline:none}
-    .ctrl-row input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#C9A84C;cursor:pointer}
-    .range-val{font-size:0.7rem;color:#667;float:right}
-    .color-input{display:flex;align-items:center;gap:8px}
-    .color-input input[type="color"]{width:32px;height:32px;border:none;border-radius:6px;cursor:pointer;background:none}
-    .color-input span{font-size:0.8rem;color:#8899AA;font-family:monospace}
-    .btn-row{display:flex;gap:8px;margin-top:8px}
-    .btn-sm{padding:6px 12px;border-radius:6px;font-size:0.75rem;font-weight:600;border:1px solid #2E3340;background:#1A1D27;color:#fff;cursor:pointer;transition:all .15s}
-    .btn-sm:hover{border-color:#C9A84C}
-    .btn-sm.active{border-color:#C9A84C;color:#C9A84C}
-    .btn-sm.primary{background:#C9A84C;color:#0A1628;border-color:#C9A84C}
-
-    /* Canvas */
+    .s{margin-bottom:20px}
+    .s h4{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#556;margin-bottom:10px;padding-top:8px;border-top:1px solid #1E2330}
+    .r{margin-bottom:10px}
+    .r label{display:block;font-size:.75rem;font-weight:600;color:#8899AA;margin-bottom:3px}
+    .r input[type="text"],.r select{width:100%;padding:7px 10px;background:#1A1D27;border:1px solid #2E3340;border-radius:6px;color:#fff;font-size:.85rem;outline:none}
+    .r input:focus,.r select:focus{border-color:#C9A84C}
+    .r input[type="range"]{width:100%;height:4px;-webkit-appearance:none;background:#2E3340;border-radius:2px;outline:none;margin-top:4px}
+    .r input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#C9A84C;cursor:pointer}
+    .rv{font-size:.7rem;color:#667;float:right}
+    .ci{display:flex;align-items:center;gap:8px}
+    .ci input[type="color"]{width:28px;height:28px;border:none;border-radius:4px;cursor:pointer;background:none;padding:0}
+    .ci span{font-size:.75rem;color:#667;font-family:monospace}
+    .btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+    .b{padding:5px 10px;border-radius:5px;font-size:.7rem;font-weight:600;border:1px solid #2E3340;background:#1A1D27;color:#aab;cursor:pointer;transition:all .15s}
+    .b:hover{border-color:#C9A84C;color:#C9A84C}
+    .b.primary{background:#C9A84C;color:#0A1628;border-color:#C9A84C}
     .canvas-area{flex:1;display:flex;flex-direction:column}
-    .canvas-toolbar{padding:10px 20px;border-bottom:1px solid #1E2330;display:flex;align-items:center;gap:12px;background:#12161E}
-    .canvas-toolbar .logo-select{padding:6px 10px;background:#1A1D27;border:1px solid #2E3340;border-radius:6px;color:#fff;font-size:0.8rem;outline:none}
-    .canvas-toolbar .bg-btns{display:flex;gap:6px;margin-left:auto}
-    .canvas-toolbar .bg-btn{width:24px;height:24px;border-radius:4px;border:2px solid #2E3340;cursor:pointer}
-    .canvas-toolbar .bg-btn:hover,.canvas-toolbar .bg-btn.active{border-color:#C9A84C}
-    .canvas-viewport{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:#0A1628;transition:background .3s}
-    .canvas-viewport svg{max-width:100%;max-height:100%;filter:var(--svg-filter,none)}
-    .export-bar{padding:10px 20px;border-top:1px solid #1E2330;display:flex;gap:8px;justify-content:flex-end;background:#12161E}
+    .toolbar{padding:10px 20px;border-bottom:1px solid #1E2330;display:flex;align-items:center;gap:12px;background:#12161E}
+    .toolbar select{padding:6px 10px;background:#1A1D27;border:1px solid #2E3340;border-radius:6px;color:#fff;font-size:.8rem;outline:none}
+    .toolbar .bgs{display:flex;gap:5px;margin-left:auto}
+    .toolbar .bg{width:22px;height:22px;border-radius:4px;border:2px solid #2E3340;cursor:pointer}
+    .toolbar .bg:hover,.toolbar .bg.a{border-color:#C9A84C}
+    .viewport{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;transition:background .3s}
+    .viewport svg{max-width:90%;max-height:90%}
+    .ebar{padding:10px 20px;border-top:1px solid #1E2330;display:flex;gap:8px;justify-content:flex-end;background:#12161E}
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="sidebar-header">Logo Editor</div>
-    <div class="tab-bar">
-      <div class="tab active" data-tab="text" onclick="switchTab('text')">Text</div>
-      <div class="tab" data-tab="colors" onclick="switchTab('colors')">Colors</div>
-      <div class="tab" data-tab="shape" onclick="switchTab('shape')">Shape</div>
-      <div class="tab" data-tab="filters" onclick="switchTab('filters')">Filters</div>
-    </div>
-    <div class="controls" id="controls">
+<div class="sidebar">
+  <div class="sidebar-header">Logo Editor</div>
+  <div class="controls">
 
-      <!-- TEXT TAB -->
-      <div class="tab-panel active" id="tab-text">
-        <div class="ctrl-section">
-          <h4>Line 1 (GUNTHER)</h4>
-          <div class="ctrl-row"><label>Text</label><input type="text" id="line1-text" value="GUNTHER" oninput="updateLogo()"></div>
-          <div class="ctrl-row"><label>Font</label>
-            <select id="line1-font" onchange="updateLogo()">
-              <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
-              <option value="'Inter',sans-serif">Inter</option>
-              <option value="'Oswald',sans-serif">Oswald</option>
-              <option value="'Montserrat',sans-serif">Montserrat</option>
-              <option value="'Bebas Neue',sans-serif">Bebas Neue</option>
-              <option value="Georgia,serif">Georgia</option>
-              <option value="'Playfair Display',serif">Playfair Display</option>
-              <option value="'Arial Black',sans-serif">Arial Black</option>
-              <option value="Impact,sans-serif">Impact</option>
-            </select>
-          </div>
-          <div class="ctrl-row"><label>Size <span class="range-val" id="v-line1-size">38</span></label><input type="range" id="line1-size" min="20" max="70" value="38" oninput="updateLogo();rv('line1-size')"></div>
-          <div class="ctrl-row"><label>Letter Spacing <span class="range-val" id="v-line1-spacing">10</span></label><input type="range" id="line1-spacing" min="0" max="24" value="10" oninput="updateLogo();rv('line1-spacing')"></div>
-          <div class="ctrl-row"><label>Y Position <span class="range-val" id="v-line1-y">50</span></label><input type="range" id="line1-y" min="20" max="100" value="50" oninput="updateLogo();rv('line1-y')"></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Line 2 (EAGLEMAN)</h4>
-          <div class="ctrl-row"><label>Text</label><input type="text" id="line2-text" value="EAGLEMAN" oninput="updateLogo()"></div>
-          <div class="ctrl-row"><label>Font</label>
-            <select id="line2-font" onchange="updateLogo()">
-              <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
-              <option value="'Inter',sans-serif">Inter</option>
-              <option value="'Oswald',sans-serif">Oswald</option>
-              <option value="'Montserrat',sans-serif">Montserrat</option>
-              <option value="'Bebas Neue',sans-serif">Bebas Neue</option>
-              <option value="Georgia,serif">Georgia</option>
-              <option value="'Playfair Display',serif">Playfair Display</option>
-              <option value="'Arial Black',sans-serif">Arial Black</option>
-              <option value="Impact,sans-serif">Impact</option>
-            </select>
-          </div>
-          <div class="ctrl-row"><label>Size <span class="range-val" id="v-line2-size">38</span></label><input type="range" id="line2-size" min="20" max="70" value="38" oninput="updateLogo();rv('line2-size')"></div>
-          <div class="ctrl-row"><label>Letter Spacing <span class="range-val" id="v-line2-spacing">10</span></label><input type="range" id="line2-spacing" min="0" max="24" value="10" oninput="updateLogo();rv('line2-spacing')"></div>
-          <div class="ctrl-row"><label>Y Position <span class="range-val" id="v-line2-y">106</span></label><input type="range" id="line2-y" min="60" max="160" value="106" oninput="updateLogo();rv('line2-y')"></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Stars</h4>
-          <div class="ctrl-row"><label>Show Stars</label>
-            <select id="stars-show" onchange="updateLogo()">
-              <option value="3">3 Stars</option>
-              <option value="1">1 Star</option>
-              <option value="0">None</option>
-              <option value="5">5 Stars</option>
-            </select>
-          </div>
-          <div class="ctrl-row"><label>Star Y Position <span class="range-val" id="v-stars-y">65</span></label><input type="range" id="stars-y" min="30" max="120" value="65" oninput="updateLogo();rv('stars-y')"></div>
-          <div class="ctrl-row"><label>Star Size <span class="range-val" id="v-stars-size">12</span></label><input type="range" id="stars-size" min="5" max="25" value="12" oninput="updateLogo();rv('stars-size')"></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Decorative Lines</h4>
-          <div class="ctrl-row"><label>Top Line</label>
-            <select id="line-top" onchange="updateLogo()"><option value="1">Show</option><option value="0">Hide</option></select>
-          </div>
-          <div class="ctrl-row"><label>Bottom Line</label>
-            <select id="line-bottom" onchange="updateLogo()"><option value="1">Show</option><option value="0">Hide</option></select>
-          </div>
-          <div class="ctrl-row"><label>Separator Line</label>
-            <select id="line-sep" onchange="updateLogo()"><option value="0">Hide</option><option value="1">Show</option></select>
-          </div>
-          <div class="ctrl-row"><label>Left Bar</label>
-            <select id="line-left" onchange="updateLogo()"><option value="0">Hide</option><option value="1">Show</option></select>
-          </div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Tagline</h4>
-          <div class="ctrl-row"><label>Text (leave empty to hide)</label><input type="text" id="tagline-text" value="" placeholder="e.g. AMERICA FIRST" oninput="updateLogo()"></div>
-        </div>
-      </div>
-
-      <!-- COLORS TAB -->
-      <div class="tab-panel" id="tab-colors" style="display:none">
-        <div class="ctrl-section">
-          <h4>Text Colors</h4>
-          <div class="ctrl-row"><label>Line 1 Color</label><div class="color-input"><input type="color" id="color-line1" value="#FFFFFF" oninput="updateLogo()"><span id="hex-line1">#FFFFFF</span></div></div>
-          <div class="ctrl-row"><label>Line 2 Color</label><div class="color-input"><input type="color" id="color-line2" value="#C9A84C" oninput="updateLogo()"><span id="hex-line2">#C9A84C</span></div></div>
-          <div class="ctrl-row"><label>Tagline Color</label><div class="color-input"><input type="color" id="color-tagline" value="#BF0A30" oninput="updateLogo()"><span id="hex-tagline">#BF0A30</span></div></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Accent Colors</h4>
-          <div class="ctrl-row"><label>Stars</label><div class="color-input"><input type="color" id="color-stars" value="#BF0A30" oninput="updateLogo()"><span id="hex-stars">#BF0A30</span></div></div>
-          <div class="ctrl-row"><label>Lines / Bars</label><div class="color-input"><input type="color" id="color-lines" value="#BF0A30" oninput="updateLogo()"><span id="hex-lines">#BF0A30</span></div></div>
-          <div class="ctrl-row"><label>Separator</label><div class="color-input"><input type="color" id="color-sep" value="#C9A84C" oninput="updateLogo()"><span id="hex-sep">#C9A84C</span></div></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Presets</h4>
-          <div class="btn-row" style="flex-wrap:wrap">
-            <button class="btn-sm" onclick="colorPreset('patriot')">Patriot</button>
-            <button class="btn-sm" onclick="colorPreset('gold')">All Gold</button>
-            <button class="btn-sm" onclick="colorPreset('mono')">Monochrome</button>
-            <button class="btn-sm" onclick="colorPreset('redwhite')">Red & White</button>
-            <button class="btn-sm" onclick="colorPreset('dark')">Dark</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- SHAPE TAB -->
-      <div class="tab-panel" id="tab-shape" style="display:none">
-        <div class="ctrl-section">
-          <h4>Canvas</h4>
-          <div class="ctrl-row"><label>Width <span class="range-val" id="v-canvas-w">480</span></label><input type="range" id="canvas-w" min="300" max="900" value="480" oninput="updateLogo();rv('canvas-w')"></div>
-          <div class="ctrl-row"><label>Height <span class="range-val" id="v-canvas-h">120</span></label><input type="range" id="canvas-h" min="60" max="300" value="120" oninput="updateLogo();rv('canvas-h')"></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Line Thickness</h4>
-          <div class="ctrl-row"><label>Top/Bottom Lines <span class="range-val" id="v-line-weight">3</span></label><input type="range" id="line-weight" min="1" max="8" value="3" oninput="updateLogo();rv('line-weight')"></div>
-          <div class="ctrl-row"><label>Left Bar Width <span class="range-val" id="v-leftbar-w">5</span></label><input type="range" id="leftbar-w" min="2" max="15" value="5" oninput="updateLogo();rv('leftbar-w')"></div>
-        </div>
-        <div class="ctrl-section">
-          <h4>Padding</h4>
-          <div class="ctrl-row"><label>Horizontal <span class="range-val" id="v-pad-x">40</span></label><input type="range" id="pad-x" min="0" max="100" value="40" oninput="updateLogo();rv('pad-x')"></div>
-        </div>
-      </div>
-
-      <!-- FILTERS TAB -->
-      <div class="tab-panel" id="tab-filters" style="display:none">
-        <div class="ctrl-section">
-          <h4>SVG Filters</h4>
-          <div class="ctrl-row"><label>Drop Shadow</label>
-            <select id="f-shadow" onchange="updateFilters()"><option value="0">Off</option><option value="1">Subtle</option><option value="2">Medium</option><option value="3">Strong</option></select>
-          </div>
-          <div class="ctrl-row"><label>Glow</label>
-            <select id="f-glow" onchange="updateFilters()"><option value="0">Off</option><option value="1">Gold Glow</option><option value="2">Red Glow</option><option value="3">White Glow</option></select>
-          </div>
-          <div class="ctrl-row"><label>Opacity <span class="range-val" id="v-f-opacity">100</span></label><input type="range" id="f-opacity" min="20" max="100" value="100" oninput="updateFilters();rv('f-opacity')"></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- CANVAS -->
-  <div class="canvas-area">
-    <div class="canvas-toolbar">
-      <select class="logo-select" id="logo-type" onchange="switchLogoType()">
-        <optgroup label="Wordmarks">
-          <option value="wordmark">Custom Wordmark</option>
-        </optgroup>
+    <div class="s"><h4>Logo Type</h4>
+      <div class="r"><select id="type" onchange="onTypeChange()">
+        <optgroup label="Wordmarks"><option value="wm">Custom Wordmark</option></optgroup>
         <optgroup label="Monograms">
-          <option value="monogram-circle">Circle Monogram</option>
-          <option value="monogram-shield">Shield Monogram</option>
-          <option value="monogram-square">Square Monogram</option>
-          <option value="monogram-octagon">Octagon Monogram</option>
-          <option value="monogram-diamond">Diamond Monogram</option>
+          <option value="m-shield">Shield</option>
+          <option value="m-circle">Circle</option>
+          <option value="m-square">Rounded Square</option>
+          <option value="m-octagon">Octagon</option>
+          <option value="m-diamond">Diamond</option>
+          <option value="m-seal">Presidential Seal</option>
         </optgroup>
-      </select>
-      <div class="bg-btns">
-        <div class="bg-btn active" style="background:#0A1628" onclick="setBg('#0A1628',this)"></div>
-        <div class="bg-btn" style="background:#fff" onclick="setBg('#FFFFFF',this)"></div>
-        <div class="bg-btn" style="background:#BF0A30" onclick="setBg('#BF0A30',this)"></div>
-        <div class="bg-btn" style="background:#374151" onclick="setBg('#374151',this)"></div>
-        <div class="bg-btn" style="background:#000" onclick="setBg('#000000',this)"></div>
+      </select></div>
+    </div>
+
+    <div class="s"><h4>Letters</h4>
+      <div class="r"><label>Text</label><input type="text" id="letters" value="GE" oninput="draw()"></div>
+      <div class="r"><label>Font</label>
+        <select id="font" onchange="draw()">
+          <option value="Georgia,serif">Georgia</option>
+          <option value="'Cinzel',serif">Cinzel</option>
+          <option value="'Libre Baskerville',serif">Libre Baskerville</option>
+          <option value="'Playfair Display',serif">Playfair Display</option>
+          <option value="'Trebuchet MS',sans-serif">Trebuchet MS</option>
+          <option value="'Montserrat',sans-serif">Montserrat</option>
+          <option value="'Oswald',sans-serif">Oswald</option>
+          <option value="'Bebas Neue',sans-serif">Bebas Neue</option>
+          <option value="'Inter',sans-serif">Inter</option>
+          <option value="'Arial Black',sans-serif">Arial Black</option>
+        </select>
+      </div>
+      <div class="r"><label>Size <span class="rv" id="rv-fs">150</span></label><input type="range" id="fs" min="60" max="280" value="150" oninput="draw();rvU('fs')"></div>
+      <div class="r"><label>Letter Spacing <span class="rv" id="rv-ls">4</span></label><input type="range" id="ls" min="-10" max="40" value="4" oninput="draw();rvU('ls')"></div>
+      <div class="r"><label>Vertical Offset <span class="rv" id="rv-ty">0</span></label><input type="range" id="ty" min="-80" max="80" value="0" oninput="draw();rvU('ty')"></div>
+      <div class="r"><label>Font Weight</label>
+        <select id="fw" onchange="draw()"><option value="700" selected>Bold</option><option value="900">Black</option><option value="400">Regular</option></select>
       </div>
     </div>
-    <div class="canvas-viewport" id="canvas">
-      <!-- SVG renders here -->
+
+    <!-- Wordmark-only controls -->
+    <div id="wm-ctrls">
+      <div class="s"><h4>Second Line (Wordmark)</h4>
+        <div class="r"><label>Text</label><input type="text" id="l2" value="EAGLEMAN" oninput="draw()"></div>
+        <div class="r"><label>Size <span class="rv" id="rv-fs2">38</span></label><input type="range" id="fs2" min="16" max="70" value="38" oninput="draw();rvU('fs2')"></div>
+        <div class="r"><label>Y Position <span class="rv" id="rv-l2y">105</span></label><input type="range" id="l2y" min="50" max="180" value="105" oninput="draw();rvU('l2y')"></div>
+        <div class="r"><label>Spacing <span class="rv" id="rv-ls2">10</span></label><input type="range" id="ls2" min="0" max="24" value="10" oninput="draw();rvU('ls2')"></div>
+      </div>
+      <div class="s"><h4>Canvas</h4>
+        <div class="r"><label>Width <span class="rv" id="rv-cw">500</span></label><input type="range" id="cw" min="300" max="900" value="500" oninput="draw();rvU('cw')"></div>
+        <div class="r"><label>Height <span class="rv" id="rv-ch">120</span></label><input type="range" id="ch" min="60" max="300" value="120" oninput="draw();rvU('ch')"></div>
+      </div>
     </div>
-    <div class="export-bar">
-      <button class="btn-sm" onclick="exportSVG()">Download SVG</button>
-      <button class="btn-sm primary" onclick="exportPNG()">Download PNG</button>
+
+    <!-- Monogram-only controls -->
+    <div id="mono-ctrls" style="display:none">
+      <div class="s"><h4>Shape</h4>
+        <div class="r"><label>Size <span class="rv" id="rv-ss">400</span></label><input type="range" id="ss" min="200" max="600" value="400" oninput="draw();rvU('ss')"></div>
+        <div class="r"><label>Border Width <span class="rv" id="rv-bw">4</span></label><input type="range" id="bw" min="1" max="12" value="4" oninput="draw();rvU('bw')"></div>
+        <div class="r"><label>Corner Radius (square) <span class="rv" id="rv-cr">48</span></label><input type="range" id="cr" min="0" max="100" value="48" oninput="draw();rvU('cr')"></div>
+      </div>
+    </div>
+
+    <div class="s"><h4>Star</h4>
+      <div class="r"><label>Show Star</label><select id="star" onchange="draw()"><option value="1">Yes</option><option value="0">No</option></select></div>
+      <div class="r"><label>Star Size <span class="rv" id="rv-starR">12</span></label><input type="range" id="starR" min="4" max="30" value="12" oninput="draw();rvU('starR')"></div>
+      <div class="r"><label>Star Y Offset <span class="rv" id="rv-starY">0</span></label><input type="range" id="starY" min="-50" max="50" value="0" oninput="draw();rvU('starY')"></div>
+    </div>
+
+    <div class="s"><h4>Colors</h4>
+      <div class="r"><label>Letters</label><div class="ci"><input type="color" id="cL" value="#C9A84C" oninput="draw()"><span id="hL">#C9A84C</span></div></div>
+      <div class="r"><label>Background</label><div class="ci"><input type="color" id="cBg" value="#0A1628" oninput="draw()"><span id="hBg">#0A1628</span></div></div>
+      <div class="r"><label>Border / Lines</label><div class="ci"><input type="color" id="cB" value="#C9A84C" oninput="draw()"><span id="hB">#C9A84C</span></div></div>
+      <div class="r"><label>Accent (red bar)</label><div class="ci"><input type="color" id="cA" value="#BF0A30" oninput="draw()"><span id="hA">#BF0A30</span></div></div>
+      <div class="r"><label>Star</label><div class="ci"><input type="color" id="cS" value="#C9A84C" oninput="draw()"><span id="hS">#C9A84C</span></div></div>
+      <div class="r"><label>Line 1 (Wordmark)</label><div class="ci"><input type="color" id="cL1" value="#FFFFFF" oninput="draw()"><span id="hL1">#FFFFFF</span></div></div>
+      <div class="btns">
+        <button class="b" onclick="preset('patriot')">Patriot</button>
+        <button class="b" onclick="preset('gold')">All Gold</button>
+        <button class="b" onclick="preset('bw')">B&amp;W</button>
+        <button class="b" onclick="preset('redwhite')">Red/White</button>
+      </div>
+    </div>
+
+    <div class="s"><h4>Decorations (Wordmark)</h4>
+      <div class="r"><label>Top Line</label><select id="dTop" onchange="draw()"><option value="1">Show</option><option value="0">Hide</option></select></div>
+      <div class="r"><label>Bottom Line</label><select id="dBot" onchange="draw()"><option value="1">Show</option><option value="0">Hide</option></select></div>
+      <div class="r"><label>Left Bar</label><select id="dLeft" onchange="draw()"><option value="0">Hide</option><option value="1">Show</option></select></div>
+      <div class="r"><label>Separator</label><select id="dSep" onchange="draw()"><option value="0">Hide</option><option value="1">Show</option></select></div>
+      <div class="r"><label>Tagline</label><input type="text" id="tag" value="" placeholder="AMERICA FIRST" oninput="draw()"></div>
+    </div>
+
+    <div class="s"><h4>Filters</h4>
+      <div class="r"><label>Drop Shadow</label><select id="fSh" onchange="applyF()"><option value="0">Off</option><option value="1">Light</option><option value="2">Medium</option><option value="3">Heavy</option></select></div>
+      <div class="r"><label>Glow</label><select id="fGl" onchange="applyF()"><option value="0">Off</option><option value="gold">Gold</option><option value="red">Red</option><option value="white">White</option></select></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="canvas-area">
+  <div class="toolbar">
+    <div class="bgs">
+      <div class="bg a" style="background:#0A1628" onclick="setBg('#0A1628',this)"></div>
+      <div class="bg" style="background:#fff" onclick="setBg('#fff',this)"></div>
+      <div class="bg" style="background:#BF0A30" onclick="setBg('#BF0A30',this)"></div>
+      <div class="bg" style="background:#374151" onclick="setBg('#374151',this)"></div>
+      <div class="bg" style="background:#000" onclick="setBg('#000',this)"></div>
     </div>
   </div>
+  <div class="viewport" id="vp" style="background:#0A1628"></div>
+  <div class="ebar">
+    <button class="b" onclick="dlSVG()">Download SVG</button>
+    <button class="b primary" onclick="dlPNG()">Download PNG</button>
+  </div>
+</div>
 
-  <script>
-    var canvas = document.getElementById('canvas');
+<script>
+var vp=document.getElementById('vp');
+function g(id){var e=document.getElementById(id);return e?(e.type==='range'?+e.value:e.value):'';}
+function rvU(id){var e=document.getElementById('rv-'+id),i=document.getElementById(id);if(e&&i)e.textContent=i.value;}
+function hU(){['L','Bg','B','A','S','L1'].forEach(function(k){var e=document.getElementById('h'+k),i=document.getElementById('c'+k);if(e&&i)e.textContent=i.value.toUpperCase();});}
 
-    function v(id) { var el = document.getElementById(id); return el ? (el.type === 'range' || el.type === 'number' ? Number(el.value) : el.value) : ''; }
-    function rv(id) { var el = document.getElementById('v-' + id); var inp = document.getElementById(id); if (el && inp) el.textContent = inp.value; }
+function setBg(c,btn){vp.style.background=c;document.querySelectorAll('.bg').forEach(function(b){b.classList.remove('a');});btn.classList.add('a');}
 
-    function switchTab(name) {
-      document.querySelectorAll('.tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === name); });
-      document.querySelectorAll('.tab-panel').forEach(function(p) { p.style.display = 'none'; });
-      document.getElementById('tab-' + name).style.display = 'block';
+function star(cx,cy,r,fill){var p=[];for(var i=0;i<5;i++){var ao=(i*72-90)*Math.PI/180,ai=((i*72)+36-90)*Math.PI/180;p.push((cx+r*Math.cos(ao)).toFixed(1)+','+(cy+r*Math.sin(ao)).toFixed(1));p.push((cx+r*.4*Math.cos(ai)).toFixed(1)+','+(cy+r*.4*Math.sin(ai)).toFixed(1));}return '<polygon points="'+p.join(' ')+'" fill="'+fill+'"/>';}
+
+function onTypeChange(){
+  var t=g('type'),isMono=t!=='wm';
+  document.getElementById('wm-ctrls').style.display=isMono?'none':'block';
+  document.getElementById('mono-ctrls').style.display=isMono?'block':'none';
+  if(isMono){
+    document.getElementById('letters').value='GE';
+    document.getElementById('fs').value=150;rvU('fs');
+    document.getElementById('ls').value=4;rvU('ls');
+    document.getElementById('ty').value=0;rvU('ty');
+    document.getElementById('font').value="Georgia,serif";
+  }else{
+    document.getElementById('letters').value='GUNTHER';
+    document.getElementById('fs').value=38;rvU('fs');
+    document.getElementById('ls').value=10;rvU('ls');
+    document.getElementById('ty').value=0;rvU('ty');
+    document.getElementById('font').value="'Trebuchet MS',sans-serif";
+  }
+  draw();
+}
+
+function preset(n){
+  var p={
+    patriot:{cL:'#C9A84C',cBg:'#0A1628',cB:'#C9A84C',cA:'#BF0A30',cS:'#C9A84C',cL1:'#FFFFFF'},
+    gold:{cL:'#D4AF37',cBg:'#0A1628',cB:'#D4AF37',cA:'#B89530',cS:'#D4AF37',cL1:'#D4AF37'},
+    bw:{cL:'#FFFFFF',cBg:'#111111',cB:'#CCCCCC',cA:'#888888',cS:'#FFFFFF',cL1:'#FFFFFF'},
+    redwhite:{cL:'#FFFFFF',cBg:'#0A1628',cB:'#BF0A30',cA:'#BF0A30',cS:'#FFFFFF',cL1:'#FFFFFF'}
+  };
+  var c=p[n];if(!c)return;
+  Object.keys(c).forEach(function(k){document.getElementById(k).value=c[k];});
+  hU();draw();
+}
+
+function draw(){
+  hU();
+  var t=g('type');
+  if(t==='wm') drawWM(); else drawMono(t);
+}
+
+function drawWM(){
+  var W=g('cw'),H=g('ch'),cx=W/2;
+  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">';
+  var cL1=g('cL1'),cL2=g('cL'),cA=g('cA'),cB=g('cB'),cS=g('cS');
+  s+='<defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="'+cL2+'"/><stop offset="100%" stop-color="'+cL2+'" stop-opacity="0.8"/></linearGradient></defs>';
+
+  if(g('dLeft')==='1') s+='<rect x="0" y="0" width="5" height="'+H+'" fill="'+cA+'"/>';
+  if(g('dTop')==='1') s+='<rect x="40" y="6" width="'+(W-80)+'" height="3" fill="'+cA+'"/>';
+
+  // Line 1
+  var l1y=50+g('ty');
+  s+='<text x="'+cx+'" y="'+l1y+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>';
+
+  // Stars between lines
+  if(g('star')==='1'){
+    var sy=(l1y+g('l2y'))/2+g('starY');
+    s+=star(cx,sy,g('starR'),cS);
+  }
+
+  // Separator
+  if(g('dSep')==='1'){var sepY=(l1y+g('l2y'))/2;s+='<rect x="40" y="'+sepY+'" width="140" height="1.5" fill="'+cB+'" opacity="0.4"/>';}
+
+  // Line 2
+  s+='<text x="'+cx+'" y="'+g('l2y')+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+' </text>';
+
+  if(g('dBot')==='1') s+='<rect x="40" y="'+(H-8)+'" width="'+(W-80)+'" height="3" fill="'+cA+'"/>';
+
+  var tg=g('tag');
+  if(tg) s+='<text x="'+cx+'" y="'+(H-2)+'" text-anchor="middle" font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="10" fill="'+cA+'" letter-spacing="4">'+tg+'</text>';
+
+  s+='</svg>';
+  vp.innerHTML=s;
+  applyF();
+}
+
+function drawMono(type){
+  var S=g('ss'),cx=S/2,cy=S/2;
+  var cL=g('cL'),cBg=g('cBg'),cB=g('cB'),cA=g('cA'),cS=g('cS');
+  var bw=g('bw'),cr=g('cr');
+  var font=g('font'),fs=g('fs'),ls=g('ls'),fw=g('fw');
+  var textY=cy+fs*0.33+g('ty');
+  var letters=g('letters');
+  var showStar=g('star')==='1';
+  var starR=g('starR');
+
+  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+S+' '+S+'" width="'+S+'" height="'+S+'">';
+  s+='<defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="'+cL+'"/><stop offset="100%" stop-color="'+cL+'" stop-opacity="0.85"/></linearGradient></defs>';
+
+  var m=S*0.05; // margin
+  var inner=S-m*2;
+
+  if(type==='m-shield'){
+    var t=m,b=S-m,l=m+10,r=S-m-10;
+    s+='<path d="M'+cx+','+t+' L'+r+','+(t+inner*0.17)+' L'+r+','+(cy+inner*0.1)+' C'+r+','+(b-inner*0.12)+' '+(cx+inner*0.2)+','+(b-inner*0.05)+' '+cx+','+b+' C'+(cx-inner*0.2)+','+(b-inner*0.05)+' '+l+','+(b-inner*0.12)+' '+l+','+(cy+inner*0.1)+' L'+l+','+(t+inner*0.17)+' Z" fill="'+cBg+'" stroke="'+cB+'" stroke-width="'+bw+'"/>';
+    // Red top
+    var rt=t+inner*0.17;
+    s+='<path d="M'+cx+','+t+' L'+r+','+rt+' L'+r+','+(rt+12)+' L'+cx+','+(t+14)+' L'+l+','+(rt+12)+' L'+l+','+rt+' Z" fill="'+cA+'"/>';
+    if(showStar) s+=star(cx,rt+30+g('starY'),starR,cS);
+    textY=cy+fs*0.25+inner*0.08+g('ty');
+  }
+  else if(type==='m-circle'){
+    var rad=inner/2;
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+rad+'" fill="'+cBg+'" stroke="'+cB+'" stroke-width="'+bw+'"/>';
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rad-16)+'" fill="none" stroke="'+cB+'" stroke-width="1" opacity="0.15"/>';
+    // Red arc
+    var arcY=cy-rad+20;
+    s+='<path d="M'+(cx-rad*0.75)+','+arcY+' A'+rad+','+rad+' 0 0,1 '+(cx+rad*0.75)+','+arcY+'" fill="none" stroke="'+cA+'" stroke-width="5" stroke-linecap="round"/>';
+    if(showStar) s+=star(cx,arcY+20+g('starY'),starR,cS);
+  }
+  else if(type==='m-square'){
+    s+='<rect x="'+m+'" y="'+m+'" width="'+inner+'" height="'+inner+'" rx="'+cr+'" fill="'+cBg+'" stroke="'+cB+'" stroke-width="'+bw+'"/>';
+    s+='<rect x="'+m+'" y="'+m+'" width="'+inner+'" height="6" rx="3" fill="'+cA+'"/>';
+    if(showStar) s+=star(cx,m+40+g('starY'),starR,cS);
+  }
+  else if(type==='m-octagon'){
+    var c1=m+inner*0.25,c2=m+inner*0.75;
+    s+='<polygon points="'+c1+','+m+' '+c2+','+m+' '+(m+inner)+','+c1+' '+(m+inner)+','+c2+' '+c2+','+(m+inner)+' '+c1+','+(m+inner)+' '+m+','+c2+' '+m+','+c1+'" fill="'+cBg+'" stroke="'+cB+'" stroke-width="'+bw+'"/>';
+    // Red top edge
+    s+='<polygon points="'+c1+','+m+' '+c2+','+m+' '+(m+inner)+','+c1+' '+(m+inner)+','+(c1-10)+' '+c2+','+(m-8)+' '+c1+','+(m-8)+' '+m+','+(c1-10)+' '+m+','+c1+'" fill="'+cA+'"/>';
+    if(showStar) s+=star(cx,m+inner*0.12+g('starY'),starR,'#FFFFFF');
+  }
+  else if(type==='m-diamond'){
+    var half=inner*0.5;
+    s+='<g transform="translate('+cx+','+cy+') rotate(45)"><rect x="-'+half+'" y="-'+half+'" width="'+(half*2)+'" height="'+(half*2)+'" rx="10" fill="'+cBg+'" stroke="'+cB+'" stroke-width="'+bw+'"/>';
+    s+='<rect x="-'+half+'" y="-'+half+'" width="'+(half*2)+'" height="6" fill="'+cA+'"/></g>';
+    if(showStar){s+=star(cx,m-2+g('starY'),starR,cS);s+=star(cx,S-m+2-g('starY'),starR*.7,cA);}
+  }
+  else if(type==='m-seal'){
+    var rad2=inner/2;
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+rad2+'" fill="'+cBg+'" stroke="'+cB+'" stroke-width="5"/>';
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rad2-12)+'" fill="none" stroke="'+cB+'" stroke-width="2"/>';
+    s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(rad2-50)+'" fill="none" stroke="'+cB+'" stroke-width="1" opacity="0.1"/>';
+    // 5 stars around
+    for(var i=0;i<5;i++){
+      var a=(i*40-100)*Math.PI/180;
+      s+=star(cx+(rad2-20)*Math.cos(a),cy+(rad2-20)*Math.sin(a),6,cS);
     }
+    // Curved text
+    s+='<path id="tc" d="M'+(cx-rad2+45)+','+cy+' A'+(rad2-45)+','+(rad2-45)+' 0 0,1 '+(cx+rad2-45)+','+cy+'" fill="none"/>';
+    s+='<text font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="12" fill="#fff" letter-spacing="3"><textPath href="#tc" startOffset="50%" text-anchor="middle">GUNTHER EAGLEMAN</textPath></text>';
+    s+='<path id="bc" d="M'+(cx-rad2+55)+','+(cy+60)+' A'+(rad2-55)+','+(rad2-55)+' 0 0,0 '+(cx+rad2-55)+','+(cy+60)+'" fill="none"/>';
+    s+='<text font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="11" fill="'+cA+'" letter-spacing="4"><textPath href="#bc" startOffset="50%" text-anchor="middle">AMERICA FIRST</textPath></text>';
+    // Red accent lines
+    s+='<line x1="'+(cx-60)+'" y1="'+(cy+45)+'" x2="'+(cx-20)+'" y2="'+(cy+45)+'" stroke="'+cA+'" stroke-width="2" stroke-linecap="round"/>';
+    s+='<line x1="'+(cx+20)+'" y1="'+(cy+45)+'" x2="'+(cx+60)+'" y2="'+(cy+45)+'" stroke="'+cA+'" stroke-width="2" stroke-linecap="round"/>';
+    if(showStar) s+=star(cx,m+15+g('starY'),starR,cS);
+  }
 
-    function setBg(color, btn) {
-      canvas.style.background = color;
-      document.querySelectorAll('.bg-btn').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-    }
+  // Letters
+  s+='<text x="'+cx+'" y="'+textY+'" text-anchor="middle" font-family="'+font+'" font-weight="'+fw+'" font-size="'+fs+'" fill="url(#lg)" letter-spacing="'+ls+'">'+letters+'</text>';
 
-    function hexUpdate() {
-      ['line1','line2','tagline','stars','lines','sep'].forEach(function(k) {
-        var el = document.getElementById('hex-' + k);
-        var inp = document.getElementById('color-' + k);
-        if (el && inp) el.textContent = inp.value.toUpperCase();
-      });
-    }
+  s+='</svg>';
+  vp.innerHTML=s;
+  applyF();
+}
 
-    function colorPreset(name) {
-      var p = {
-        patriot: { line1:'#FFFFFF', line2:'#C9A84C', tagline:'#BF0A30', stars:'#BF0A30', lines:'#BF0A30', sep:'#C9A84C' },
-        gold: { line1:'#C9A84C', line2:'#D4AF37', tagline:'#B89530', stars:'#D4AF37', lines:'#C9A84C', sep:'#B89530' },
-        mono: { line1:'#FFFFFF', line2:'#CCCCCC', tagline:'#999999', stars:'#AAAAAA', lines:'#666666', sep:'#444444' },
-        redwhite: { line1:'#FFFFFF', line2:'#BF0A30', tagline:'#BF0A30', stars:'#FFFFFF', lines:'#BF0A30', sep:'#FFFFFF' },
-        dark: { line1:'#AABBCC', line2:'#667788', tagline:'#445566', stars:'#556677', lines:'#334455', sep:'#334455' }
-      };
-      var c = p[name]; if (!c) return;
-      Object.keys(c).forEach(function(k) { document.getElementById('color-' + k).value = c[k]; });
-      hexUpdate(); updateLogo();
-    }
+function applyF(){
+  var svg=vp.querySelector('svg');if(!svg)return;
+  var f=[];
+  var sh=g('fSh');if(sh>0) f.push('drop-shadow(0 '+(sh*2)+'px '+(sh*4)+'px rgba(0,0,0,0.'+(sh*2)+'))');
+  var gl=g('fGl');
+  if(gl==='gold') f.push('drop-shadow(0 0 10px rgba(201,168,76,0.5))');
+  if(gl==='red') f.push('drop-shadow(0 0 10px rgba(191,10,48,0.5))');
+  if(gl==='white') f.push('drop-shadow(0 0 10px rgba(255,255,255,0.3))');
+  svg.style.filter=f.length?f.join(' '):'none';
+}
 
-    function makeStar(cx, cy, r, fill) {
-      var pts = [];
-      for (var i = 0; i < 5; i++) {
-        var aOuter = (i * 72 - 90) * Math.PI / 180;
-        var aInner = ((i * 72) + 36 - 90) * Math.PI / 180;
-        pts.push((cx + r * Math.cos(aOuter)).toFixed(1) + ',' + (cy + r * Math.sin(aOuter)).toFixed(1));
-        pts.push((cx + r * 0.4 * Math.cos(aInner)).toFixed(1) + ',' + (cy + r * 0.4 * Math.sin(aInner)).toFixed(1));
-      }
-      return '<polygon points="' + pts.join(' ') + '" fill="' + fill + '"/>';
-    }
+function dlSVG(){var s=vp.querySelector('svg');if(!s)return;var b=new Blob([s.outerHTML],{type:'image/svg+xml'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='ge-logo.svg';a.click();}
+function dlPNG(){var s=vp.querySelector('svg');if(!s)return;var d=new XMLSerializer().serializeToString(s);var img=new Image();var blob=new Blob([d],{type:'image/svg+xml;charset=utf-8'});var u=URL.createObjectURL(blob);img.onload=function(){var c=document.createElement('canvas');c.width=img.width*3;c.height=img.height*3;var ctx=c.getContext('2d');ctx.scale(3,3);ctx.drawImage(img,0,0);URL.revokeObjectURL(u);var a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='ge-logo.png';a.click();};img.src=u;}
 
-    function switchLogoType() {
-      var type = v('logo-type');
-      var isMonogram = type.indexOf('monogram') === 0;
-      // Adjust controls for monogram vs wordmark
-      if (isMonogram) {
-        document.getElementById('line1-text').value = 'G';
-        document.getElementById('line2-text').value = 'E';
-        document.getElementById('canvas-w').value = 400;
-        document.getElementById('canvas-h').value = 400;
-        document.getElementById('line1-size').value = 160;
-        document.getElementById('line2-size').value = 160;
-        document.getElementById('line1-font').value = "Georgia,serif";
-        document.getElementById('line2-font').value = "Georgia,serif";
-      } else {
-        document.getElementById('line1-text').value = 'GUNTHER';
-        document.getElementById('line2-text').value = 'EAGLEMAN';
-        document.getElementById('canvas-w').value = 480;
-        document.getElementById('canvas-h').value = 120;
-        document.getElementById('line1-size').value = 38;
-        document.getElementById('line2-size').value = 38;
-        document.getElementById('line1-font').value = "'Trebuchet MS',sans-serif";
-        document.getElementById('line2-font').value = "'Trebuchet MS',sans-serif";
-      }
-      ['canvas-w','canvas-h','line1-size','line2-size'].forEach(rv);
-      updateLogo();
-    }
-
-    function updateLogo() {
-      hexUpdate();
-      var type = v('logo-type');
-      if (type.indexOf('monogram') === 0) {
-        renderMonogram(type);
-      } else {
-        renderWordmark();
-      }
-    }
-
-    function renderWordmark() {
-      var W = v('canvas-w'), H = v('canvas-h');
-      var cx = W / 2;
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '">';
-      svg += '<defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="' + v('color-line2') + '"/><stop offset="100%" stop-color="' + v('color-line2') + '" stop-opacity="0.8"/></linearGradient></defs>';
-
-      var padX = v('pad-x');
-      var lw = v('line-weight');
-
-      // Left bar
-      if (v('line-left') === '1') svg += '<rect x="0" y="0" width="' + v('leftbar-w') + '" height="' + H + '" fill="' + v('color-lines') + '"/>';
-      // Top line
-      if (v('line-top') === '1') svg += '<rect x="' + padX + '" y="6" width="' + (W - padX * 2) + '" height="' + lw + '" fill="' + v('color-lines') + '"/>';
-
-      // Line 1
-      svg += '<text x="' + cx + '" y="' + v('line1-y') + '" text-anchor="middle" font-family="' + v('line1-font') + '" font-weight="900" font-size="' + v('line1-size') + '" fill="' + v('color-line1') + '" letter-spacing="' + v('line1-spacing') + '">' + v('line1-text') + '</text>';
-
-      // Stars
-      var starCount = parseInt(v('stars-show'));
-      var starY = v('stars-y');
-      var starR = v('stars-size') / 2;
-      var starColor = v('color-stars');
-      if (starCount > 0) {
-        if (starCount === 1) {
-          svg += makeStar(cx, starY, starR, starColor);
-        } else {
-          var gap = 30;
-          var startX = cx - ((starCount - 1) * gap) / 2;
-          for (var i = 0; i < starCount; i++) {
-            svg += makeStar(startX + i * gap, starY, starR, starColor);
-          }
-        }
-      }
-
-      // Separator line
-      if (v('line-sep') === '1') {
-        var sepY = (v('line1-y') + v('line2-y')) / 2 - 5;
-        svg += '<rect x="' + padX + '" y="' + sepY + '" width="' + Math.min(180, W - padX * 2) + '" height="1.5" fill="' + v('color-sep') + '" opacity="0.5"/>';
-      }
-
-      // Line 2
-      svg += '<text x="' + cx + '" y="' + v('line2-y') + '" text-anchor="middle" font-family="' + v('line2-font') + '" font-weight="900" font-size="' + v('line2-size') + '" fill="url(#lg)" letter-spacing="' + v('line2-spacing') + '">' + v('line2-text') + '</text>';
-
-      // Bottom line
-      if (v('line-bottom') === '1') svg += '<rect x="' + padX + '" y="' + (H - 8) + '" width="' + (W - padX * 2) + '" height="' + lw + '" fill="' + v('color-lines') + '"/>';
-
-      // Tagline
-      var tl = v('tagline-text');
-      if (tl) svg += '<text x="' + cx + '" y="' + (H - 2) + '" text-anchor="middle" font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="10" fill="' + v('color-tagline') + '" letter-spacing="4">' + tl + '</text>';
-
-      svg += '</svg>';
-      canvas.innerHTML = svg;
-    }
-
-    function renderMonogram(type) {
-      var S = 400, cx = 200, cy = 200;
-      var g1 = v('color-line2');
-      var line1 = v('color-line1');
-      var starC = v('color-stars');
-      var lineC = v('color-lines');
-      var font = v('line1-font');
-      var fs = v('line1-size');
-      var ls = v('line1-spacing');
-      var textY = cy + fs * 0.32;
-
-      var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">';
-      svg += '<defs><linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#B89530"/></linearGradient></defs>';
-
-      if (type === 'monogram-circle') {
-        svg += '<circle cx="200" cy="200" r="190" fill="#0A1628" stroke="url(#mg)" stroke-width="4"/>';
-        svg += '<circle cx="200" cy="200" r="172" fill="none" stroke="' + g1 + '" stroke-width="1.5" opacity="0.15"/>';
-        svg += '<path d="M70,85 A190,190 0 0,1 330,85" fill="none" stroke="' + lineC + '" stroke-width="6" stroke-linecap="round"/>';
-        svg += makeStar(200, 65, 12, g1);
-      } else if (type === 'monogram-shield') {
-        svg += '<path d="M200,16 L370,80 L370,240 C370,330 290,390 200,420 C110,390 30,330 30,240 L30,80 Z" fill="#0A1628" stroke="url(#mg)" stroke-width="4"/>';
-        svg += '<path d="M200,16 L370,80 L370,92 L200,30 L30,92 L30,80 Z" fill="' + lineC + '"/>';
-        svg += makeStar(200, 115, 14, g1);
-        textY = 310;
-      } else if (type === 'monogram-square') {
-        svg += '<rect x="20" y="20" width="360" height="360" rx="48" fill="#0A1628" stroke="url(#mg)" stroke-width="4"/>';
-        svg += '<rect x="20" y="20" width="360" height="6" rx="3" fill="' + lineC + '"/>';
-        svg += makeStar(330, 345, 8, lineC);
-      } else if (type === 'monogram-octagon') {
-        svg += '<polygon points="120,20 280,20 380,120 380,280 280,380 120,380 20,280 20,120" fill="#0A1628" stroke="url(#mg)" stroke-width="4"/>';
-        svg += '<polygon points="120,20 280,20 380,120 380,108 280,10 120,10 20,108 20,120" fill="' + lineC + '"/>';
-        svg += makeStar(200, 55, 10, '#FFFFFF');
-      } else if (type === 'monogram-diamond') {
-        svg += '<g transform="translate(200,200) rotate(45)"><rect x="-140" y="-140" width="280" height="280" rx="12" fill="#0A1628" stroke="url(#mg)" stroke-width="4"/>';
-        svg += '<rect x="-140" y="-140" width="280" height="6" fill="' + lineC + '"/></g>';
-        svg += makeStar(200, 12, 10, g1);
-        svg += makeStar(200, 388, 8, lineC);
-      }
-
-      // GE text
-      var letters = v('line1-text') + v('line2-text');
-      if (type === 'monogram-shield') {
-        svg += '<text x="200" y="' + textY + '" text-anchor="middle" font-family="' + font + '" font-weight="700" font-size="' + fs + '" fill="url(#mg)" letter-spacing="' + ls + '">' + letters + '</text>';
-      } else {
-        svg += '<text x="200" y="' + textY + '" text-anchor="middle" font-family="' + font + '" font-weight="700" font-size="' + fs + '" fill="url(#mg)" letter-spacing="' + ls + '">' + letters + '</text>';
-      }
-
-      svg += '</svg>';
-      canvas.innerHTML = svg;
-    }
-
-    function updateFilters() {
-      rv('f-opacity');
-      var shadow = v('f-shadow');
-      var glow = v('f-glow');
-      var opacity = v('f-opacity') / 100;
-      var filters = [];
-      if (shadow > 0) filters.push('drop-shadow(0 ' + (shadow * 2) + 'px ' + (shadow * 4) + 'px rgba(0,0,0,0.' + (shadow * 2) + '))');
-      if (glow === '1') filters.push('drop-shadow(0 0 8px rgba(201,168,76,0.5))');
-      if (glow === '2') filters.push('drop-shadow(0 0 8px rgba(191,10,48,0.5))');
-      if (glow === '3') filters.push('drop-shadow(0 0 8px rgba(255,255,255,0.4))');
-      var svgEl = canvas.querySelector('svg');
-      if (svgEl) {
-        svgEl.style.filter = filters.join(' ');
-        svgEl.style.opacity = opacity;
-      }
-    }
-
-    function exportSVG() {
-      var svgEl = canvas.querySelector('svg');
-      if (!svgEl) return;
-      var blob = new Blob([svgEl.outerHTML], { type: 'image/svg+xml' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'gunther-eagleman-logo.svg';
-      a.click();
-    }
-
-    function exportPNG() {
-      var svgEl = canvas.querySelector('svg');
-      if (!svgEl) return;
-      var svgData = new XMLSerializer().serializeToString(svgEl);
-      var img = new Image();
-      var svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-      var url = URL.createObjectURL(svgBlob);
-      img.onload = function() {
-        var c = document.createElement('canvas');
-        c.width = img.width * 2;
-        c.height = img.height * 2;
-        var ctx = c.getContext('2d');
-        ctx.scale(2, 2);
-        ctx.drawImage(img, 0, 0);
-        URL.revokeObjectURL(url);
-        var a = document.createElement('a');
-        a.href = c.toDataURL('image/png');
-        a.download = 'gunther-eagleman-logo.png';
-        a.click();
-      };
-      img.src = url;
-    }
-
-    // Init
-    updateLogo();
-  </script>
+// Init
+onTypeChange();
+</script>
 </body>
 </html>
