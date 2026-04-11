@@ -1112,12 +1112,13 @@
       <!-- Primary: X Embed -->
       <div class="embed-container reveal" id="embed-container">
         <a class="twitter-timeline"
-           href="https://twitter.com/GuntherEagleman"
+           href="https://twitter.com/GuntherEagleman?ref_src=twsrc%5Etfw"
            data-tweet-limit="6"
            data-theme="dark"
-           data-chrome="noheader nofooter noborders"
-           data-border-color="#C9A84C">
-          Loading feed...
+           data-chrome="noheader nofooter noborders transparent"
+           data-border-color="#C9A84C"
+           data-dnt="true">
+          Tweets by GuntherEagleman
         </a>
       </div>
 
@@ -1454,14 +1455,24 @@
       staticCards.classList.add('active');
     }
 
-    setTimeout(function() {
+    // Check multiple times for embed to load
+    var checkCount = 0;
+    var checkInterval = setInterval(function() {
+      checkCount++;
       var iframe = embedContainer.querySelector('iframe');
-      if (iframe) return;
-      fetchRSS().then(function(posts) {
-        if (!posts.length) throw new Error('empty');
-        renderRSS(posts);
-      }).catch(function() { showStatic(); });
-    }, 6000);
+      if (iframe) {
+        clearInterval(checkInterval);
+        return;
+      }
+      // After 4 seconds, fall back
+      if (checkCount >= 8) {
+        clearInterval(checkInterval);
+        fetchRSS().then(function(posts) {
+          if (!posts.length) throw new Error('empty');
+          renderRSS(posts);
+        }).catch(function() { showStatic(); });
+      }
+    }, 500);
 
     document.getElementById('btn-refresh').addEventListener('click', function() {
       fetchRSS().then(function(posts) {
