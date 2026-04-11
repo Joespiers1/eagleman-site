@@ -8,15 +8,15 @@
   <!-- Top red line -->
   <rect x="40" y="6" width="400" height="3" fill="#BF0A30"/>
   <!-- GUNTHER centered -->
-  <text x="240" y="52" text-anchor="middle" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" letter-spacing="10">GUNTHER</text>
-  <!-- Three small stars -->
+  <text x="240" y="50" text-anchor="middle" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" letter-spacing="10">GUNTHER</text>
+  <!-- Three small stars - centered between the two text lines -->
   <g fill="#BF0A30">
-    <polygon points="200,67 202,72 207,72 203,75 205,80 200,77 195,80 197,75 193,72 198,72"/>
-    <polygon points="240,67 242,72 247,72 243,75 245,80 240,77 235,80 237,75 233,72 238,72"/>
-    <polygon points="280,67 282,72 287,72 283,75 285,80 280,77 275,80 277,75 273,72 278,72"/>
+    <polygon points="210,65 212,70 217,70 213,73 215,78 210,75 205,78 207,73 203,70 208,70"/>
+    <polygon points="240,65 242,70 247,70 243,73 245,78 240,75 235,78 237,73 233,70 238,70"/>
+    <polygon points="270,65 272,70 277,70 273,73 275,78 270,75 265,78 267,73 263,70 268,70"/>
   </g>
   <!-- EAGLEMAN centered -->
-  <text x="240" y="104" text-anchor="middle" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="38" fill="url(#gld3)" letter-spacing="10">EAGLEMAN</text>
+  <text x="240" y="106" text-anchor="middle" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="38" fill="url(#gld3)" letter-spacing="10">EAGLEMAN</text>
   <!-- Bottom red line -->
   <rect x="40" y="112" width="400" height="3" fill="#BF0A30"/>
 </svg>

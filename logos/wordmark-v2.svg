@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 60" width="780" height="60">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 55" width="660" height="55">
   <defs>
     <linearGradient id="gld2" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%" stop-color="#D4AF37"/>
@@ -6,11 +6,11 @@
     </linearGradient>
   </defs>
   <!-- GUNTHER -->
-  <text x="0" y="42" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="44" fill="#FFFFFF" letter-spacing="3">GUNTHER</text>
-  <!-- Red diamond -->
-  <rect x="326" y="17" width="10" height="10" fill="#BF0A30" transform="rotate(45,331,22)"/>
+  <text x="0" y="36" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="38" fill="#FFFFFF" letter-spacing="3">GUNTHER</text>
+  <!-- Red diamond centered vertically between text baseline and top -->
+  <rect x="290" y="14" width="9" height="9" fill="#BF0A30" transform="rotate(45,294.5,18.5)"/>
   <!-- EAGLEMAN -->
-  <text x="352" y="42" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="44" fill="url(#gld2)" letter-spacing="3">EAGLEMAN</text>
+  <text x="315" y="36" font-family="'Trebuchet MS',Arial,sans-serif" font-weight="900" font-size="38" fill="url(#gld2)" letter-spacing="3">EAGLEMAN</text>
   <!-- Subtle underline -->
-  <rect x="0" y="52" width="780" height="1.5" fill="#C9A84C" opacity="0.3"/>
+  <rect x="0" y="46" width="660" height="1.5" fill="#C9A84C" opacity="0.3"/>
 </svg>
