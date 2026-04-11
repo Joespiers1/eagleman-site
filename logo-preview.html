@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logo Preview — Gunther Eagleman</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #111; color: #fff; padding: 40px; }
+    h1 { font-size: 1.5rem; margin-bottom: 40px; color: #C9A84C; text-align: center; letter-spacing: 2px; }
+    h2 { font-size: 1rem; color: #8899AA; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto; }
+    .card { background: #1A1D27; border: 1px solid #2E3340; border-radius: 16px; padding: 32px; }
+    .preview-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
+    .preview-box { padding: 24px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+    .bg-dark { background: #0A1628; }
+    .bg-white { background: #FFFFFF; }
+    .bg-red { background: #BF0A30; }
+    .bg-gray { background: #333; }
+    .preview-box img { max-height: 80px; width: auto; }
+    .preview-box.icon img { max-height: 100px; }
+    .preview-box.favicon img { max-height: 32px; }
+    .preview-box.small img { max-height: 48px; }
+    .label { font-size: 0.75rem; color: #667; margin-top: 6px; text-align: center; }
+    .use-cases { font-size: 0.85rem; color: #8899AA; line-height: 1.8; }
+    .use-cases li { margin-bottom: 4px; }
+    .section { margin-bottom: 32px; }
+    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>GUNTHER EAGLEMAN — LOGO SYSTEM</h1>
+
+  <div class="grid">
+    <!-- Banner Logo -->
+    <div class="card">
+      <h2>1. Banner Logo (Wordmark)</h2>
+
+      <div class="section">
+        <div class="preview-row">
+          <div>
+            <div class="preview-box bg-dark" style="min-width: 320px;">
+              <img src="logo-banner.svg" alt="Banner logo on dark">
+            </div>
+            <p class="label">On Dark (Primary)</p>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div>
+            <div class="preview-box bg-white" style="min-width: 320px;">
+              <img src="logo-banner.svg" alt="Banner logo on white" style="filter: brightness(0.2);">
+            </div>
+            <p class="label">On White (Inverted)</p>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div>
+            <div class="preview-box bg-red" style="min-width: 320px;">
+              <img src="logo-banner.svg" alt="Banner logo on red">
+            </div>
+            <p class="label">On Red</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>Use Cases</h2>
+      <ul class="use-cases">
+        <li>Website navbar (upper left)</li>
+        <li>T-shirts, hoodies, jackets</li>
+        <li>Event banners and signs</li>
+        <li>Bumper stickers</li>
+        <li>Letterhead and business cards</li>
+        <li>YouTube channel art / X header</li>
+      </ul>
+    </div>
+
+    <!-- GE Icon -->
+    <div class="card">
+      <h2>2. GE Shield Icon (Monogram)</h2>
+
+      <div class="section">
+        <div class="preview-row">
+          <div>
+            <div class="preview-box bg-dark icon">
+              <img src="logo-icon-ge.svg" alt="GE icon on dark">
+            </div>
+            <p class="label">Full Size</p>
+          </div>
+          <div>
+            <div class="preview-box bg-dark small">
+              <img src="logo-icon-ge.svg" alt="GE icon small">
+            </div>
+            <p class="label">Small</p>
+          </div>
+          <div>
+            <div class="preview-box bg-dark favicon">
+              <img src="favicon.svg" alt="Favicon">
+            </div>
+            <p class="label">Favicon</p>
+          </div>
+        </div>
+        <div class="preview-row">
+          <div>
+            <div class="preview-box bg-white icon">
+              <img src="logo-icon-ge.svg" alt="GE icon on white">
+            </div>
+            <p class="label">On White</p>
+          </div>
+          <div>
+            <div class="preview-box bg-red icon">
+              <img src="logo-icon-ge.svg" alt="GE icon on red">
+            </div>
+            <p class="label">On Red</p>
+          </div>
+          <div>
+            <div class="preview-box bg-gray icon">
+              <img src="logo-icon-ge.svg" alt="GE icon on gray">
+            </div>
+            <p class="label">On Gray</p>
+          </div>
+        </div>
+      </div>
+
+      <h2>Use Cases</h2>
+      <ul class="use-cases">
+        <li>Browser favicon / tab icon</li>
+        <li>App icon (iOS / Android)</li>
+        <li>Hat embroidery (front center)</li>
+        <li>Lapel pins</li>
+        <li>Social media profile picture</li>
+        <li>Watermark on images/videos</li>
+        <li>Coin / challenge coin design</li>
+        <li>Merch tag / label</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

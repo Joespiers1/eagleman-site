@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D1B2E"/>
+      <stop offset="100%" stop-color="#0A1628"/>
+    </linearGradient>
+    <linearGradient id="gld" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8952F"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield -->
+  <path d="M32,3 L58,14 L58,36 C58,49 46,57 32,62 C18,57 6,49 6,36 L6,14 Z" fill="url(#bg)" stroke="url(#gld)" stroke-width="2"/>
+  <!-- Red bar -->
+  <path d="M32,3 L58,14 L58,17 L32,7 L6,17 L6,14 Z" fill="#BF0A30"/>
+  <!-- G -->
+  <text x="16" y="46" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="24" fill="url(#gld)">G</text>
+  <!-- E -->
+  <text x="34" y="46" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="24" fill="url(#gld)">E</text>
+</svg>
