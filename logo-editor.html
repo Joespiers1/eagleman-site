@@ -46,7 +46,14 @@
 
     <div class="s"><h4>Logo Type</h4>
       <div class="r"><select id="type" onchange="onTypeChange()">
-        <optgroup label="Wordmarks"><option value="wm">Custom Wordmark</option></optgroup>
+        <optgroup label="Wordmarks">
+          <option value="wm">Custom Wordmark</option>
+          <option value="wm-v1">V1 — Star + Stacked</option>
+          <option value="wm-v2">V2 — Inline Bold</option>
+          <option value="wm-v3">V3 — Centered Military</option>
+          <option value="wm-v4">V4 — Left Bar + Tagline</option>
+          <option value="wm-v5">V5 — Star Divider</option>
+        </optgroup>
         <optgroup label="Monograms">
           <option value="m-shield">Shield</option>
           <option value="m-circle">Circle</option>
@@ -169,8 +176,17 @@ function setBg(c,btn){vp.style.background=c;document.querySelectorAll('.bg').for
 
 function star(cx,cy,r,fill){var p=[];for(var i=0;i<5;i++){var ao=(i*72-90)*Math.PI/180,ai=((i*72)+36-90)*Math.PI/180;p.push((cx+r*Math.cos(ao)).toFixed(1)+','+(cy+r*Math.sin(ao)).toFixed(1));p.push((cx+r*.4*Math.cos(ai)).toFixed(1)+','+(cy+r*.4*Math.sin(ai)).toFixed(1));}return '<polygon points="'+p.join(' ')+'" fill="'+fill+'"/>';}
 
+var wmPresets = {
+  'wm':    {letters:'GUNTHER',l2:'EAGLEMAN',fs:38,ls:10,fs2:38,ls2:10,l2y:105,cw:500,ch:120,ty:0,dTop:'1',dBot:'1',dLeft:'0',dSep:'0',star:'1',starR:12,starY:0,tag:''},
+  'wm-v1': {letters:'GUNTHER',l2:'EAGLEMAN',fs:36,ls:4,fs2:36,ls2:4,l2y:82,cw:520,ch:100,ty:0,dTop:'0',dBot:'0',dLeft:'0',dSep:'1',star:'0',starR:10,starY:0,tag:''},
+  'wm-v2': {letters:'GUNTHER',l2:'EAGLEMAN',fs:38,ls:3,fs2:38,ls2:3,l2y:36,cw:660,ch:55,ty:0,dTop:'0',dBot:'0',dLeft:'0',dSep:'0',star:'0',starR:8,starY:0,tag:''},
+  'wm-v3': {letters:'GUNTHER',l2:'EAGLEMAN',fs:38,ls:10,fs2:38,ls2:10,l2y:106,cw:480,ch:120,ty:0,dTop:'1',dBot:'1',dLeft:'0',dSep:'0',star:'1',starR:12,starY:0,tag:''},
+  'wm-v4': {letters:'GUNTHER',l2:'EAGLEMAN',fs:38,ls:5,fs2:38,ls2:5,l2y:84,cw:500,ch:110,ty:0,dTop:'0',dBot:'0',dLeft:'1',dSep:'1',star:'0',starR:10,starY:0,tag:'AMERICA FIRST'},
+  'wm-v5': {letters:'GUNTHER',l2:'EAGLEMAN',fs:36,ls:8,fs2:32,ls2:10,l2y:82,cw:500,ch:100,ty:0,dTop:'0',dBot:'0',dLeft:'0',dSep:'0',star:'1',starR:10,starY:0,tag:''}
+};
+
 function onTypeChange(){
-  var t=g('type'),isMono=t!=='wm';
+  var t=g('type'),isMono=t.indexOf('m-')===0;
   document.getElementById('wm-ctrls').style.display=isMono?'none':'block';
   document.getElementById('mono-ctrls').style.display=isMono?'block':'none';
   if(isMono){
@@ -180,10 +196,26 @@ function onTypeChange(){
     document.getElementById('ty').value=0;rvU('ty');
     document.getElementById('font').value="Georgia,serif";
   }else{
-    document.getElementById('letters').value='GUNTHER';
-    document.getElementById('fs').value=38;rvU('fs');
-    document.getElementById('ls').value=10;rvU('ls');
-    document.getElementById('ty').value=0;rvU('ty');
+    // Load wordmark preset
+    var p = wmPresets[t] || wmPresets['wm'];
+    document.getElementById('letters').value=p.letters;
+    document.getElementById('l2').value=p.l2;
+    document.getElementById('fs').value=p.fs;rvU('fs');
+    document.getElementById('ls').value=p.ls;rvU('ls');
+    document.getElementById('fs2').value=p.fs2;rvU('fs2');
+    document.getElementById('ls2').value=p.ls2;rvU('ls2');
+    document.getElementById('l2y').value=p.l2y;rvU('l2y');
+    document.getElementById('cw').value=p.cw;rvU('cw');
+    document.getElementById('ch').value=p.ch;rvU('ch');
+    document.getElementById('ty').value=p.ty;rvU('ty');
+    document.getElementById('dTop').value=p.dTop;
+    document.getElementById('dBot').value=p.dBot;
+    document.getElementById('dLeft').value=p.dLeft;
+    document.getElementById('dSep').value=p.dSep;
+    document.getElementById('star').value=p.star;
+    document.getElementById('starR').value=p.starR;rvU('starR');
+    document.getElementById('starY').value=p.starY;rvU('starY');
+    document.getElementById('tag').value=p.tag;
     document.getElementById('font').value="'Trebuchet MS',sans-serif";
   }
   draw();
@@ -209,33 +241,73 @@ function draw(){
 
 function drawWM(){
   var W=g('cw'),H=g('ch'),cx=W/2;
+  var t=g('type');
   var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" width="'+W+'" height="'+H+'">';
   var cL1=g('cL1'),cL2=g('cL'),cA=g('cA'),cB=g('cB'),cS=g('cS');
   s+='<defs><linearGradient id="lg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="'+cL2+'"/><stop offset="100%" stop-color="'+cL2+'" stop-opacity="0.8"/></linearGradient></defs>';
 
+  // V2 is a special inline layout
+  if(t==='wm-v2'){
+    var midY=H*0.72;
+    s+='<text x="10" y="'+midY+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>';
+    // Diamond separator
+    s+='<rect x="'+(W*0.44)+'" y="'+(midY-g('fs')*0.45)+'" width="'+(g('fs')*0.22)+'" height="'+(g('fs')*0.22)+'" fill="'+cA+'" transform="rotate(45,'+(W*0.44+g('fs')*0.11)+','+(midY-g('fs')*0.34)+')"/>';
+    s+='<text x="'+(W*0.49)+'" y="'+midY+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+'</text>';
+    s+='<rect x="0" y="'+(H-6)+'" width="'+W+'" height="1.5" fill="'+cB+'" opacity="0.3"/>';
+    s+='</svg>';
+    vp.innerHTML=s;applyF();return;
+  }
+
+  // V1 star icon variant
+  if(t==='wm-v1'){
+    var l1y=42+g('ty');
+    // Star on far left
+    s+=star(22,l1y-14,14,cS);
+    s+='<text x="52" y="'+l1y+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>';
+    // Separator line
+    s+='<rect x="52" y="'+(l1y+7)+'" width="200" height="2" fill="'+cA+'"/>';
+    s+='<text x="52" y="'+g('l2y')+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+'</text>';
+    s+='</svg>';
+    vp.innerHTML=s;applyF();return;
+  }
+
+  // Standard stacked layout (V3, V4, V5, custom)
   if(g('dLeft')==='1') s+='<rect x="0" y="0" width="5" height="'+H+'" fill="'+cA+'"/>';
   if(g('dTop')==='1') s+='<rect x="40" y="6" width="'+(W-80)+'" height="3" fill="'+cA+'"/>';
 
-  // Line 1
   var l1y=50+g('ty');
-  s+='<text x="'+cx+'" y="'+l1y+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>';
+  var offsetX = g('dLeft')==='1' ? 15 : 0;
+  s+='<text x="'+(cx+offsetX)+'" y="'+l1y+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>';
 
   // Stars between lines
-  if(g('star')==='1'){
+  var numStars = g('star')==='1' ? 3 : 0;
+  if(t==='wm-v5') numStars = g('star')==='1' ? 1 : 0;
+  if(numStars > 0){
     var sy=(l1y+g('l2y'))/2+g('starY');
-    s+=star(cx,sy,g('starR'),cS);
+    if(numStars===1){
+      // V5 style: star with lines on either side
+      s+=star(cx+offsetX,sy,g('starR'),cS);
+      if(t==='wm-v5'){
+        s+='<rect x="'+(cx+offsetX-120)+'" y="'+(sy-1)+'" width="'+(120-g('starR')-8)+'" height="2" fill="'+cA+'"/>';
+        s+='<rect x="'+(cx+offsetX+g('starR')+8)+'" y="'+(sy-1)+'" width="'+(120-g('starR')-8)+'" height="2" fill="'+cA+'"/>';
+      }
+    } else {
+      var gap=30;
+      var startX=cx+offsetX-((numStars-1)*gap)/2;
+      for(var i=0;i<numStars;i++) s+=star(startX+i*gap,sy,g('starR'),cS);
+    }
   }
 
   // Separator
-  if(g('dSep')==='1'){var sepY=(l1y+g('l2y'))/2;s+='<rect x="40" y="'+sepY+'" width="140" height="1.5" fill="'+cB+'" opacity="0.4"/>';}
+  if(g('dSep')==='1'){var sepY=(l1y+g('l2y'))/2;s+='<rect x="'+(g('dLeft')==='1'?22:40)+'" y="'+sepY+'" width="140" height="1.5" fill="'+cB+'" opacity="0.4"/>';}
 
   // Line 2
-  s+='<text x="'+cx+'" y="'+g('l2y')+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+' </text>';
+  s+='<text x="'+(cx+offsetX)+'" y="'+g('l2y')+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+'</text>';
 
   if(g('dBot')==='1') s+='<rect x="40" y="'+(H-8)+'" width="'+(W-80)+'" height="3" fill="'+cA+'"/>';
 
   var tg=g('tag');
-  if(tg) s+='<text x="'+cx+'" y="'+(H-2)+'" text-anchor="middle" font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="10" fill="'+cA+'" letter-spacing="4">'+tg+'</text>';
+  if(tg) s+='<text x="'+(cx+offsetX)+'" y="'+(H-2)+'" text-anchor="middle" font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="10" fill="'+cA+'" letter-spacing="4">'+tg+'</text>';
 
   s+='</svg>';
   vp.innerHTML=s;
