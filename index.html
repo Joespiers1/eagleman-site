@@ -1109,41 +1109,9 @@
         <p class="section-subtitle" style="margin: 0 auto;">Straight from Gunther's X feed — no filter, no spin.</p>
       </div>
 
-      <!-- Primary: X Embed -->
-      <div class="embed-container reveal" id="embed-container">
-        <a class="twitter-timeline"
-           href="https://twitter.com/GuntherEagleman?ref_src=twsrc%5Etfw"
-           data-tweet-limit="6"
-           data-theme="dark"
-           data-chrome="noheader nofooter noborders transparent"
-           data-border-color="#C9A84C"
-           data-dnt="true">
-          Tweets by GuntherEagleman
-        </a>
-      </div>
-
-      <!-- Secondary: RSS cards -->
-      <div class="rss-grid" id="rss-grid"></div>
-
-      <!-- Tertiary: Static fallback -->
-      <div class="static-cards" id="static-cards">
-        <div class="static-card">
-          <p>Follow <strong>@GuntherEagleman</strong> for live, unfiltered updates straight from the source.</p>
-          <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener">Follow on X &rarr;</a>
-        </div>
-        <div class="static-card">
-          <p>Real-time commentary on the stories the mainstream media won't touch.</p>
-          <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener">Follow on X &rarr;</a>
-        </div>
-        <div class="static-card">
-          <p>Stay informed. Stay ahead. The truth doesn't wait.</p>
-          <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener">Follow on X &rarr;</a>
-        </div>
-      </div>
-
-      <!-- Refresh -->
-      <div class="refresh-row" id="refresh-row">
-        <button class="btn-refresh" id="btn-refresh">&#8635; Refresh Feed</button>
+      <!-- Curator.io Live Feed -->
+      <div class="reveal" id="curator-feed-default-feed-layout">
+        <a href="https://curator.io" target="_blank" class="crt-logo crt-tag">Powered by Curator.io</a>
       </div>
 
       <!-- Feed CTA -->
@@ -1285,8 +1253,14 @@
     </div>
   </footer>
 
-  <!-- X Embed Script -->
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <!-- Curator.io Feed Script -->
+  <script type="text/javascript">
+  (function(){
+    var i,e,d=document,s="script";i=d.createElement("script");i.async=1;i.charset="UTF-8";
+    i.src="https://cdn.curator.io/published/2940fe24-381b-455b-93d0-cd71439f123b.js";
+    e=d.getElementsByTagName(s)[0];e.parentNode.insertBefore(i, e);
+  })();
+  </script>
 
   <script>
     /* ═══ STAR FIELD ═══ */
@@ -1391,95 +1365,7 @@
       formSuccess.classList.add('show');
     });
 
-    /* ═══ X FEED FALLBACK ═══ */
-    var NITTER_RSS = 'https://nitter.net/GuntherEagleman/rss';
-    var embedContainer = document.getElementById('embed-container');
-    var rssGrid = document.getElementById('rss-grid');
-    var staticCards = document.getElementById('static-cards');
-    var refreshRow = document.getElementById('refresh-row');
-
-    function truncate(str, len) {
-      return str.length <= len ? str : str.slice(0, len).trimEnd() + '\u2026';
-    }
-
-    function relativeTime(dateStr) {
-      var diff = Date.now() - new Date(dateStr).getTime();
-      var mins = Math.floor(diff / 60000);
-      if (mins < 60) return mins + 'm ago';
-      var hrs = Math.floor(mins / 60);
-      if (hrs < 24) return hrs + 'h ago';
-      return Math.floor(hrs / 24) + 'd ago';
-    }
-
-    function fetchRSS() {
-      return fetch(NITTER_RSS).then(function(res) {
-        if (!res.ok) throw new Error('fail');
-        return res.text();
-      }).then(function(text) {
-        var xml = new DOMParser().parseFromString(text, 'application/xml');
-        var items = xml.querySelectorAll('item');
-        var posts = [];
-        items.forEach(function(item, i) {
-          if (i >= 6) return;
-          var title = item.querySelector('title') ? item.querySelector('title').textContent : '';
-          var link = item.querySelector('link') ? item.querySelector('link').textContent : '';
-          var pubDate = item.querySelector('pubDate') ? item.querySelector('pubDate').textContent : '';
-          posts.push({ text: title, link: link.replace('nitter.net', 'x.com'), date: pubDate });
-        });
-        return posts;
-      });
-    }
-
-    function renderRSS(posts) {
-      rssGrid.innerHTML = '';
-      posts.forEach(function(post) {
-        var card = document.createElement('a');
-        card.className = 'tweet-card';
-        card.href = post.link;
-        card.target = '_blank';
-        card.rel = 'noopener';
-        card.innerHTML =
-          '<div class="card-text">' + truncate(post.text, 280) + '</div>' +
-          '<div class="card-meta"><span>' + relativeTime(post.date) + '</span>' +
-          '<span class="engagement"><span>&#x1F4AC;</span><span>&#8634;</span><span>&#9829;</span></span></div>';
-        rssGrid.appendChild(card);
-      });
-      embedContainer.style.display = 'none';
-      rssGrid.classList.add('active');
-      refreshRow.classList.add('active');
-    }
-
-    function showStatic() {
-      embedContainer.style.display = 'none';
-      rssGrid.classList.remove('active');
-      staticCards.classList.add('active');
-    }
-
-    // Check multiple times for embed to load
-    var checkCount = 0;
-    var checkInterval = setInterval(function() {
-      checkCount++;
-      var iframe = embedContainer.querySelector('iframe');
-      if (iframe) {
-        clearInterval(checkInterval);
-        return;
-      }
-      // After 4 seconds, fall back
-      if (checkCount >= 8) {
-        clearInterval(checkInterval);
-        fetchRSS().then(function(posts) {
-          if (!posts.length) throw new Error('empty');
-          renderRSS(posts);
-        }).catch(function() { showStatic(); });
-      }
-    }, 500);
-
-    document.getElementById('btn-refresh').addEventListener('click', function() {
-      fetchRSS().then(function(posts) {
-        if (!posts.length) throw new Error('empty');
-        renderRSS(posts);
-      }).catch(function() { showStatic(); });
-    });
+    /* ═══ X FEED — Powered by Curator.io ═══ */
     /* ═══ APPLY ADMIN CONFIG ═══ */
     (function() {
       try {
