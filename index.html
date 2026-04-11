@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gunther Eagleman — America First Political Commentator</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Gunther Eagleman — America First Political Commentator">
+  <meta property="og:description" content="The unfiltered truth about American politics. Follow Gunther Eagleman.">
+  <meta property="og:image" content="/og-image.jpg">
+  <meta property="og:url" content="https://gunthereagleman.com">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@GuntherEagleman">
+  <meta name="twitter:title" content="Gunther Eagleman — America First Political Commentator">
+  <meta name="twitter:description" content="The unfiltered truth about American politics.">
+  <meta name="twitter:image" content="/og-image.jpg">
+
+  <!-- Favicon: gold star on navy -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230A1628'/><text x='32' y='44' font-size='36' text-anchor='middle' fill='%23C9A84C'>&#9733;</text></svg>">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════
+       RESET & BASE
+       ══════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0A1628;
+      color: #FFFFFF;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: inherit; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Section common */
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #C9A84C;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #8899AA;
+      max-width: 600px;
+    }
+
+    /* Animate on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════ */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
+    }
+
+    .navbar.scrolled {
+      background: rgba(10, 22, 40, 0.97);
+      box-shadow: 0 1px 0 #C9A84C;
+      padding: 10px 0;
+      backdrop-filter: blur(12px);
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-logo .star { color: #C9A84C; font-size: 1.2rem; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.7);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: #C9A84C; }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #C9A84C;
+      transition: width 0.25s;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+
+    /* Mobile hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 1001;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 22, 40, 0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #fff;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: #C9A84C; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+       ══════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+
+    /* Star field */
+    .star-field {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .star-field .star-layer {
+      position: absolute;
+      inset: 0;
+    }
+
+    .star-field .star-layer span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; }
+      50% { opacity: var(--peak, 0.8); }
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, transparent 0%, #0A1628 75%),
+        linear-gradient(180deg, transparent 60%, #0A1628 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+    }
+
+    .hero-avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 3px solid #C9A84C;
+      box-shadow: 0 0 40px rgba(201, 168, 76, 0.25);
+      margin: 0 auto 32px;
+      background: #0F1D33;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #C9A84C;
+      overflow: hidden;
+    }
+
+    .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .hero h1 {
+      font-size: 3.8rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .accent { color: #BF0A30; }
+
+    .hero .hero-sub {
+      font-size: 1.15rem;
+      color: #8899AA;
+      margin-bottom: 40px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    .hero .hero-sub .divider {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: #C9A84C;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin: 0 12px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      border: 2px solid transparent;
+      transition: all 0.25s;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .btn-primary {
+      background: #BF0A30;
+      color: #fff;
+      border-color: #BF0A30;
+    }
+    .btn-primary:hover {
+      background: #a00828;
+      border-color: #C9A84C;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(191, 10, 48, 0.3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #C9A84C;
+      border-color: #C9A84C;
+    }
+    .btn-outline:hover {
+      background: #C9A84C;
+      color: #0A1628;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.4rem; }
+      .hero .hero-sub { font-size: 0.95rem; }
+      .hero-avatar { width: 110px; height: 110px; }
+    }
+
+    /* ══════════════════════════════════════
+       ABOUT
+       ══════════════════════════════════════ */
+    .about {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .about::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(201,168,76,0.15) 1px, transparent 0),
+        radial-gradient(1px 1px at 60% 70%, rgba(201,168,76,0.1) 1px, transparent 0),
+        radial-gradient(1px 1px at 80% 20%, rgba(201,168,76,0.08) 1px, transparent 0);
+      background-size: 120px 120px;
+      pointer-events: none;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-bottom: 64px;
+    }
+
+    .about-image {
+      aspect-ratio: 4/5;
+      background: #0F1D33;
+      border-radius: 16px;
+      border: 1px solid rgba(201, 168, 76, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .about-image .placeholder-icon { font-size: 4rem; color: #1a2d4d; }
+
+    .about-image::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(transparent, rgba(10, 22, 40, 0.6));
+    }
+
+    .about-text h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #C9A84C;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .about-text h2 {
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin-bottom: 20px;
+      line-height: 1.15;
+    }
+
+    .about-text p {
+      color: #B0BEC5;
+      margin-bottom: 16px;
+      font-size: 1.05rem;
+    }
+
+    /* Values cards */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .value-card {
+      background: #0F1D33;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 12px;
+      padding: 28px 20px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .value-card:hover {
+      border-color: #C9A84C;
+      transform: translateY(-4px);
+    }
+
+    .value-card .icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      color: #C9A84C;
+    }
+
+    .value-card h4 { font-size: 0.95rem; font-weight: 700; letter-spacing: 0.5px; }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+      .about-image { max-height: 300px; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .section-title { font-size: 1.8rem; }
+    }
+
+    @media (max-width: 480px) {
+      .values-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════
+       LIVE FEED
+       ══════════════════════════════════════ */
+    .feed {
+      padding: 100px 0;
+      background: #060D1A;
+    }
+
+    .feed .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #BF0A30;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+    }
+
+    .pulse-dot::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: rgba(191, 10, 48, 0.5);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(2); opacity: 0; }
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(191, 10, 48, 0.1);
+      border: 1px solid rgba(191, 10, 48, 0.3);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #BF0A30;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 16px;
+    }
+
+    .embed-container {
+      max-width: 680px;
+      margin: 0 auto 32px;
+      background: #0F1D33;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      max-height: 800px;
+      overflow-y: auto;
+    }
+
+    .embed-container::-webkit-scrollbar { width: 6px; }
+    .embed-container::-webkit-scrollbar-track { background: #0F1D33; }
+    .embed-container::-webkit-scrollbar-thumb { background: #C9A84C; border-radius: 3px; }
+
+    .rss-grid {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1060px;
+      margin: 0 auto 32px;
+    }
+    .rss-grid.active { display: grid; }
+
+    .tweet-card {
+      background: #0F1D33;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-left: 4px solid #C9A84C;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: inherit;
+    }
+    .tweet-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .tweet-card .card-text { font-size: 0.95rem; color: #D0D8E0; flex: 1; }
+    .tweet-card .card-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #8899AA;
+    }
+    .tweet-card .card-meta .engagement { display: flex; gap: 14px; }
+
+    .static-cards {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1060px;
+      margin: 0 auto 32px;
+    }
+    .static-cards.active { display: grid; }
+
+    .static-card {
+      background: #0F1D33;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-left: 4px solid #C9A84C;
+      border-radius: 10px;
+      padding: 32px 20px;
+      text-align: center;
+    }
+    .static-card p { color: #8899AA; margin-bottom: 16px; }
+    .static-card a { color: #C9A84C; font-weight: 600; }
+    .static-card a:hover { text-decoration: underline; }
+
+    .refresh-row {
+      text-align: center;
+      margin-bottom: 40px;
+      display: none;
+    }
+    .refresh-row.active { display: block; }
+
+    .btn-refresh {
+      background: transparent;
+      color: #C9A84C;
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-refresh:hover {
+      background: rgba(201,168,76,0.1);
+      border-color: #C9A84C;
+    }
+
+    .feed-cta { text-align: center; }
+
+    .btn-feed-follow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #BF0A30;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 16px 48px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      transition: all 0.25s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .btn-feed-follow:hover {
+      border-color: #C9A84C;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(191, 10, 48, 0.3);
+    }
+
+    @media (max-width: 768px) {
+      .rss-grid, .static-cards { grid-template-columns: 1fr; }
+      .embed-container { max-height: none; }
+    }
+
+    /* ══════════════════════════════════════
+       ISSUES / TOPICS
+       ══════════════════════════════════════ */
+    .issues {
+      padding: 100px 0;
+    }
+
+    .issues .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .issues .section-subtitle { margin: 0 auto; }
+
+    .pill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 10px 24px;
+      border-radius: 999px;
+      background: #0F1D33;
+      border: 1px solid rgba(201, 168, 76, 0.25);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.25s;
+      white-space: nowrap;
+    }
+
+    .pill:hover {
+      background: #BF0A30;
+      border-color: #BF0A30;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(191, 10, 48, 0.25);
+    }
+
+    @media (max-width: 768px) {
+      .pill-grid {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        padding-bottom: 12px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .pill-grid::-webkit-scrollbar { display: none; }
+    }
+
+    /* ══════════════════════════════════════
+       VIDEOS
+       ══════════════════════════════════════ */
+    .videos {
+      padding: 100px 0;
+      background: #060D1A;
+    }
+
+    .videos .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .video-card {
+      background: #0F1D33;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .video-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(201, 168, 76, 0.15);
+    }
+
+    .video-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: #0A1628;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-thumb .play-icon {
+      width: 56px;
+      height: 56px;
+      color: #fff;
+      opacity: 0.8;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .video-card:hover .play-icon {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .video-info { padding: 20px; }
+    .video-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; line-height: 1.4; }
+    .video-info .video-date { font-size: 0.8rem; color: #8899AA; margin-bottom: 16px; }
+
+    .video-info .btn-watch {
+      display: inline-block;
+      background: #BF0A30;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 8px 20px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      transition: background 0.2s;
+    }
+    .video-info .btn-watch:hover { background: #a00828; }
+
+    @media (max-width: 1024px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .video-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════
+       NEWSLETTER
+       ══════════════════════════════════════ */
+    .newsletter {
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .newsletter::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #BF0A30 0%, #0A1628 60%);
+      opacity: 0.15;
+    }
+
+    .newsletter-inner {
+      position: relative;
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .newsletter h2 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .newsletter .section-subtitle {
+      margin: 0 auto 40px;
+      text-align: center;
+    }
+
+    .newsletter-form {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .newsletter-form input {
+      padding: 14px 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      min-width: 200px;
+      flex: 1;
+      max-width: 240px;
+    }
+
+    .newsletter-form input::placeholder { color: #667788; }
+    .newsletter-form input:focus { border-color: #C9A84C; }
+
+    .btn-subscribe {
+      padding: 14px 36px;
+      border-radius: 8px;
+      border: none;
+      background: #C9A84C;
+      color: #0A1628;
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+    }
+
+    .btn-subscribe:hover {
+      background: #d4b35a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
+    }
+
+    .form-success {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #C9A84C;
+    }
+
+    .form-success.show { display: block; }
+
+    @media (max-width: 600px) {
+      .newsletter h2 { font-size: 1.8rem; }
+      .newsletter-form { flex-direction: column; align-items: center; }
+      .newsletter-form input { max-width: 100%; width: 100%; }
+      .btn-subscribe { width: 100%; }
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════ */
+    .footer {
+      background: #060D1A;
+      border-top: 1px solid #C9A84C;
+      padding: 60px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .footer-logo {
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-brand .footer-logo .star { color: #C9A84C; }
+    .footer-brand p { color: #667788; font-size: 0.9rem; }
+
+    .footer-nav h5,
+    .footer-social h5 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #C9A84C;
+      margin-bottom: 16px;
+    }
+
+    .footer-nav ul { list-style: none; }
+    .footer-nav ul li { margin-bottom: 10px; }
+    .footer-nav ul a { color: #8899AA; font-size: 0.9rem; transition: color 0.2s; }
+    .footer-nav ul a:hover { color: #C9A84C; }
+
+    .social-links { display: flex; gap: 12px; }
+
+    .social-link {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8899AA;
+      font-size: 0.85rem;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      background: #C9A84C;
+      color: #0A1628;
+      border-color: #C9A84C;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-bottom .tagline { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+    .footer-bottom .copyright { color: #556677; font-size: 0.8rem; margin-bottom: 4px; }
+    .footer-bottom .disclaimer { color: #445566; font-size: 0.75rem; }
+
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .social-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ NAVBAR ═══════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#home" class="nav-logo">
+        <span class="star">&#9733;</span> Gunther Eagleman
+      </a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#feed">Live Feed</a></li>
+        <li><a href="#issues">Issues</a></li>
+        <li><a href="#videos">Videos</a></li>
+        <li><a href="#newsletter">Newsletter</a></li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#feed">Live Feed</a>
+    <a href="#issues">Issues</a>
+    <a href="#videos">Videos</a>
+    <a href="#newsletter">Newsletter</a>
+  </div>
+
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero" id="home">
+    <div class="star-field" id="star-field"></div>
+    <div class="hero-content">
+      <div class="hero-avatar">
+        <!-- Replace with <img src="photo.jpg" alt="Gunther Eagleman" loading="lazy"> -->
+        <span>GE</span>
+      </div>
+      <h1>America First.<br><span class="accent">No Apologies.</span></h1>
+      <p class="hero-sub">
+        Political Commentator
+        <span class="divider"></span>
+        Patriot
+        <span class="divider"></span>
+        1.6M Followers on X
+      </p>
+      <div class="hero-btns">
+        <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener" class="btn btn-primary">
+          Follow on X
+        </a>
+        <a href="#newsletter" class="btn btn-outline">
+          Join the Movement
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ ABOUT ═══════ -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-grid reveal">
+        <div class="about-image">
+          <!-- Replace with <img src="about-photo.jpg" alt="Gunther Eagleman" loading="lazy"> -->
+          <span class="placeholder-icon">&#9733;</span>
+        </div>
+        <div class="about-text">
+          <h3>Who Is Gunther</h3>
+          <h2>A Fearless Voice for the American People</h2>
+          <p>
+            Texas-born and unapologetically patriotic, Gunther Eagleman is a former law
+            enforcement officer turned America First political commentator. After relocating
+            from California to Texas in 2007, he witnessed firsthand the policies destroying
+            the American Dream — and decided to fight back.
+          </p>
+          <p>
+            Since 2021, Gunther has built a following of over 1.6 million on X by delivering
+            the unfiltered truth the mainstream media refuses to cover. A devoted Christian,
+            husband, and father, he stands firm on the values that built this nation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Values -->
+      <div class="values-grid reveal">
+        <div class="value-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h4>Free Speech</h4>
+        </div>
+        <div class="value-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+              <line x1="4" y1="22" x2="4" y2="15"/>
+            </svg>
+          </div>
+          <h4>America First</h4>
+        </div>
+        <div class="value-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h4>Law &amp; Order</h4>
+        </div>
+        <div class="value-card">
+          <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <h4>Faith &amp; Family</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ LIVE FEED ═══════ -->
+  <section class="feed" id="feed">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="live-badge"><span class="pulse-dot"></span> Live Feed</span>
+        <h2 class="section-title">The Unfiltered Truth</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">Straight from Gunther's X feed — no filter, no spin.</p>
+      </div>
+
+      <!-- Primary: X Embed -->
+      <div class="embed-container reveal" id="embed-container">
+        <a class="twitter-timeline"
+           href="https://twitter.com/GuntherEagleman"
+           data-tweet-limit="6"
+           data-theme="dark"
+           data-chrome="noheader nofooter noborders"
+           data-border-color="#C9A84C">
+          Loading feed...
+        </a>
+      </div>
+
+      <!-- Secondary: RSS cards -->
+      <div class="rss-grid" id="rss-grid"></div>
+
+      <!-- Tertiary: Static fallback -->
+      <div class="static-cards" id="static-cards">
+        <div class="static-card">
+          <p>Follow <strong>@GuntherEagleman</strong> for live, unfiltered updates straight from the source.</p>
+          <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener">Follow on X &rarr;</a>
+        </div>
+        <div class="static-card">
+          <p>Real-time commentary on the stories the mainstream media won't touch.</p>
+          <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener">Follow on X &rarr;</a>
+        </div>
+        <div class="static-card">
+          <p>Stay informed. Stay ahead. The truth doesn't wait.</p>
+          <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener">Follow on X &rarr;</a>
+        </div>
+      </div>
+
+      <!-- Refresh -->
+      <div class="refresh-row" id="refresh-row">
+        <button class="btn-refresh" id="btn-refresh">&#8635; Refresh Feed</button>
+      </div>
+
+      <!-- Feed CTA -->
+      <div class="feed-cta reveal">
+        <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener" class="btn-feed-follow">
+          Follow @GuntherEagleman on X &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ ISSUES ═══════ -->
+  <section class="issues" id="issues">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">The Issues</span>
+        <h2 class="section-title">What Gunther Covers</h2>
+        <p class="section-subtitle">The issues that matter to real Americans.</p>
+      </div>
+      <div class="pill-grid reveal">
+        <a href="#" class="pill">Immigration</a>
+        <a href="#" class="pill">Election Integrity</a>
+        <a href="#" class="pill">Free Speech</a>
+        <a href="#" class="pill">Law Enforcement</a>
+        <a href="#" class="pill">Mainstream Media</a>
+        <a href="#" class="pill">America First Economy</a>
+        <a href="#" class="pill">Faith &amp; Values</a>
+        <a href="#" class="pill">2nd Amendment</a>
+        <a href="#" class="pill">Deep State</a>
+        <a href="#" class="pill">Border Security</a>
+        <a href="#" class="pill">National Sovereignty</a>
+        <a href="#" class="pill">Veteran Rights</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ VIDEOS ═══════ -->
+  <section class="videos" id="videos">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Media</span>
+        <h2 class="section-title">Watch &amp; Share</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">Commentary the mainstream media doesn't want you to see.</p>
+      </div>
+      <div class="video-grid reveal">
+        <div class="video-card">
+          <div class="video-thumb">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="video-info">
+            <h4>The Border Crisis They're Hiding From You</h4>
+            <p class="video-date">Coming Soon</p>
+            <a href="#" class="btn-watch">Watch Now</a>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumb">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="video-info">
+            <h4>Why Free Speech Is Under Attack</h4>
+            <p class="video-date">Coming Soon</p>
+            <a href="#" class="btn-watch">Watch Now</a>
+          </div>
+        </div>
+        <div class="video-card">
+          <div class="video-thumb">
+            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <div class="video-info">
+            <h4>America First: What It Really Means</h4>
+            <p class="video-date">Coming Soon</p>
+            <a href="#" class="btn-watch">Watch Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ NEWSLETTER ═══════ -->
+  <section class="newsletter" id="newsletter">
+    <div class="container">
+      <div class="newsletter-inner reveal">
+        <span class="section-label">Stay Informed</span>
+        <h2>Get the Truth Delivered<br>to Your Inbox</h2>
+        <p class="section-subtitle">
+          Join thousands of patriots who get Gunther's unfiltered takes before the
+          mainstream media buries them.
+        </p>
+        <form class="newsletter-form" name="newsletter" method="POST" data-netlify="true" id="newsletter-form">
+          <input type="hidden" name="form-name" value="newsletter">
+          <input type="text" name="first-name" placeholder="First Name" required>
+          <input type="email" name="email" placeholder="Email Address" required>
+          <button type="submit" class="btn-subscribe">Subscribe</button>
+        </form>
+        <p class="form-success" id="form-success">You're in! God Bless America</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <span class="star">&#9733;</span> Gunther Eagleman
+          </div>
+          <p>America First political commentator. Unfiltered truth. No apologies.</p>
+        </div>
+        <div class="footer-nav">
+          <h5>Navigation</h5>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#feed">Live Feed</a></li>
+            <li><a href="#issues">Issues</a></li>
+            <li><a href="#videos">Videos</a></li>
+            <li><a href="#newsletter">Newsletter</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h5>Follow Gunther</h5>
+          <div class="social-links">
+            <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener" class="social-link" title="X (Twitter)">X</a>
+            <a href="#" class="social-link" title="YouTube">YT</a>
+            <a href="#" class="social-link" title="Rumble">R</a>
+            <a href="#" class="social-link" title="Truth Social">TS</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="tagline">God Bless America</p>
+        <p class="copyright">&copy; 2025 Gunther Eagleman. All Rights Reserved.</p>
+        <p class="disclaimer">This site is the official platform for Gunther Eagleman's political commentary.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- X Embed Script -->
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  <script>
+    /* ═══ STAR FIELD ═══ */
+    (function() {
+      var field = document.getElementById('star-field');
+      var layer = document.createElement('div');
+      layer.className = 'star-layer';
+      for (var i = 0; i < 120; i++) {
+        var s = document.createElement('span');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.top = Math.random() * 100 + '%';
+        s.style.setProperty('--dur', (3 + Math.random() * 5) + 's');
+        s.style.setProperty('--peak', (0.3 + Math.random() * 0.7).toFixed(2));
+        s.style.animationDelay = (Math.random() * 5) + 's';
+        if (Math.random() > 0.7) { s.style.width = '3px'; s.style.height = '3px'; }
+        layer.appendChild(s);
+      }
+      field.appendChild(layer);
+    })();
+
+    /* ═══ STICKY NAVBAR ═══ */
+    var navbar = document.getElementById('navbar');
+    var navLinks = document.querySelectorAll('.nav-links a');
+    var sections = document.querySelectorAll('section[id]');
+
+    window.addEventListener('scroll', function() {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      var current = '';
+      sections.forEach(function(sec) {
+        if (window.scrollY >= sec.offsetTop - 200) current = sec.id;
+      });
+      navLinks.forEach(function(link) {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    }, { passive: true });
+
+    /* ═══ MOBILE MENU ═══ */
+    var toggle = document.getElementById('nav-toggle');
+    var mobileMenu = document.getElementById('mobile-menu');
+
+    toggle.addEventListener('click', function() {
+      toggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(function(link) {
+      link.addEventListener('click', function() {
+        toggle.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* ═══ SCROLL REVEAL ═══ */
+    var revealEls = document.querySelectorAll('.reveal');
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(function(el) { observer.observe(el); });
+
+    /* ═══ NEWSLETTER FORM ═══ */
+    var form = document.getElementById('newsletter-form');
+    var formSuccess = document.getElementById('form-success');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var data = new FormData(form);
+      fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data).toString()
+      })
+      .then(function() { form.style.display = 'none'; formSuccess.classList.add('show'); })
+      .catch(function() { form.style.display = 'none'; formSuccess.classList.add('show'); });
+    });
+
+    /* ═══ X FEED FALLBACK ═══ */
+    var NITTER_RSS = 'https://nitter.net/GuntherEagleman/rss';
+    var embedContainer = document.getElementById('embed-container');
+    var rssGrid = document.getElementById('rss-grid');
+    var staticCards = document.getElementById('static-cards');
+    var refreshRow = document.getElementById('refresh-row');
+
+    function truncate(str, len) {
+      return str.length <= len ? str : str.slice(0, len).trimEnd() + '\u2026';
+    }
+
+    function relativeTime(dateStr) {
+      var diff = Date.now() - new Date(dateStr).getTime();
+      var mins = Math.floor(diff / 60000);
+      if (mins < 60) return mins + 'm ago';
+      var hrs = Math.floor(mins / 60);
+      if (hrs < 24) return hrs + 'h ago';
+      return Math.floor(hrs / 24) + 'd ago';
+    }
+
+    function fetchRSS() {
+      return fetch(NITTER_RSS).then(function(res) {
+        if (!res.ok) throw new Error('fail');
+        return res.text();
+      }).then(function(text) {
+        var xml = new DOMParser().parseFromString(text, 'application/xml');
+        var items = xml.querySelectorAll('item');
+        var posts = [];
+        items.forEach(function(item, i) {
+          if (i >= 6) return;
+          var title = item.querySelector('title') ? item.querySelector('title').textContent : '';
+          var link = item.querySelector('link') ? item.querySelector('link').textContent : '';
+          var pubDate = item.querySelector('pubDate') ? item.querySelector('pubDate').textContent : '';
+          posts.push({ text: title, link: link.replace('nitter.net', 'x.com'), date: pubDate });
+        });
+        return posts;
+      });
+    }
+
+    function renderRSS(posts) {
+      rssGrid.innerHTML = '';
+      posts.forEach(function(post) {
+        var card = document.createElement('a');
+        card.className = 'tweet-card';
+        card.href = post.link;
+        card.target = '_blank';
+        card.rel = 'noopener';
+        card.innerHTML =
+          '<div class="card-text">' + truncate(post.text, 280) + '</div>' +
+          '<div class="card-meta"><span>' + relativeTime(post.date) + '</span>' +
+          '<span class="engagement"><span>&#x1F4AC;</span><span>&#8634;</span><span>&#9829;</span></span></div>';
+        rssGrid.appendChild(card);
+      });
+      embedContainer.style.display = 'none';
+      rssGrid.classList.add('active');
+      refreshRow.classList.add('active');
+    }
+
+    function showStatic() {
+      embedContainer.style.display = 'none';
+      rssGrid.classList.remove('active');
+      staticCards.classList.add('active');
+    }
+
+    setTimeout(function() {
+      var iframe = embedContainer.querySelector('iframe');
+      if (iframe) return;
+      fetchRSS().then(function(posts) {
+        if (!posts.length) throw new Error('empty');
+        renderRSS(posts);
+      }).catch(function() { showStatic(); });
+    }, 6000);
+
+    document.getElementById('btn-refresh').addEventListener('click', function() {
+      fetchRSS().then(function(posts) {
+        if (!posts.length) throw new Error('empty');
+        renderRSS(posts);
+      }).catch(function() { showStatic(); });
+    });
+    /* ═══ APPLY ADMIN CONFIG ═══ */
+    (function() {
+      try {
+        var raw = localStorage.getItem('eagleman_admin');
+        if (!raw) return;
+        var cfg = JSON.parse(raw);
+
+        // Apply theme colors via CSS custom properties
+        if (cfg.theme) {
+          var t = cfg.theme;
+          var r = document.documentElement;
+          if (t.navy) {
+            document.body.style.background = t.navy;
+            r.style.setProperty('--cfg-navy', t.navy);
+          }
+          if (t.red) r.style.setProperty('--cfg-red', t.red);
+          if (t.gold) r.style.setProperty('--cfg-gold', t.gold);
+          if (t.white) r.style.setProperty('--cfg-white', t.white);
+          if (t.dark) r.style.setProperty('--cfg-dark', t.dark);
+
+          // Inject dynamic overrides
+          var style = document.createElement('style');
+          style.textContent = '' +
+            'body { background: ' + (t.navy||'') + '; color: ' + (t.white||'') + '; }' +
+            '.hero::after { background: radial-gradient(ellipse at center, transparent 0%, ' + (t.navy||'#0A1628') + ' 75%), linear-gradient(180deg, transparent 60%, ' + (t.navy||'#0A1628') + ' 100%); }' +
+            '.btn-primary, .btn-feed-follow, .btn-watch, .video-info .btn-watch { background: ' + (t.red||'') + '; }' +
+            '.btn-primary { border-color: ' + (t.red||'') + '; }' +
+            '.btn-primary:hover, .btn-feed-follow:hover { border-color: ' + (t.gold||'') + '; }' +
+            '.btn-outline { color: ' + (t.gold||'') + '; border-color: ' + (t.gold||'') + '; }' +
+            '.btn-outline:hover { background: ' + (t.gold||'') + '; }' +
+            '.nav-links a:hover, .nav-links a.active, .section-label, .about-text h3, .footer-nav h5, .footer-social h5 { color: ' + (t.gold||'') + '; }' +
+            '.nav-links a::after, .navbar.scrolled { box-shadow: 0 1px 0 ' + (t.gold||'') + '; }' +
+            '.nav-links a::after { background: ' + (t.gold||'') + '; }' +
+            '.hero h1 .accent, .live-badge { color: ' + (t.red||'') + '; }' +
+            '.pulse-dot { background: ' + (t.red||'') + '; }' +
+            '.live-badge { background: ' + (t.red||'') + '1a; border-color: ' + (t.red||'') + '4d; }' +
+            '.value-card .icon, .nav-logo .star, .footer-brand .footer-logo .star, .btn-refresh, .static-card a, .form-success { color: ' + (t.gold||'') + '; }' +
+            '.value-card:hover, .hero-avatar { border-color: ' + (t.gold||'') + '; }' +
+            '.hero-avatar { box-shadow: 0 0 40px ' + (t.gold||'') + '40; }' +
+            '.pill:hover { background: ' + (t.red||'') + '; border-color: ' + (t.red||'') + '; }' +
+            '.pill { border-color: ' + (t.gold||'') + '40; }' +
+            '.btn-subscribe { background: ' + (t.gold||'') + '; }' +
+            '.footer { border-top-color: ' + (t.gold||'') + '; }' +
+            '.social-link:hover { background: ' + (t.gold||'') + '; }' +
+            '.feed, .videos, .footer { background: ' + (t.dark||'') + '; }' +
+            '.embed-container, .value-card, .about-image, .video-card, .tweet-card, .static-card { background: ' + (t.navy||'#0A1628') + '20; }' +
+            '.tweet-card, .static-card { border-left-color: ' + (t.gold||'') + '; }';
+          document.head.appendChild(style);
+
+          // Typography
+          if (t.bodyFont && t.bodyFont !== 'Inter') {
+            document.body.style.fontFamily = "'" + t.bodyFont + "', sans-serif";
+          }
+          if (t.fontSize && t.fontSize !== 16) {
+            document.body.style.fontSize = t.fontSize + 'px';
+          }
+        }
+
+        // Apply content changes
+        if (cfg.content) {
+          var c = cfg.content;
+          var heroH1 = document.querySelector('.hero h1');
+          if (heroH1 && c.heroH1) {
+            var parts = c.heroH1.split('.');
+            if (parts.length >= 2) {
+              heroH1.innerHTML = parts[0] + '.<br><span class="accent">' + parts.slice(1).join('.').trim() + '</span>';
+            } else {
+              heroH1.textContent = c.heroH1;
+            }
+          }
+
+          var heroSub = document.querySelector('.hero .hero-sub');
+          if (heroSub && c.heroSub) {
+            var subParts = c.heroSub.split('|').map(function(s){return s.trim();});
+            heroSub.innerHTML = subParts.join(' <span class="divider"></span> ');
+          }
+
+          var btns = document.querySelectorAll('.hero-btns .btn');
+          if (btns[0] && c.heroCta1) { btns[0].textContent = c.heroCta1; }
+          if (btns[0] && c.heroCta1Url) { btns[0].href = c.heroCta1Url; }
+          if (btns[1] && c.heroCta2) { btns[1].textContent = c.heroCta2; }
+          if (btns[1] && c.heroCta2Url) { btns[1].href = c.heroCta2Url; }
+
+          if (c.heroImg) {
+            var avatar = document.querySelector('.hero-avatar');
+            if (avatar) avatar.innerHTML = '<img src="' + c.heroImg + '" alt="Gunther Eagleman" loading="lazy">';
+          }
+
+          var aboutLabel = document.querySelector('.about-text h3');
+          if (aboutLabel && c.aboutLabel) aboutLabel.textContent = c.aboutLabel;
+
+          var aboutH2 = document.querySelector('.about-text h2');
+          if (aboutH2 && c.aboutH2) aboutH2.textContent = c.aboutH2;
+
+          var aboutPs = document.querySelectorAll('.about-text p');
+          if (aboutPs[0] && c.aboutP1) aboutPs[0].textContent = c.aboutP1;
+          if (aboutPs[1] && c.aboutP2) aboutPs[1].textContent = c.aboutP2;
+
+          if (c.aboutImg) {
+            var aboutImg = document.querySelector('.about-image');
+            if (aboutImg) aboutImg.innerHTML = '<img src="' + c.aboutImg + '" alt="Gunther Eagleman" loading="lazy" style="width:100%;height:100%;object-fit:cover;">';
+          }
+
+          var feedTitle = document.querySelector('.feed .section-title');
+          if (feedTitle && c.feedTitle) feedTitle.textContent = c.feedTitle;
+
+          var feedSub = document.querySelector('.feed .section-subtitle');
+          if (feedSub && c.feedSub) feedSub.textContent = c.feedSub;
+
+          var nlH2 = document.querySelector('.newsletter h2');
+          if (nlH2 && c.nlTitle) nlH2.innerHTML = c.nlTitle.replace(/\n/g, '<br>');
+
+          var nlDesc = document.querySelector('.newsletter .section-subtitle');
+          if (nlDesc && c.nlDesc) nlDesc.textContent = c.nlDesc;
+
+          var nlSuccess = document.getElementById('form-success');
+          if (nlSuccess && c.nlSuccess) nlSuccess.textContent = c.nlSuccess;
+
+          var tagline = document.querySelector('.footer-bottom .tagline');
+          if (tagline && c.footerTagline) tagline.textContent = c.footerTagline;
+
+          var copyright = document.querySelector('.footer-bottom .copyright');
+          if (copyright && c.footerCopy) copyright.textContent = c.footerCopy;
+
+          var disclaimer = document.querySelector('.footer-bottom .disclaimer');
+          if (disclaimer && c.footerDisclaimer) disclaimer.textContent = c.footerDisclaimer;
+
+          // Social links
+          var socials = document.querySelectorAll('.social-links .social-link');
+          if (socials[0] && c.socialX) socials[0].href = c.socialX;
+          if (socials[1] && c.socialYT) socials[1].href = c.socialYT;
+          if (socials[2] && c.socialRumble) socials[2].href = c.socialRumble;
+          if (socials[3] && c.socialTS) socials[3].href = c.socialTS;
+        }
+
+        // Apply section visibility & order
+        if (cfg.sectionVisibility) {
+          var sectionMap = {
+            home: document.getElementById('home'),
+            about: document.getElementById('about'),
+            feed: document.getElementById('feed'),
+            issues: document.getElementById('issues'),
+            videos: document.getElementById('videos'),
+            newsletter: document.getElementById('newsletter'),
+            footer: document.getElementById('contact')
+          };
+
+          Object.keys(cfg.sectionVisibility).forEach(function(key) {
+            var el = sectionMap[key];
+            if (el && !cfg.sectionVisibility[key]) {
+              el.style.display = 'none';
+            }
+          });
+        }
+
+        if (cfg.sections && cfg.sections.length) {
+          var sectionMap2 = {
+            home: document.getElementById('home'),
+            about: document.getElementById('about'),
+            feed: document.getElementById('feed'),
+            issues: document.getElementById('issues'),
+            videos: document.getElementById('videos'),
+            newsletter: document.getElementById('newsletter'),
+            footer: document.getElementById('contact')
+          };
+
+          var parent = document.body;
+          var nav = document.getElementById('navbar');
+          var mMenu = document.getElementById('mobile-menu');
+
+          cfg.sections.forEach(function(key) {
+            var el = sectionMap2[key];
+            if (el) {
+              // Move after the last inserted or after mobile menu
+              parent.appendChild(el);
+            }
+          });
+        }
+
+      } catch(e) {
+        // Config parsing failed, use defaults
+      }
+    })();
+  </script>
+
+</body>
+</html>
