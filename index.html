@@ -827,10 +827,11 @@
     }
 
     .newsletter-form {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
+      max-width: 520px;
+      margin: 0 auto;
     }
 
     .newsletter-form input {
@@ -843,9 +844,14 @@
       font-family: inherit;
       outline: none;
       transition: border-color 0.2s;
-      min-width: 200px;
-      flex: 1;
-      max-width: 240px;
+    }
+
+    .newsletter-form input[name="email"] {
+      grid-column: 1 / -1;
+    }
+
+    .newsletter-form .btn-subscribe {
+      grid-column: 1 / -1;
     }
 
     .newsletter-form input::placeholder { color: #667788; }
@@ -882,9 +888,7 @@
 
     @media (max-width: 600px) {
       .newsletter h2 { font-size: 1.8rem; }
-      .newsletter-form { flex-direction: column; align-items: center; }
-      .newsletter-form input { max-width: 100%; width: 100%; }
-      .btn-subscribe { width: 100%; }
+      .newsletter-form { grid-template-columns: 1fr; }
     }
 
     /* ══════════════════════════════════════
@@ -1230,8 +1234,10 @@
         </p>
         <form class="newsletter-form" name="newsletter" method="POST" data-netlify="true" id="newsletter-form">
           <input type="hidden" name="form-name" value="newsletter">
-          <input type="text" name="first-name" placeholder="First Name" required>
+          <input type="text" name="full-name" placeholder="Full Name" required>
           <input type="email" name="email" placeholder="Email Address" required>
+          <input type="text" name="city" placeholder="City" required>
+          <input type="text" name="state" placeholder="State" required>
           <button type="submit" class="btn-subscribe">Subscribe</button>
         </form>
         <p class="form-success" id="form-success">You're in! God Bless America</p>
@@ -1350,16 +1356,38 @@
     var form = document.getElementById('newsletter-form');
     var formSuccess = document.getElementById('form-success');
 
+    // Google Sheets Apps Script URL — replace with your deployed script URL
+    var GOOGLE_SHEET_URL = '';
+
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      var payload = {
+        fullName: form.querySelector('[name="full-name"]').value,
+        email: form.querySelector('[name="email"]').value,
+        city: form.querySelector('[name="city"]').value,
+        state: form.querySelector('[name="state"]').value
+      };
+
+      // Send to Netlify Forms
       var data = new FormData(form);
       fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(data).toString()
-      })
-      .then(function() { form.style.display = 'none'; formSuccess.classList.add('show'); })
-      .catch(function() { form.style.display = 'none'; formSuccess.classList.add('show'); });
+      }).catch(function(){});
+
+      // Send to Google Sheets (if URL configured)
+      if (GOOGLE_SHEET_URL) {
+        fetch(GOOGLE_SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(function(){});
+      }
+
+      form.style.display = 'none';
+      formSuccess.classList.add('show');
     });
 
     /* ═══ X FEED FALLBACK ═══ */
