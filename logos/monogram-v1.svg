@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D1B2E"/>
+      <stop offset="100%" stop-color="#0A1628"/>
+    </linearGradient>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8952F"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield -->
+  <path d="M256,20 L466,100 L466,280 C466,380 370,460 256,496 C142,460 46,380 46,280 L46,100 Z" fill="url(#bg1)" stroke="url(#g1)" stroke-width="5"/>
+  <!-- Red bar top -->
+  <path d="M256,20 L466,100 L466,115 L256,38 L46,115 L46,100 Z" fill="#BF0A30"/>
+  <!-- Star -->
+  <g transform="translate(256, 125)">
+    <polygon points="0,-30 7,-10 28,-10 11,4 18,24 0,13 -18,24 -11,4 -28,-10 -7,-10" fill="url(#g1)"/>
+  </g>
+  <!-- G -->
+  <text x="148" y="370" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="200" fill="url(#g1)">G</text>
+  <!-- E -->
+  <text x="300" y="370" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="200" fill="url(#g1)">E</text>
+  <!-- Small star bottom -->
+  <polygon points="256,444 259,452 268,452 261,457 263,466 256,461 249,466 251,457 244,452 253,452" fill="#BF0A30" transform="translate(0, -10)"/>
+</svg>

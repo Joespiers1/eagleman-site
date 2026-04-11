@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8952F"/>
+    </linearGradient>
+  </defs>
+  <!-- Circle background -->
+  <circle cx="256" cy="256" r="240" fill="#0A1628" stroke="url(#g2)" stroke-width="6"/>
+  <!-- Inner ring -->
+  <circle cx="256" cy="256" r="215" fill="none" stroke="#C9A84C" stroke-width="1.5" opacity="0.25"/>
+  <!-- Red accent arc at top -->
+  <path d="M100,110 A240,240 0 0,1 412,110" fill="none" stroke="#BF0A30" stroke-width="8" stroke-linecap="round"/>
+  <!-- GE bold letters -->
+  <text x="256" y="300" text-anchor="middle" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="180" fill="url(#g2)" letter-spacing="-5">GE</text>
+  <!-- Star above -->
+  <g transform="translate(256, 115)">
+    <polygon points="0,-22 5,-7 21,-7 8.5,3 13,17 0,9 -13,17 -8.5,3 -21,-7 -5,-7" fill="url(#g2)"/>
+  </g>
+  <!-- AMERICA FIRST curved text at bottom -->
+  <path id="bottomArc" d="M100,400 A180,180 0 0,0 412,400" fill="none"/>
+  <text font-family="Arial, sans-serif" font-weight="700" font-size="16" fill="#BF0A30" letter-spacing="6">
+    <textPath href="#bottomArc" startOffset="50%" text-anchor="middle">AMERICA FIRST</textPath>
+  </text>
+</svg>

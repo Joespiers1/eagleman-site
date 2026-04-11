@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#B8952F"/>
+    </linearGradient>
+    <linearGradient id="r5" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D41030"/>
+      <stop offset="100%" stop-color="#8B0820"/>
+    </linearGradient>
+  </defs>
+  <!-- Double circle seal -->
+  <circle cx="256" cy="256" r="245" fill="#0A1628"/>
+  <circle cx="256" cy="256" r="245" fill="none" stroke="url(#g5)" stroke-width="6"/>
+  <circle cx="256" cy="256" r="225" fill="none" stroke="url(#g5)" stroke-width="2"/>
+  <circle cx="256" cy="256" r="170" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
+  <!-- Stars around the seal - 5 stars at top -->
+  <g fill="url(#g5)">
+    <polygon points="256,28 259,37 269,37 261,43 264,52 256,47 248,52 251,43 243,37 253,37" />
+    <polygon points="150,55 153,64 163,64 155,70 158,79 150,74 142,79 145,70 137,64 147,64" />
+    <polygon points="362,55 365,64 375,64 367,70 370,79 362,74 354,79 357,70 349,64 359,64" />
+    <polygon points="82,120 85,129 95,129 87,135 90,144 82,139 74,144 77,135 69,129 79,129" />
+    <polygon points="430,120 433,129 443,129 435,135 438,144 430,139 422,144 425,135 417,129 427,129" />
+  </g>
+  <!-- GE large centered -->
+  <text x="256" y="300" text-anchor="middle" font-family="'Arial Black',Impact,sans-serif" font-weight="900" font-size="200" fill="url(#g5)" letter-spacing="-8">GE</text>
+  <!-- Curved text top: GUNTHER EAGLEMAN -->
+  <path id="topCurve5" d="M80,256 A176,176 0 0,1 432,256" fill="none"/>
+  <text font-family="Arial, sans-serif" font-weight="800" font-size="18" fill="#FFFFFF" letter-spacing="4">
+    <textPath href="#topCurve5" startOffset="50%" text-anchor="middle">GUNTHER EAGLEMAN</textPath>
+  </text>
+  <!-- Curved text bottom: AMERICA FIRST -->
+  <path id="botCurve5" d="M100,390 A180,180 0 0,0 412,390" fill="none"/>
+  <text font-family="Arial, sans-serif" font-weight="800" font-size="16" fill="url(#r5)" letter-spacing="5">
+    <textPath href="#botCurve5" startOffset="50%" text-anchor="middle">AMERICA FIRST</textPath>
+  </text>
+  <!-- Red line accents -->
+  <line x1="120" y1="340" x2="200" y2="340" stroke="#BF0A30" stroke-width="3" stroke-linecap="round"/>
+  <line x1="312" y1="340" x2="392" y2="340" stroke="#BF0A30" stroke-width="3" stroke-linecap="round"/>
+</svg>

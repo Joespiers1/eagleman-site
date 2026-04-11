@@ -3,136 +3,381 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Logo Preview — Gunther Eagleman</title>
+  <title>Logo Selection — Gunther Eagleman</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #111; color: #fff; padding: 40px; }
-    h1 { font-size: 1.5rem; margin-bottom: 40px; color: #C9A84C; text-align: center; letter-spacing: 2px; }
-    h2 { font-size: 1rem; color: #8899AA; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto; }
-    .card { background: #1A1D27; border: 1px solid #2E3340; border-radius: 16px; padding: 32px; }
-    .preview-row { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
-    .preview-box { padding: 24px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
-    .bg-dark { background: #0A1628; }
-    .bg-white { background: #FFFFFF; }
-    .bg-red { background: #BF0A30; }
-    .bg-gray { background: #333; }
-    .preview-box img { max-height: 80px; width: auto; }
-    .preview-box.icon img { max-height: 100px; }
-    .preview-box.favicon img { max-height: 32px; }
-    .preview-box.small img { max-height: 48px; }
-    .label { font-size: 0.75rem; color: #667; margin-top: 6px; text-align: center; }
-    .use-cases { font-size: 0.85rem; color: #8899AA; line-height: 1.8; }
-    .use-cases li { margin-bottom: 4px; }
-    .section { margin-bottom: 32px; }
-    @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+    body { font-family: 'Inter', sans-serif; background: #0A0D12; color: #fff; }
+
+    .header {
+      text-align: center;
+      padding: 60px 24px 40px;
+      border-bottom: 1px solid #1E2330;
+    }
+    .header h1 { font-size: 2rem; font-weight: 900; letter-spacing: 1px; margin-bottom: 8px; }
+    .header p { color: #8899AA; font-size: 1rem; }
+
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    .section h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #C9A84C;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .section .subtitle {
+      color: #667788;
+      font-size: 0.9rem;
+      margin-bottom: 40px;
+    }
+
+    .logo-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .logo-grid.wordmarks {
+      grid-template-columns: 1fr;
+    }
+
+    .logo-grid.monograms {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .logo-card {
+      background: #12161E;
+      border: 2px solid #1E2330;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
+      cursor: pointer;
+    }
+
+    .logo-card:hover {
+      border-color: #C9A84C;
+      transform: translateY(-3px);
+    }
+
+    .logo-card.selected {
+      border-color: #22C55E;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
+    }
+
+    .logo-display {
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 160px;
+    }
+
+    .logo-display.mono { min-height: 240px; }
+
+    .logo-display img {
+      max-width: 100%;
+      max-height: 120px;
+    }
+
+    .logo-display.mono img {
+      max-height: 200px;
+    }
+
+    .logo-info {
+      padding: 20px 24px;
+      border-top: 1px solid #1E2330;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-info .name {
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+
+    .logo-info .desc {
+      font-size: 0.8rem;
+      color: #667788;
+    }
+
+    .logo-info .tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid #2E3340;
+      color: #8899AA;
+    }
+
+    .logo-card.selected .tag {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: #22C55E;
+      color: #22C55E;
+    }
+
+    /* Background switcher */
+    .bg-switcher {
+      display: flex;
+      gap: 8px;
+      padding: 12px 24px;
+      border-top: 1px solid #1E2330;
+    }
+
+    .bg-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 2px solid #2E3340;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .bg-btn:hover, .bg-btn.active { border-color: #C9A84C; }
+    .bg-btn.dark { background: #0A1628; }
+    .bg-btn.white { background: #FFFFFF; }
+    .bg-btn.red { background: #BF0A30; }
+    .bg-btn.gray { background: #374151; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #1E2330;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .logo-grid.monograms { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .logo-grid.monograms { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
-  <h1>GUNTHER EAGLEMAN — LOGO SYSTEM</h1>
 
-  <div class="grid">
-    <!-- Banner Logo -->
-    <div class="card">
-      <h2>1. Banner Logo (Wordmark)</h2>
+  <div class="header">
+    <h1>Logo Selection</h1>
+    <p>Click a logo to select it. Use the color dots to preview on different backgrounds.</p>
+  </div>
 
-      <div class="section">
-        <div class="preview-row">
-          <div>
-            <div class="preview-box bg-dark" style="min-width: 320px;">
-              <img src="logo-banner.svg" alt="Banner logo on dark">
-            </div>
-            <p class="label">On Dark (Primary)</p>
-          </div>
+  <!-- WORDMARKS -->
+  <div class="section">
+    <h2>Wordmark Logos</h2>
+    <p class="subtitle">For the navbar, apparel, banners, bumper stickers, merch</p>
+    <div class="logo-grid wordmarks">
+
+      <div class="logo-card" data-logo="wordmark-v1">
+        <div class="logo-display" id="display-wm1" style="background: #0A1628;">
+          <img src="logos/wordmark-v1.svg" alt="V1">
         </div>
-        <div class="preview-row">
-          <div>
-            <div class="preview-box bg-white" style="min-width: 320px;">
-              <img src="logo-banner.svg" alt="Banner logo on white" style="filter: brightness(0.2);">
-            </div>
-            <p class="label">On White (Inverted)</p>
-          </div>
+        <div class="logo-info">
+          <div><div class="name">V1 — Star + Stacked</div><div class="desc">Gold star icon, stacked text, red accent bar</div></div>
+          <span class="tag">Current</span>
         </div>
-        <div class="preview-row">
-          <div>
-            <div class="preview-box bg-red" style="min-width: 320px;">
-              <img src="logo-banner.svg" alt="Banner logo on red">
-            </div>
-            <p class="label">On Red</p>
-          </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('wm1','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('wm1','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('wm1','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('wm1','#374151',this)"></div>
         </div>
       </div>
 
-      <h2>Use Cases</h2>
-      <ul class="use-cases">
-        <li>Website navbar (upper left)</li>
-        <li>T-shirts, hoodies, jackets</li>
-        <li>Event banners and signs</li>
-        <li>Bumper stickers</li>
-        <li>Letterhead and business cards</li>
-        <li>YouTube channel art / X header</li>
-      </ul>
-    </div>
-
-    <!-- GE Icon -->
-    <div class="card">
-      <h2>2. GE Shield Icon (Monogram)</h2>
-
-      <div class="section">
-        <div class="preview-row">
-          <div>
-            <div class="preview-box bg-dark icon">
-              <img src="logo-icon-ge.svg" alt="GE icon on dark">
-            </div>
-            <p class="label">Full Size</p>
-          </div>
-          <div>
-            <div class="preview-box bg-dark small">
-              <img src="logo-icon-ge.svg" alt="GE icon small">
-            </div>
-            <p class="label">Small</p>
-          </div>
-          <div>
-            <div class="preview-box bg-dark favicon">
-              <img src="favicon.svg" alt="Favicon">
-            </div>
-            <p class="label">Favicon</p>
-          </div>
+      <div class="logo-card" data-logo="wordmark-v2">
+        <div class="logo-display" id="display-wm2" style="background: #0A1628;">
+          <img src="logos/wordmark-v2.svg" alt="V2">
         </div>
-        <div class="preview-row">
-          <div>
-            <div class="preview-box bg-white icon">
-              <img src="logo-icon-ge.svg" alt="GE icon on white">
-            </div>
-            <p class="label">On White</p>
-          </div>
-          <div>
-            <div class="preview-box bg-red icon">
-              <img src="logo-icon-ge.svg" alt="GE icon on red">
-            </div>
-            <p class="label">On Red</p>
-          </div>
-          <div>
-            <div class="preview-box bg-gray icon">
-              <img src="logo-icon-ge.svg" alt="GE icon on gray">
-            </div>
-            <p class="label">On Gray</p>
-          </div>
+        <div class="logo-info">
+          <div><div class="name">V2 — Inline Bold</div><div class="desc">Single-line, red diamond separator, gold underline</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('wm2','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('wm2','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('wm2','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('wm2','#374151',this)"></div>
         </div>
       </div>
 
-      <h2>Use Cases</h2>
-      <ul class="use-cases">
-        <li>Browser favicon / tab icon</li>
-        <li>App icon (iOS / Android)</li>
-        <li>Hat embroidery (front center)</li>
-        <li>Lapel pins</li>
-        <li>Social media profile picture</li>
-        <li>Watermark on images/videos</li>
-        <li>Coin / challenge coin design</li>
-        <li>Merch tag / label</li>
-      </ul>
+      <div class="logo-card" data-logo="wordmark-v3">
+        <div class="logo-display" id="display-wm3" style="background: #0A1628;">
+          <img src="logos/wordmark-v3.svg" alt="V3">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V3 — Centered Military</div><div class="desc">Centered text, red border bars, three stars separator</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('wm3','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('wm3','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('wm3','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('wm3','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="wordmark-v4">
+        <div class="logo-display" id="display-wm4" style="background: #0A1628;">
+          <img src="logos/wordmark-v4.svg" alt="V4">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V4 — Left Bar + Tagline</div><div class="desc">Bold red left bar, "AMERICA FIRST" tagline below</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('wm4','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('wm4','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('wm4','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('wm4','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="wordmark-v5">
+        <div class="logo-display" id="display-wm5" style="background: #0A1628;">
+          <img src="logos/wordmark-v5.svg" alt="V5">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V5 — Eagle Wings</div><div class="desc">Subtle wing accents, centered star, wide gold tracking</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('wm5','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('wm5','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('wm5','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('wm5','#374151',this)"></div>
+        </div>
+      </div>
+
     </div>
   </div>
+
+  <hr class="divider">
+
+  <!-- MONOGRAMS -->
+  <div class="section">
+    <h2>GE Monogram Icons</h2>
+    <p class="subtitle">For favicon, hats, app icon, pins, social profile picture, watermarks</p>
+    <div class="logo-grid monograms">
+
+      <div class="logo-card" data-logo="monogram-v1">
+        <div class="logo-display mono" id="display-m1" style="background: #0A1628;">
+          <img src="logos/monogram-v1.svg" alt="M1">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V1 — Shield Classic</div><div class="desc">Patriotic shield, gold letters, star crown</div></div>
+          <span class="tag">Current</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('m1','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('m1','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('m1','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('m1','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="monogram-v2">
+        <div class="logo-display mono" id="display-m2" style="background: #0A1628;">
+          <img src="logos/monogram-v2.svg" alt="M2">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V2 — Circle Badge</div><div class="desc">Clean circle, red arc, "AMERICA FIRST" curved</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('m2','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('m2','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('m2','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('m2','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="monogram-v3">
+        <div class="logo-display mono" id="display-m3" style="background: #0A1628;">
+          <img src="logos/monogram-v3.svg" alt="M3">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V3 — Cut Corner</div><div class="desc">Angular octagon shape, bold block letters, white star</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('m3','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('m3','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('m3','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('m3','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="monogram-v4">
+        <div class="logo-display mono" id="display-m4" style="background: #0A1628;">
+          <img src="logos/monogram-v4.svg" alt="M4">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V4 — Modern Rounded</div><div class="desc">Rounded square, overlapping G/E, minimal red accent</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('m4','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('m4','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('m4','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('m4','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="monogram-v5">
+        <div class="logo-display mono" id="display-m5" style="background: #0A1628;">
+          <img src="logos/monogram-v5.svg" alt="M5">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V5 — Presidential Seal</div><div class="desc">Double ring, 5 stars, curved name text, challenge coin style</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('m5','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('m5','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('m5','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('m5','#374151',this)"></div>
+        </div>
+      </div>
+
+      <div class="logo-card" data-logo="monogram-v6">
+        <div class="logo-display mono" id="display-m6" style="background: #0A1628;">
+          <img src="logos/monogram-v6.svg" alt="M6">
+        </div>
+        <div class="logo-info">
+          <div><div class="name">V6 — Diamond</div><div class="desc">Rotated square, bold gold GE, dual stars</div></div>
+          <span class="tag">New</span>
+        </div>
+        <div class="bg-switcher">
+          <div class="bg-btn dark active" onclick="switchBg('m6','#0A1628',this)"></div>
+          <div class="bg-btn white" onclick="switchBg('m6','#FFFFFF',this)"></div>
+          <div class="bg-btn red" onclick="switchBg('m6','#BF0A30',this)"></div>
+          <div class="bg-btn gray" onclick="switchBg('m6','#374151',this)"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function switchBg(id, color, btn) {
+      document.getElementById('display-' + id).style.background = color;
+      var siblings = btn.parentElement.querySelectorAll('.bg-btn');
+      siblings.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+
+    document.querySelectorAll('.logo-card').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        if (e.target.classList.contains('bg-btn')) return;
+        card.classList.toggle('selected');
+      });
+    });
+  </script>
 </body>
 </html>
