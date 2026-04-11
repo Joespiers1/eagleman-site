@@ -1373,6 +1373,17 @@
         if (!raw) return;
         var cfg = JSON.parse(raw);
 
+        // Helper: build CSS filter string from filter data
+        function buildFilterCSS(f) {
+          if (!f) return '';
+          var css = 'filter: brightness(' + ((f.brightness||100)/100) + ') contrast(' + ((f.contrast||100)/100) + ') saturate(' + ((f.saturate||100)/100) + ')';
+          if (f.blur > 0) css += ' blur(' + f.blur + 'px)';
+          if (f.preset === 'sepia') css += ' sepia(0.6)';
+          if (f.preset === 'vintage') css += ' sepia(0.3)';
+          css += ';';
+          return css;
+        }
+
         // Apply theme colors via CSS custom properties
         if (cfg.theme) {
           var t = cfg.theme;
@@ -1449,9 +1460,14 @@
           if (btns[1] && c.heroCta2) { btns[1].textContent = c.heroCta2; }
           if (btns[1] && c.heroCta2Url) { btns[1].href = c.heroCta2Url; }
 
-          if (c.heroImg) {
+          // Hero image: check uploaded data first, then URL
+          var heroImgSrc = (cfg.images && cfg.images.hero) || c.heroImg;
+          if (heroImgSrc) {
             var avatar = document.querySelector('.hero-avatar');
-            if (avatar) avatar.innerHTML = '<img src="' + c.heroImg + '" alt="Gunther Eagleman" loading="lazy">';
+            if (avatar) {
+              var heroFilter = (cfg.filters && cfg.filters.hero) ? buildFilterCSS(cfg.filters.hero) : '';
+              avatar.innerHTML = '<img src="' + heroImgSrc + '" alt="Gunther Eagleman" loading="lazy" style="' + heroFilter + '">';
+            }
           }
 
           var aboutLabel = document.querySelector('.about-text h3');
@@ -1464,9 +1480,14 @@
           if (aboutPs[0] && c.aboutP1) aboutPs[0].textContent = c.aboutP1;
           if (aboutPs[1] && c.aboutP2) aboutPs[1].textContent = c.aboutP2;
 
-          if (c.aboutImg) {
-            var aboutImg = document.querySelector('.about-image');
-            if (aboutImg) aboutImg.innerHTML = '<img src="' + c.aboutImg + '" alt="Gunther Eagleman" loading="lazy" style="width:100%;height:100%;object-fit:cover;">';
+          // About image: check uploaded data first, then URL
+          var aboutImgSrc = (cfg.images && cfg.images.about) || c.aboutImg;
+          if (aboutImgSrc) {
+            var aboutImgEl = document.querySelector('.about-image');
+            if (aboutImgEl) {
+              var aboutFilter = (cfg.filters && cfg.filters.about) ? buildFilterCSS(cfg.filters.about) : '';
+              aboutImgEl.innerHTML = '<img src="' + aboutImgSrc + '" alt="Gunther Eagleman" loading="lazy" style="width:100%;height:100%;object-fit:cover;' + aboutFilter + '">';
+            }
           }
 
           var feedTitle = document.querySelector('.feed .section-title');

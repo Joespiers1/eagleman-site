@@ -802,6 +802,165 @@
       opacity: 1;
     }
 
+    /* ── Image Uploader ── */
+    .img-uploader {
+      border: 2px dashed var(--admin-border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .img-uploader:hover,
+    .img-uploader.dragover {
+      border-color: var(--admin-accent);
+      background: rgba(201, 168, 76, 0.05);
+    }
+
+    .img-uploader input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .img-uploader .upload-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: var(--admin-muted);
+    }
+
+    .img-uploader .upload-text {
+      font-size: 0.85rem;
+      color: var(--admin-muted);
+    }
+
+    .img-uploader .upload-text strong {
+      color: var(--admin-accent);
+    }
+
+    .img-preview {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: var(--admin-bg);
+      display: none;
+    }
+
+    .img-preview.has-image { display: block; }
+
+    .img-preview img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .img-preview .img-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .img-preview:hover .img-overlay { opacity: 1; }
+
+    .img-preview .btn-img {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .img-preview .btn-img:hover { background: rgba(255,255,255,0.2); }
+    .img-preview .btn-img.danger { border-color: var(--admin-red); color: var(--admin-red); }
+
+    /* ── Image Filters ── */
+    .filter-controls {
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .filter-controls.active { display: block; }
+
+    .filter-presets {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .filter-preset {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--admin-border);
+      background: var(--admin-surface2);
+      color: var(--admin-text);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-preset:hover,
+    .filter-preset.active {
+      border-color: var(--admin-accent);
+      color: var(--admin-accent);
+    }
+
+    .filter-sliders {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .filter-slider label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--admin-muted);
+      margin-bottom: 4px;
+    }
+
+    .filter-slider input[type="range"] {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--admin-border);
+      border-radius: 2px;
+      outline: none;
+    }
+
+    .filter-slider input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--admin-accent);
+      cursor: pointer;
+    }
+
+    .filter-slider .filter-value {
+      font-size: 0.7rem;
+      color: var(--admin-muted);
+      text-align: right;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 1024px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1005,9 +1164,51 @@
                   <input type="text" id="edit-hero-cta2-url" value="#newsletter">
                 </div>
               </div>
+              <!-- Hero Profile Image -->
               <div class="form-group">
-                <label>Profile Image URL</label>
-                <input type="text" id="edit-hero-img" placeholder="photo.jpg or full URL">
+                <label>Profile Image</label>
+                <div class="img-preview" id="preview-hero-img">
+                  <img src="" alt="Preview" id="preview-hero-img-el">
+                  <div class="img-overlay">
+                    <button class="btn-img" onclick="document.getElementById('upload-hero-img').click()">Replace</button>
+                    <button class="btn-img danger" onclick="removeImage('hero')">Remove</button>
+                  </div>
+                </div>
+                <div class="img-uploader" id="uploader-hero-img">
+                  <input type="file" id="upload-hero-img" accept="image/*" onchange="handleImageUpload(this, 'hero')">
+                  <div class="upload-icon">&#128247;</div>
+                  <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop<br>PNG, JPG, WebP (max 2MB)</div>
+                </div>
+                <input type="text" id="edit-hero-img" placeholder="Or paste image URL" style="margin-top: 8px;">
+                <div class="filter-controls" id="filters-hero">
+                  <label style="font-size: 0.8rem; font-weight: 600; color: var(--admin-muted); margin-bottom: 8px; display: block;">Image Filters</label>
+                  <div class="filter-presets">
+                    <button class="filter-preset active" onclick="applyFilter('hero','none')">None</button>
+                    <button class="filter-preset" onclick="applyFilter('hero','grayscale')">B&amp;W</button>
+                    <button class="filter-preset" onclick="applyFilter('hero','sepia')">Sepia</button>
+                    <button class="filter-preset" onclick="applyFilter('hero','patriot')">Patriot</button>
+                    <button class="filter-preset" onclick="applyFilter('hero','dramatic')">Dramatic</button>
+                    <button class="filter-preset" onclick="applyFilter('hero','vintage')">Vintage</button>
+                  </div>
+                  <div class="filter-sliders">
+                    <div class="filter-slider">
+                      <label>Brightness <span class="filter-value" id="val-hero-brightness">100%</span></label>
+                      <input type="range" min="50" max="150" value="100" data-target="hero" data-prop="brightness" oninput="updateFilter(this)">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Contrast <span class="filter-value" id="val-hero-contrast">100%</span></label>
+                      <input type="range" min="50" max="150" value="100" data-target="hero" data-prop="contrast" oninput="updateFilter(this)">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Saturation <span class="filter-value" id="val-hero-saturate">100%</span></label>
+                      <input type="range" min="0" max="200" value="100" data-target="hero" data-prop="saturate" oninput="updateFilter(this)">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Blur <span class="filter-value" id="val-hero-blur">0px</span></label>
+                      <input type="range" min="0" max="10" value="0" data-target="hero" data-prop="blur" oninput="updateFilter(this)">
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1035,9 +1236,51 @@
                 <label>Bio Paragraph 2</label>
                 <textarea id="edit-about-p2">Since 2021, Gunther has built a following of over 1.6 million on X by delivering the unfiltered truth the mainstream media refuses to cover. A devoted Christian, husband, and father, he stands firm on the values that built this nation.</textarea>
               </div>
+              <!-- About Image -->
               <div class="form-group">
-                <label>About Image URL</label>
-                <input type="text" id="edit-about-img" placeholder="about-photo.jpg or full URL">
+                <label>About Photo</label>
+                <div class="img-preview" id="preview-about-img">
+                  <img src="" alt="Preview" id="preview-about-img-el">
+                  <div class="img-overlay">
+                    <button class="btn-img" onclick="document.getElementById('upload-about-img').click()">Replace</button>
+                    <button class="btn-img danger" onclick="removeImage('about')">Remove</button>
+                  </div>
+                </div>
+                <div class="img-uploader" id="uploader-about-img">
+                  <input type="file" id="upload-about-img" accept="image/*" onchange="handleImageUpload(this, 'about')">
+                  <div class="upload-icon">&#128247;</div>
+                  <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop<br>PNG, JPG, WebP (max 2MB)</div>
+                </div>
+                <input type="text" id="edit-about-img" placeholder="Or paste image URL" style="margin-top: 8px;">
+                <div class="filter-controls" id="filters-about">
+                  <label style="font-size: 0.8rem; font-weight: 600; color: var(--admin-muted); margin-bottom: 8px; display: block;">Image Filters</label>
+                  <div class="filter-presets">
+                    <button class="filter-preset active" onclick="applyFilter('about','none')">None</button>
+                    <button class="filter-preset" onclick="applyFilter('about','grayscale')">B&amp;W</button>
+                    <button class="filter-preset" onclick="applyFilter('about','sepia')">Sepia</button>
+                    <button class="filter-preset" onclick="applyFilter('about','patriot')">Patriot</button>
+                    <button class="filter-preset" onclick="applyFilter('about','dramatic')">Dramatic</button>
+                    <button class="filter-preset" onclick="applyFilter('about','vintage')">Vintage</button>
+                  </div>
+                  <div class="filter-sliders">
+                    <div class="filter-slider">
+                      <label>Brightness <span class="filter-value" id="val-about-brightness">100%</span></label>
+                      <input type="range" min="50" max="150" value="100" data-target="about" data-prop="brightness" oninput="updateFilter(this)">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Contrast <span class="filter-value" id="val-about-contrast">100%</span></label>
+                      <input type="range" min="50" max="150" value="100" data-target="about" data-prop="contrast" oninput="updateFilter(this)">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Saturation <span class="filter-value" id="val-about-saturate">100%</span></label>
+                      <input type="range" min="0" max="200" value="100" data-target="about" data-prop="saturate" oninput="updateFilter(this)">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Blur <span class="filter-value" id="val-about-blur">0px</span></label>
+                      <input type="range" min="0" max="10" value="0" data-target="about" data-prop="blur" oninput="updateFilter(this)">
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -1425,8 +1668,20 @@
               <textarea id="seo-desc">The unfiltered truth about American politics. Follow Gunther Eagleman.</textarea>
             </div>
             <div class="form-group">
-              <label>OG Image URL</label>
-              <input type="text" id="seo-og-image" value="/og-image.jpg">
+              <label>OG / Social Share Image</label>
+              <div class="img-preview" id="preview-og-img">
+                <img src="" alt="Preview" id="preview-og-img-el">
+                <div class="img-overlay">
+                  <button class="btn-img" onclick="document.getElementById('upload-og-img').click()">Replace</button>
+                  <button class="btn-img danger" onclick="removeImage('og')">Remove</button>
+                </div>
+              </div>
+              <div class="img-uploader" id="uploader-og-img">
+                <input type="file" id="upload-og-img" accept="image/*" onchange="handleImageUpload(this, 'og')">
+                <div class="upload-icon">&#128247;</div>
+                <div class="upload-text"><strong>Click to upload</strong> OG image (1200x630 recommended)</div>
+              </div>
+              <input type="text" id="seo-og-image" value="/og-image.jpg" placeholder="Or paste image URL" style="margin-top: 8px;">
             </div>
             <div class="form-group">
               <label>Canonical URL</label>
@@ -2049,6 +2304,171 @@
           }
         }
       });
+    });
+
+    /* ══════════════════════════════════════
+       IMAGE UPLOAD & FILTERS
+       ══════════════════════════════════════ */
+    var imageData = config.images || {};
+    var filterData = config.filters || {};
+
+    // Filter presets
+    var filterPresets = {
+      none:     { brightness: 100, contrast: 100, saturate: 100, blur: 0 },
+      grayscale:{ brightness: 100, contrast: 110, saturate: 0, blur: 0 },
+      sepia:    { brightness: 100, contrast: 100, saturate: 80, blur: 0 },
+      patriot:  { brightness: 105, contrast: 120, saturate: 130, blur: 0 },
+      dramatic: { brightness: 90, contrast: 140, saturate: 80, blur: 0 },
+      vintage:  { brightness: 110, contrast: 90, saturate: 60, blur: 0 }
+    };
+
+    function handleImageUpload(input, target) {
+      var file = input.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        showToast('Image must be under 2MB');
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var dataUrl = e.target.result;
+        imageData[target] = dataUrl;
+        showImagePreview(target, dataUrl);
+        // Also set the URL input
+        var urlInput = document.getElementById('edit-' + target + '-img') || document.getElementById('seo-og-image');
+        if (urlInput) urlInput.value = '';
+        showToast('Image uploaded — click Save to keep');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function showImagePreview(target, src) {
+      var preview = document.getElementById('preview-' + target + '-img');
+      var img = document.getElementById('preview-' + target + '-img-el');
+      if (preview && img) {
+        img.src = src;
+        preview.classList.add('has-image');
+        // Show filter controls
+        var filters = document.getElementById('filters-' + target);
+        if (filters) filters.classList.add('active');
+        // Apply saved filters
+        applyFilterCSS(target);
+      }
+    }
+
+    function removeImage(target) {
+      delete imageData[target];
+      delete filterData[target];
+      var preview = document.getElementById('preview-' + target + '-img');
+      var img = document.getElementById('preview-' + target + '-img-el');
+      var filters = document.getElementById('filters-' + target);
+      if (preview) preview.classList.remove('has-image');
+      if (img) { img.src = ''; img.style.filter = ''; }
+      if (filters) filters.classList.remove('active');
+      var urlInput = document.getElementById('edit-' + target + '-img') || document.getElementById('seo-og-image');
+      if (urlInput) urlInput.value = '';
+      showToast('Image removed');
+    }
+
+    function applyFilter(target, preset) {
+      var vals = filterPresets[preset];
+      if (!vals) return;
+      filterData[target] = Object.assign({}, vals, { preset: preset });
+
+      // Update sliders
+      var sliders = document.querySelectorAll('#filters-' + target + ' input[type="range"]');
+      sliders.forEach(function(s) {
+        var prop = s.dataset.prop;
+        if (vals[prop] !== undefined) {
+          s.value = vals[prop];
+          var valEl = document.getElementById('val-' + target + '-' + prop);
+          if (valEl) valEl.textContent = vals[prop] + (prop === 'blur' ? 'px' : '%');
+        }
+      });
+
+      // Update preset buttons
+      var presets = document.querySelectorAll('#filters-' + target + ' .filter-preset');
+      presets.forEach(function(btn) { btn.classList.remove('active'); });
+      var activeBtn = Array.from(presets).find(function(b) {
+        return b.textContent.toLowerCase().replace(/&/g,'').trim() === preset ||
+               (preset === 'grayscale' && b.textContent.trim() === 'B&W') ||
+               (preset === 'none' && b.textContent.trim() === 'None');
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+
+      applyFilterCSS(target);
+    }
+
+    function updateFilter(input) {
+      var target = input.dataset.target;
+      var prop = input.dataset.prop;
+      var val = input.value;
+
+      if (!filterData[target]) filterData[target] = Object.assign({}, filterPresets.none);
+      filterData[target][prop] = parseInt(val);
+      filterData[target].preset = 'custom';
+
+      var valEl = document.getElementById('val-' + target + '-' + prop);
+      if (valEl) valEl.textContent = val + (prop === 'blur' ? 'px' : '%');
+
+      // Deselect preset buttons
+      var presets = document.querySelectorAll('#filters-' + target + ' .filter-preset');
+      presets.forEach(function(btn) { btn.classList.remove('active'); });
+
+      applyFilterCSS(target);
+    }
+
+    function applyFilterCSS(target) {
+      var f = filterData[target] || filterPresets.none;
+      var img = document.getElementById('preview-' + target + '-img-el');
+      if (!img) return;
+
+      var css = 'brightness(' + (f.brightness/100) + ') contrast(' + (f.contrast/100) + ') saturate(' + (f.saturate/100) + ')';
+      if (f.blur > 0) css += ' blur(' + f.blur + 'px)';
+      // Sepia special handling
+      if (f.preset === 'sepia') css += ' sepia(0.6)';
+      if (f.preset === 'vintage') css += ' sepia(0.3)';
+      img.style.filter = css;
+    }
+
+    // Drag & drop support for uploaders
+    document.querySelectorAll('.img-uploader').forEach(function(uploader) {
+      uploader.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        uploader.classList.add('dragover');
+      });
+      uploader.addEventListener('dragleave', function() {
+        uploader.classList.remove('dragover');
+      });
+      uploader.addEventListener('drop', function(e) {
+        e.preventDefault();
+        uploader.classList.remove('dragover');
+        var fileInput = uploader.querySelector('input[type="file"]');
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          fileInput.dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    // Load saved images on init
+    function loadSavedImages() {
+      ['hero', 'about', 'og'].forEach(function(target) {
+        if (imageData[target]) {
+          showImagePreview(target, imageData[target]);
+        }
+        if (filterData[target]) {
+          applyFilter(target, filterData[target].preset || 'none');
+        }
+      });
+    }
+    loadSavedImages();
+
+    // Override save to include images and filters
+    var origSave = document.getElementById('btn-save');
+    origSave.addEventListener('click', function() {
+      config.images = imageData;
+      config.filters = filterData;
     });
   </script>
 </body>
