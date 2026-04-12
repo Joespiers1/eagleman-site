@@ -1027,14 +1027,69 @@
       display: block;
     }
 
-    /* When preview is open, shrink the main content area */
+    /* When preview is open, collapse sidebar and split screen */
+    body.preview-active .sidebar {
+      width: 48px;
+      overflow: hidden;
+    }
+
+    body.preview-active .sidebar .sidebar-header,
+    body.preview-active .sidebar .sidebar-footer,
+    body.preview-active .sidebar .nav-section-label,
+    body.preview-active .sidebar .nav-item span:not(.nav-icon) {
+      display: none;
+    }
+
+    body.preview-active .sidebar .nav-item {
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    body.preview-active .sidebar .nav-icon {
+      margin: 0;
+    }
+
     body.preview-active .main {
-      width: 55%;
-      width: calc(100% - var(--sidebar-w) - 45vw);
+      margin-left: 48px;
+      width: calc(55% - 48px);
+    }
+
+    body.preview-active .main .main-header {
+      padding: 12px 16px;
+    }
+
+    body.preview-active .main .main-header h1 {
+      font-size: 1rem;
     }
 
     body.preview-active .main .main-body {
-      padding-right: 16px;
+      padding: 16px;
+    }
+
+    body.preview-active .preview-panel {
+      width: 45%;
+    }
+
+    /* Make form elements smaller in preview mode */
+    body.preview-active .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    body.preview-active .img-preview img {
+      max-height: 120px;
+    }
+
+    body.preview-active .img-uploader {
+      padding: 12px;
+    }
+
+    body.preview-active .img-uploader .upload-icon {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    body.preview-active .img-uploader .upload-text {
+      font-size: 0.75rem;
     }
 
     /* ── Responsive ── */
