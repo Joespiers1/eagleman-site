@@ -2010,18 +2010,32 @@
 
         <!-- ═══ STORE PRODUCTS PANEL ═══ -->
         <div class="panel" id="panel-store">
-          <div class="form-section">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-              <h3>Store Products</h3>
+          <!-- Card Grid View -->
+          <div id="store-grid-view">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+              <div>
+                <p style="color:var(--admin-muted);font-size:0.85rem;">
+                  <span id="store-product-count">0</span> products on your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>
+                </p>
+              </div>
               <div style="display:flex;gap:8px;">
-                <button class="btn-sm" onclick="resetStoreProducts()" style="border-color:var(--admin-red);color:var(--admin-red);">Reset to Defaults</button>
+                <button class="btn-sm" onclick="resetStoreProducts()" style="border-color:var(--admin-red);color:var(--admin-red);">Reset Defaults</button>
                 <button class="btn-sm primary" onclick="addStoreProduct()">+ Add Product</button>
               </div>
             </div>
-            <p style="color:var(--admin-muted);font-size:0.85rem;margin-bottom:20px;">
-              Manage products displayed on your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>. Changes save automatically.
-            </p>
-            <div id="store-products-list"></div>
+            <div id="store-products-grid"></div>
+          </div>
+
+          <!-- Single Product Editor View (hidden by default) -->
+          <div id="store-edit-view" style="display:none;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+              <button class="btn-sm" onclick="closeProductEditor()" style="display:flex;align-items:center;gap:6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                All Products
+              </button>
+              <span style="color:var(--admin-muted);font-size:0.85rem;" id="store-edit-breadcrumb"></span>
+            </div>
+            <div id="store-edit-content"></div>
           </div>
         </div>
 
@@ -3149,110 +3163,185 @@
     }
 
     var CATEGORIES = ['hats','shirts','hoodies','flags','accessories','stickers'];
+    var editingProductIndex = -1;
 
+    /* ── Card Grid View ── */
     function renderStoreProducts() {
-      var list = document.getElementById('store-products-list');
-      if (!list) return;
+      var grid = document.getElementById('store-products-grid');
+      var countEl = document.getElementById('store-product-count');
+      if (!grid) return;
+
+      countEl.textContent = config.storeProducts.length;
 
       if (config.storeProducts.length === 0) {
-        list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--admin-muted);">' +
-          '<div style="font-size:2rem;margin-bottom:12px;">&#128722;</div>' +
+        grid.innerHTML = '<div style="text-align:center;padding:60px 24px;color:var(--admin-muted);background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:12px;">' +
+          '<div style="font-size:2.5rem;margin-bottom:12px;">&#128722;</div>' +
           '<p>No products yet. Click <strong>+ Add Product</strong> to get started.</p></div>';
         return;
       }
 
-      list.innerHTML = config.storeProducts.map(function(p, i) {
-        var catOptions = CATEGORIES.map(function(c) {
-          return '<option value="' + c + '"' + (p.category === c ? ' selected' : '') + '>' + c.charAt(0).toUpperCase() + c.slice(1) + '</option>';
-        }).join('');
+      grid.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">' +
+        config.storeProducts.map(function(p, i) {
+          var badgeHtml = '';
+          if (p.badge === 'new') badgeHtml = '<span style="position:absolute;top:8px;left:8px;background:var(--admin-red);color:#fff;font-size:0.6rem;font-weight:800;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;">New</span>';
+          if (p.badge === 'hot') badgeHtml = '<span style="position:absolute;top:8px;left:8px;background:var(--admin-accent);color:#0A1628;font-size:0.6rem;font-weight:800;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;">Best Seller</span>';
 
-        var badgeOptions = '<option value="">None</option>' +
-          '<option value="new"' + (p.badge === 'new' ? ' selected' : '') + '>New</option>' +
-          '<option value="hot"' + (p.badge === 'hot' ? ' selected' : '') + '>Best Seller</option>';
+          var colorDots = '';
+          if (p.colors && p.colors.length) {
+            colorDots = '<div style="display:flex;gap:4px;margin-top:6px;">' +
+              p.colors.slice(0, 5).map(function(c) {
+                return '<span style="width:12px;height:12px;border-radius:50%;background:'+c+';border:1px solid rgba(255,255,255,0.15);"></span>';
+              }).join('') +
+              (p.colors.length > 5 ? '<span style="font-size:0.65rem;color:var(--admin-muted);line-height:12px;">+' + (p.colors.length-5) + '</span>' : '') +
+            '</div>';
+          }
 
-        var colorsHtml = (p.colors || []).map(function(c, ci) {
-          return '<div style="display:flex;gap:4px;align-items:center;margin-bottom:4px;">' +
-            '<input type="color" value="' + c + '" onchange="updateStoreProductColor('+i+','+ci+',this.value)" style="width:32px;height:28px;border:none;background:none;cursor:pointer;">' +
-            '<input type="text" value="' + escHtml((p.colorNames||[])[ci]||'') + '" placeholder="Name" onchange="updateStoreProductColorName('+i+','+ci+',this.value)" style="flex:1;padding:4px 6px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:4px;color:var(--admin-text);font-size:0.75rem;">' +
-            '<button class="btn-icon danger" onclick="removeStoreProductColor('+i+','+ci+')" title="Remove">&times;</button>' +
+          var sizeBadge = p.sizes ? '<span style="font-size:0.65rem;color:var(--admin-muted);">' + p.sizes.length + ' sizes</span>' : '';
+
+          return '<div onclick="openProductEditor('+i+')" style="background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:12px;cursor:pointer;transition:all 0.2s;overflow:hidden;" onmouseenter="this.style.borderColor=\'var(--admin-accent)\';this.style.transform=\'translateY(-2px)\'" onmouseleave="this.style.borderColor=\'var(--admin-border)\';this.style.transform=\'none\'">' +
+            '<div style="aspect-ratio:1;background:var(--admin-surface2);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">' +
+              badgeHtml +
+              (p.image ? '<img src="'+escHtml(p.image)+'" style="width:100%;height:100%;object-fit:cover;">' : '<span style="font-size:2.5rem;opacity:0.2;">&#9733;</span>') +
+            '</div>' +
+            '<div style="padding:12px;">' +
+              '<div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--admin-accent);margin-bottom:4px;">' + escHtml(p.category) + '</div>' +
+              '<div style="font-size:0.85rem;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escHtml(p.name) + '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                '<span style="font-size:1rem;font-weight:900;">$' + (p.price||0).toFixed(2) + '</span>' +
+                sizeBadge +
+              '</div>' +
+              colorDots +
+            '</div>' +
           '</div>';
-        }).join('');
-
-        var sizesVal = (p.sizes || []).join(', ');
-
-        return '<div style="background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:12px;padding:18px;margin-bottom:14px;">' +
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
-            '<span style="font-size:0.85rem;font-weight:800;color:var(--admin-accent);">' +
-              (p.image ? '<img src="'+escHtml(p.image)+'" style="width:32px;height:32px;border-radius:6px;object-fit:cover;display:inline-block;vertical-align:middle;margin-right:8px;">' : '') +
-              escHtml(p.name || 'Untitled Product') +
-            '</span>' +
-            '<div style="display:flex;gap:4px;">' +
-              '<button class="btn-icon" title="Move Up" onclick="moveStoreProduct('+i+',-1)">&uarr;</button>' +
-              '<button class="btn-icon" title="Move Down" onclick="moveStoreProduct('+i+',1)">&darr;</button>' +
-              '<button class="btn-icon" title="Duplicate" onclick="dupeStoreProduct('+i+')">&#x2398;</button>' +
-              '<button class="btn-icon danger" title="Delete" onclick="removeStoreProduct('+i+')">&times;</button>' +
-            '</div>' +
-          '</div>' +
-
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
-            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Product Name</label>' +
-            '<input type="text" value="' + escHtml(p.name) + '" onchange="updateStoreProduct('+i+',\'name\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
-            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Price ($)</label>' +
-            '<input type="number" step="0.01" value="' + (p.price||0) + '" onchange="updateStoreProduct('+i+',\'price\',parseFloat(this.value))" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
-          '</div>' +
-
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
-            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Category</label>' +
-            '<select onchange="updateStoreProduct('+i+',\'category\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;">' + catOptions + '</select></div>' +
-            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Badge</label>' +
-            '<select onchange="updateStoreProduct('+i+',\'badge\',this.value||null)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;">' + badgeOptions + '</select></div>' +
-          '</div>' +
-
-          '<div style="margin-bottom:8px;"><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Description</label>' +
-          '<textarea onchange="updateStoreProduct('+i+',\'desc\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;min-height:50px;resize:vertical;">' + escHtml(p.desc) + '</textarea></div>' +
-
-          '<div style="margin-bottom:8px;"><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Image URL</label>' +
-          '<input type="text" value="' + escHtml(p.image||'') + '" onchange="updateStoreProduct('+i+',\'image\',this.value)" placeholder="https://... or leave blank for placeholder" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
-
-          '<div style="margin-bottom:8px;"><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Sizes (comma-separated, e.g. S, M, L, XL — leave blank for no sizes)</label>' +
-          '<input type="text" value="' + escHtml(sizesVal) + '" onchange="updateStoreProductSizes('+i+',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
-
-          '<div style="border-top:1px solid var(--admin-border);padding-top:8px;">' +
-            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
-              '<label style="font-size:0.7rem;color:var(--admin-muted);">Colors</label>' +
-              '<button class="btn-icon" onclick="addStoreProductColor('+i+')" title="Add color">+</button>' +
-            '</div>' +
-            colorsHtml +
-          '</div>' +
-        '</div>';
-      }).join('');
+        }).join('') +
+      '</div>';
     }
 
+    /* ── Product Editor View ── */
+    function openProductEditor(i) {
+      editingProductIndex = i;
+      document.getElementById('store-grid-view').style.display = 'none';
+      document.getElementById('store-edit-view').style.display = 'block';
+      renderProductEditor();
+    }
+
+    function closeProductEditor() {
+      editingProductIndex = -1;
+      document.getElementById('store-edit-view').style.display = 'none';
+      document.getElementById('store-grid-view').style.display = 'block';
+      renderStoreProducts();
+    }
+
+    function renderProductEditor() {
+      var i = editingProductIndex;
+      if (i < 0 || i >= config.storeProducts.length) return;
+      var p = config.storeProducts[i];
+
+      document.getElementById('store-edit-breadcrumb').textContent = 'Editing: ' + p.name;
+
+      var catOptions = CATEGORIES.map(function(c) {
+        return '<option value="' + c + '"' + (p.category === c ? ' selected' : '') + '>' + c.charAt(0).toUpperCase() + c.slice(1) + '</option>';
+      }).join('');
+
+      var badgeOptions = '<option value="">None</option>' +
+        '<option value="new"' + (p.badge === 'new' ? ' selected' : '') + '>New</option>' +
+        '<option value="hot"' + (p.badge === 'hot' ? ' selected' : '') + '>Best Seller</option>';
+
+      var colorsHtml = (p.colors || []).map(function(c, ci) {
+        return '<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;background:var(--admin-bg);padding:8px 12px;border-radius:8px;border:1px solid var(--admin-border);">' +
+          '<input type="color" value="' + c + '" onchange="updateStoreProductColor('+i+','+ci+',this.value)" style="width:36px;height:32px;border:none;background:none;cursor:pointer;border-radius:4px;">' +
+          '<input type="text" value="' + escHtml((p.colorNames||[])[ci]||'') + '" placeholder="Color name" onchange="updateStoreProductColorName('+i+','+ci+',this.value)" style="flex:1;padding:8px 10px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;">' +
+          '<button class="btn-icon danger" onclick="removeStoreProductColor('+i+','+ci+')" title="Remove" style="font-size:1.1rem;">&times;</button>' +
+        '</div>';
+      }).join('');
+
+      var sizesVal = (p.sizes || []).join(', ');
+
+      var inputStyle = 'width:100%;padding:10px 12px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:8px;color:var(--admin-text);font-size:0.9rem;';
+      var labelStyle = 'font-size:0.75rem;font-weight:600;color:var(--admin-muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;';
+      var sectionStyle = 'background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:12px;padding:20px;margin-bottom:16px;';
+
+      var content = document.getElementById('store-edit-content');
+      content.innerHTML =
+        // Image Preview + Upload
+        '<div style="'+sectionStyle+'">' +
+          '<div style="display:grid;grid-template-columns:160px 1fr;gap:20px;align-items:start;">' +
+            '<div style="aspect-ratio:1;background:var(--admin-bg);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--admin-border);">' +
+              (p.image ? '<img src="'+escHtml(p.image)+'" style="width:100%;height:100%;object-fit:cover;">' : '<span style="font-size:3rem;opacity:0.15;">&#9733;</span>') +
+            '</div>' +
+            '<div>' +
+              '<div style="margin-bottom:12px;"><label style="'+labelStyle+'">Product Name</label>' +
+              '<input type="text" value="' + escHtml(p.name) + '" onchange="updateStoreProduct('+i+',\'name\',this.value);document.getElementById(\'store-edit-breadcrumb\').textContent=\'Editing: \'+this.value" style="'+inputStyle+'font-size:1.1rem;font-weight:700;"></div>' +
+              '<div><label style="'+labelStyle+'">Image URL</label>' +
+              '<input type="text" value="' + escHtml(p.image||'') + '" onchange="updateStoreProduct('+i+',\'image\',this.value);renderProductEditor()" placeholder="https://... or leave blank for placeholder" style="'+inputStyle+'"></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+
+        // Price, Category, Badge
+        '<div style="'+sectionStyle+'">' +
+          '<h4 style="font-size:0.85rem;font-weight:800;margin-bottom:14px;">Pricing & Classification</h4>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">' +
+            '<div><label style="'+labelStyle+'">Price ($)</label>' +
+            '<input type="number" step="0.01" value="' + (p.price||0) + '" onchange="updateStoreProduct('+i+',\'price\',parseFloat(this.value))" style="'+inputStyle+'"></div>' +
+            '<div><label style="'+labelStyle+'">Category</label>' +
+            '<select onchange="updateStoreProduct('+i+',\'category\',this.value)" style="'+inputStyle+'">' + catOptions + '</select></div>' +
+            '<div><label style="'+labelStyle+'">Badge</label>' +
+            '<select onchange="updateStoreProduct('+i+',\'badge\',this.value||null)" style="'+inputStyle+'">' + badgeOptions + '</select></div>' +
+          '</div>' +
+        '</div>' +
+
+        // Description
+        '<div style="'+sectionStyle+'">' +
+          '<h4 style="font-size:0.85rem;font-weight:800;margin-bottom:14px;">Description</h4>' +
+          '<textarea onchange="updateStoreProduct('+i+',\'desc\',this.value)" style="'+inputStyle+'min-height:80px;resize:vertical;line-height:1.6;">' + escHtml(p.desc) + '</textarea>' +
+        '</div>' +
+
+        // Sizes
+        '<div style="'+sectionStyle+'">' +
+          '<h4 style="font-size:0.85rem;font-weight:800;margin-bottom:14px;">Sizes</h4>' +
+          '<label style="'+labelStyle+'">Comma-separated (e.g. S, M, L, XL, 2XL) — leave blank for no size selection</label>' +
+          '<input type="text" value="' + escHtml(sizesVal) + '" onchange="updateStoreProductSizes('+i+',this.value)" style="'+inputStyle+'">' +
+        '</div>' +
+
+        // Colors
+        '<div style="'+sectionStyle+'">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">' +
+            '<h4 style="font-size:0.85rem;font-weight:800;">Color Options</h4>' +
+            '<button class="btn-sm" onclick="addStoreProductColor('+i+')">+ Add Color</button>' +
+          '</div>' +
+          (colorsHtml || '<p style="color:var(--admin-muted);font-size:0.85rem;">No colors configured. Click + Add Color to add swatches.</p>') +
+        '</div>' +
+
+        // Actions
+        '<div style="display:flex;gap:10px;justify-content:space-between;padding-top:8px;">' +
+          '<div style="display:flex;gap:8px;">' +
+            '<button class="btn-sm" onclick="dupeStoreProduct('+i+')">Duplicate Product</button>' +
+            '<button class="btn-sm" onclick="moveStoreProduct('+i+',-1)">&uarr; Move Up</button>' +
+            '<button class="btn-sm" onclick="moveStoreProduct('+i+',1)">&darr; Move Down</button>' +
+          '</div>' +
+          '<button class="btn-sm" onclick="removeStoreProduct('+i+')" style="border-color:var(--admin-red);color:var(--admin-red);">Delete Product</button>' +
+        '</div>';
+    }
+
+    /* ── CRUD Functions ── */
     function addStoreProduct() {
       var id = config.storeProducts.length > 0
         ? Math.max.apply(null, config.storeProducts.map(function(p){ return p.id; })) + 1
         : 1;
       config.storeProducts.push({
-        id: id,
-        name: 'New Product',
-        category: 'shirts',
-        price: 29.99,
-        badge: null,
-        desc: 'Product description...',
-        image: null,
-        colors: null,
-        colorNames: null,
-        sizes: null
+        id: id, name: 'New Product', category: 'shirts', price: 29.99, badge: null,
+        desc: 'Product description...', image: null, colors: null, colorNames: null, sizes: null
       });
-      renderStoreProducts();
       saveConfig();
+      openProductEditor(config.storeProducts.length - 1);
     }
 
     function removeStoreProduct(i) {
       if (!confirm('Delete "' + config.storeProducts[i].name + '"?')) return;
       config.storeProducts.splice(i, 1);
-      renderStoreProducts();
       saveConfig();
+      closeProductEditor();
     }
 
     function dupeStoreProduct(i) {
@@ -3260,8 +3349,8 @@
       copy.id = Math.max.apply(null, config.storeProducts.map(function(p){ return p.id; })) + 1;
       copy.name = copy.name + ' (Copy)';
       config.storeProducts.splice(i + 1, 0, copy);
-      renderStoreProducts();
       saveConfig();
+      openProductEditor(i + 1);
     }
 
     function moveStoreProduct(i, dir) {
@@ -3270,8 +3359,9 @@
       var tmp = config.storeProducts[i];
       config.storeProducts[i] = config.storeProducts[j];
       config.storeProducts[j] = tmp;
-      renderStoreProducts();
+      editingProductIndex = j;
       saveConfig();
+      renderProductEditor();
     }
 
     function updateStoreProduct(i, key, val) {
@@ -3293,8 +3383,8 @@
       if (!p.colors) { p.colors = []; p.colorNames = []; }
       p.colors.push('#000000');
       p.colorNames.push('Black');
-      renderStoreProducts();
       saveConfig();
+      renderProductEditor();
     }
 
     function removeStoreProductColor(i, ci) {
@@ -3304,8 +3394,8 @@
         config.storeProducts[i].colors = null;
         config.storeProducts[i].colorNames = null;
       }
-      renderStoreProducts();
       saveConfig();
+      renderProductEditor();
     }
 
     function updateStoreProductColor(i, ci, val) {
