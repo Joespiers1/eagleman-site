@@ -1129,8 +1129,47 @@
 
         <!-- ═══ CONTENT EDITOR ═══ -->
         <div class="panel" id="panel-content">
+
+          <!-- Navbar -->
+          <div class="editor-section open" id="editor-navbar">
+            <div class="editor-section-header">
+              <h4>&#9776; Navigation Bar</h4>
+              <span class="chevron">&#9660;</span>
+            </div>
+            <div class="editor-section-body">
+              <!-- Logo -->
+              <div class="form-group">
+                <label>Navbar Logo</label>
+                <div class="img-preview" id="preview-navlogo-img">
+                  <img src="" alt="Preview" id="preview-navlogo-img-el">
+                  <div class="img-overlay">
+                    <button class="btn-img" onclick="document.getElementById('upload-navlogo-img').click()">Replace</button>
+                    <button class="btn-img danger" onclick="removeImage('navlogo')">Remove</button>
+                  </div>
+                </div>
+                <div class="img-uploader" id="uploader-navlogo-img">
+                  <input type="file" id="upload-navlogo-img" accept="image/*" onchange="handleImageUpload(this, 'navlogo')">
+                  <div class="upload-icon">&#128247;</div>
+                  <div class="upload-text"><strong>Click to upload</strong> your wordmark logo<br>PNG, SVG, WebP (max 2MB)</div>
+                </div>
+                <input type="text" id="edit-navlogo-url" placeholder="Or paste logo image URL" style="margin-top: 8px;" oninput="updateNavLogoPreview()">
+              </div>
+              <div class="form-group">
+                <label>Logo Height <span style="float:right;color:var(--admin-muted);font-size:0.75rem" id="val-navlogo-height">42px</span></label>
+                <input type="range" id="edit-navlogo-height" min="20" max="80" value="42" oninput="document.getElementById('val-navlogo-height').textContent=this.value+'px'">
+              </div>
+
+              <!-- Nav Items -->
+              <div style="border-top:1px solid var(--admin-border);margin-top:16px;padding-top:16px;">
+                <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--admin-muted);margin-bottom:10px;">Menu Items</label>
+                <div id="nav-items-list"></div>
+                <button class="btn-sm" onclick="addNavItem()" style="margin-top:8px;">+ Add Menu Item</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Hero -->
-          <div class="editor-section open" id="editor-hero">
+          <div class="editor-section" id="editor-hero">
             <div class="editor-section-header">
               <h4>&#9733; Hero Section</h4>
               <span class="chevron">&#9660;</span>
@@ -2464,11 +2503,84 @@
     }
     loadSavedImages();
 
-    // Override save to include images and filters
+    /* ══════════════════════════════════════
+       NAVBAR EDITOR
+       ══════════════════════════════════════ */
+    var defaultNavItems = [
+      { label: 'Home', href: '#home' },
+      { label: 'About', href: '#about' },
+      { label: 'Live Feed', href: '#feed' },
+      { label: 'Issues', href: '#issues' },
+      { label: 'Videos', href: '#videos' },
+      { label: 'Newsletter', href: '#newsletter' }
+    ];
+
+    if (!config.navItems) config.navItems = JSON.parse(JSON.stringify(defaultNavItems));
+    if (!config.navLogoHeight) config.navLogoHeight = 42;
+    if (!config.navLogoUrl) config.navLogoUrl = '';
+
+    function renderNavItems() {
+      var list = document.getElementById('nav-items-list');
+      list.innerHTML = '';
+      config.navItems.forEach(function(item, i) {
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:8px;';
+        row.innerHTML =
+          '<input type="text" value="' + item.label + '" placeholder="Label" style="flex:1;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;" onchange="updateNavItem(' + i + ',\'label\',this.value)">' +
+          '<input type="text" value="' + item.href + '" placeholder="#section" style="flex:1;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;" onchange="updateNavItem(' + i + ',\'href\',this.value)">' +
+          '<button class="btn-icon" title="Move Up" onclick="moveNavItem(' + i + ',-1)" style="flex-shrink:0">&uarr;</button>' +
+          '<button class="btn-icon" title="Move Down" onclick="moveNavItem(' + i + ',1)" style="flex-shrink:0">&darr;</button>' +
+          '<button class="btn-icon danger" title="Remove" onclick="removeNavItem(' + i + ')" style="flex-shrink:0">&times;</button>';
+        list.appendChild(row);
+      });
+    }
+
+    function updateNavItem(i, key, val) {
+      config.navItems[i][key] = val;
+    }
+
+    function addNavItem() {
+      config.navItems.push({ label: 'New Link', href: '#' });
+      renderNavItems();
+    }
+
+    function removeNavItem(i) {
+      config.navItems.splice(i, 1);
+      renderNavItems();
+    }
+
+    function moveNavItem(i, dir) {
+      var j = i + dir;
+      if (j < 0 || j >= config.navItems.length) return;
+      var tmp = config.navItems[i];
+      config.navItems[i] = config.navItems[j];
+      config.navItems[j] = tmp;
+      renderNavItems();
+    }
+
+    function updateNavLogoPreview() {
+      var url = document.getElementById('edit-navlogo-url').value;
+      if (url) {
+        showImagePreview('navlogo', url);
+      }
+    }
+
+    // Load saved navbar logo
+    document.getElementById('edit-navlogo-height').value = config.navLogoHeight || 42;
+    document.getElementById('val-navlogo-height').textContent = (config.navLogoHeight || 42) + 'px';
+    document.getElementById('edit-navlogo-url').value = config.navLogoUrl || '';
+    if (config.navLogoUrl) updateNavLogoPreview();
+    if (imageData.navlogo) showImagePreview('navlogo', imageData.navlogo);
+    renderNavItems();
+
+    // Override save to include images, filters, and navbar config
     var origSave = document.getElementById('btn-save');
     origSave.addEventListener('click', function() {
       config.images = imageData;
       config.filters = filterData;
+      config.navItems = config.navItems;
+      config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
+      config.navLogoUrl = document.getElementById('edit-navlogo-url').value;
     });
   </script>
 </body>

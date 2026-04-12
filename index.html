@@ -1433,6 +1433,47 @@
           }
         }
 
+        // Apply navbar config
+        if (cfg.navLogoHeight) {
+          var navImg = document.querySelector('.nav-logo img');
+          if (navImg) navImg.style.height = cfg.navLogoHeight + 'px';
+        }
+        if (cfg.images && cfg.images.navlogo) {
+          var navImg2 = document.querySelector('.nav-logo img');
+          if (navImg2) navImg2.src = cfg.images.navlogo;
+        } else if (cfg.navLogoUrl) {
+          var navImg3 = document.querySelector('.nav-logo img');
+          if (navImg3) navImg3.src = cfg.navLogoUrl;
+        }
+        if (cfg.navItems && cfg.navItems.length) {
+          // Update desktop nav
+          var navUl = document.querySelector('.nav-links');
+          if (navUl) {
+            navUl.innerHTML = '';
+            cfg.navItems.forEach(function(item) {
+              var li = document.createElement('li');
+              li.innerHTML = '<a href="' + item.href + '">' + item.label + '</a>';
+              navUl.appendChild(li);
+            });
+          }
+          // Update mobile nav
+          var mobMenu = document.getElementById('mobile-menu');
+          if (mobMenu) {
+            mobMenu.innerHTML = '';
+            cfg.navItems.forEach(function(item) {
+              var a = document.createElement('a');
+              a.href = item.href;
+              a.textContent = item.label;
+              a.addEventListener('click', function() {
+                document.getElementById('nav-toggle').classList.remove('open');
+                mobMenu.classList.remove('open');
+                document.body.style.overflow = '';
+              });
+              mobMenu.appendChild(a);
+            });
+          }
+        }
+
         // Apply content changes
         if (cfg.content) {
           var c = cfg.content;
