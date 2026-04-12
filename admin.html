@@ -1133,6 +1133,12 @@
           Widgets
         </button>
 
+        <div class="nav-section-label">Commerce</div>
+        <button class="nav-item" data-panel="store">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-3-5z"/><line x1="3" y1="7" x2="21" y2="7"/><path d="M16 11a4 4 0 0 1-8 0"/></svg>
+          Store Products
+        </button>
+
         <div class="nav-section-label">Design</div>
         <button class="nav-item" data-panel="theme">
           <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20 7 7 0 0 1 0-14 3.5 3.5 0 0 0 0-6"/></svg>
@@ -2002,6 +2008,20 @@
           </div>
         </div>
 
+        <!-- ═══ STORE PRODUCTS PANEL ═══ -->
+        <div class="panel" id="panel-store">
+          <div class="form-section">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h3>Store Products</h3>
+              <button class="btn-sm primary" onclick="addStoreProduct()">+ Add Product</button>
+            </div>
+            <p style="color:var(--admin-muted);font-size:0.85rem;margin-bottom:20px;">
+              Manage products displayed on your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>. Changes save automatically.
+            </p>
+            <div id="store-products-list"></div>
+          </div>
+        </div>
+
       </div>
       <!-- Drag Handle + Live Preview (inside main, stacks vertically) -->
       <div class="drag-handle" id="drag-handle"></div>
@@ -2088,6 +2108,7 @@
       sectionVisibility: { home:true, about:true, feed:true, issues:true, videos:true, newsletter:true, footer:true },
       pages: [{ name: 'Home', file: 'index.html', status: 'live' }],
       widgets: ['x-feed','newsletter','videos'],
+      storeProducts: [],
       seo: {
         title: 'Gunther Eagleman — America First Political Commentator',
         desc: 'The unfiltered truth about American politics. Follow Gunther Eagleman.',
@@ -2172,8 +2193,8 @@
     var panelTitle = document.getElementById('panel-title');
     var titles = {
       dashboard: 'Dashboard', content: 'Content Editor', sections: 'Section Manager',
-      pages: 'Page Manager', widgets: 'Widget Library', theme: 'Theme & Colors',
-      seo: 'SEO & Meta', settings: 'Settings'
+      pages: 'Page Manager', widgets: 'Widget Library', store: 'Store Products',
+      theme: 'Theme & Colors', seo: 'SEO & Meta', settings: 'Settings'
     };
 
     document.querySelectorAll('.nav-item[data-panel]').forEach(function(btn) {
@@ -3100,6 +3121,183 @@
     document.getElementById('edit-videos-title').value = config.videosTitle;
     document.getElementById('edit-videos-sub').value = config.videosSub;
     renderVideoCards();
+
+    /* ══════════════════════════════════════
+       STORE PRODUCTS MANAGER
+       ══════════════════════════════════════ */
+    if (!config.storeProducts) config.storeProducts = [];
+
+    var CATEGORIES = ['hats','shirts','hoodies','flags','accessories','stickers'];
+
+    function renderStoreProducts() {
+      var list = document.getElementById('store-products-list');
+      if (!list) return;
+
+      if (config.storeProducts.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--admin-muted);">' +
+          '<div style="font-size:2rem;margin-bottom:12px;">&#128722;</div>' +
+          '<p>No products yet. Click <strong>+ Add Product</strong> to get started.</p></div>';
+        return;
+      }
+
+      list.innerHTML = config.storeProducts.map(function(p, i) {
+        var catOptions = CATEGORIES.map(function(c) {
+          return '<option value="' + c + '"' + (p.category === c ? ' selected' : '') + '>' + c.charAt(0).toUpperCase() + c.slice(1) + '</option>';
+        }).join('');
+
+        var badgeOptions = '<option value="">None</option>' +
+          '<option value="new"' + (p.badge === 'new' ? ' selected' : '') + '>New</option>' +
+          '<option value="hot"' + (p.badge === 'hot' ? ' selected' : '') + '>Best Seller</option>';
+
+        var colorsHtml = (p.colors || []).map(function(c, ci) {
+          return '<div style="display:flex;gap:4px;align-items:center;margin-bottom:4px;">' +
+            '<input type="color" value="' + c + '" onchange="updateStoreProductColor('+i+','+ci+',this.value)" style="width:32px;height:28px;border:none;background:none;cursor:pointer;">' +
+            '<input type="text" value="' + escHtml((p.colorNames||[])[ci]||'') + '" placeholder="Name" onchange="updateStoreProductColorName('+i+','+ci+',this.value)" style="flex:1;padding:4px 6px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:4px;color:var(--admin-text);font-size:0.75rem;">' +
+            '<button class="btn-icon danger" onclick="removeStoreProductColor('+i+','+ci+')" title="Remove">&times;</button>' +
+          '</div>';
+        }).join('');
+
+        var sizesVal = (p.sizes || []).join(', ');
+
+        return '<div style="background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:12px;padding:18px;margin-bottom:14px;">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
+            '<span style="font-size:0.85rem;font-weight:800;color:var(--admin-accent);">' +
+              (p.image ? '<img src="'+escHtml(p.image)+'" style="width:32px;height:32px;border-radius:6px;object-fit:cover;display:inline-block;vertical-align:middle;margin-right:8px;">' : '') +
+              escHtml(p.name || 'Untitled Product') +
+            '</span>' +
+            '<div style="display:flex;gap:4px;">' +
+              '<button class="btn-icon" title="Move Up" onclick="moveStoreProduct('+i+',-1)">&uarr;</button>' +
+              '<button class="btn-icon" title="Move Down" onclick="moveStoreProduct('+i+',1)">&darr;</button>' +
+              '<button class="btn-icon" title="Duplicate" onclick="dupeStoreProduct('+i+')">&#x2398;</button>' +
+              '<button class="btn-icon danger" title="Delete" onclick="removeStoreProduct('+i+')">&times;</button>' +
+            '</div>' +
+          '</div>' +
+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
+            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Product Name</label>' +
+            '<input type="text" value="' + escHtml(p.name) + '" onchange="updateStoreProduct('+i+',\'name\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Price ($)</label>' +
+            '<input type="number" step="0.01" value="' + (p.price||0) + '" onchange="updateStoreProduct('+i+',\'price\',parseFloat(this.value))" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+          '</div>' +
+
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
+            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Category</label>' +
+            '<select onchange="updateStoreProduct('+i+',\'category\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;">' + catOptions + '</select></div>' +
+            '<div><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Badge</label>' +
+            '<select onchange="updateStoreProduct('+i+',\'badge\',this.value||null)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;">' + badgeOptions + '</select></div>' +
+          '</div>' +
+
+          '<div style="margin-bottom:8px;"><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Description</label>' +
+          '<textarea onchange="updateStoreProduct('+i+',\'desc\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;min-height:50px;resize:vertical;">' + escHtml(p.desc) + '</textarea></div>' +
+
+          '<div style="margin-bottom:8px;"><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Image URL</label>' +
+          '<input type="text" value="' + escHtml(p.image||'') + '" onchange="updateStoreProduct('+i+',\'image\',this.value)" placeholder="https://... or leave blank for placeholder" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+
+          '<div style="margin-bottom:8px;"><label style="font-size:0.7rem;color:var(--admin-muted);display:block;margin-bottom:2px;">Sizes (comma-separated, e.g. S, M, L, XL — leave blank for no sizes)</label>' +
+          '<input type="text" value="' + escHtml(sizesVal) + '" onchange="updateStoreProductSizes('+i+',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+
+          '<div style="border-top:1px solid var(--admin-border);padding-top:8px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+              '<label style="font-size:0.7rem;color:var(--admin-muted);">Colors</label>' +
+              '<button class="btn-icon" onclick="addStoreProductColor('+i+')" title="Add color">+</button>' +
+            '</div>' +
+            colorsHtml +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    function addStoreProduct() {
+      var id = config.storeProducts.length > 0
+        ? Math.max.apply(null, config.storeProducts.map(function(p){ return p.id; })) + 1
+        : 1;
+      config.storeProducts.push({
+        id: id,
+        name: 'New Product',
+        category: 'shirts',
+        price: 29.99,
+        badge: null,
+        desc: 'Product description...',
+        image: null,
+        colors: null,
+        colorNames: null,
+        sizes: null
+      });
+      renderStoreProducts();
+      saveConfig();
+    }
+
+    function removeStoreProduct(i) {
+      if (!confirm('Delete "' + config.storeProducts[i].name + '"?')) return;
+      config.storeProducts.splice(i, 1);
+      renderStoreProducts();
+      saveConfig();
+    }
+
+    function dupeStoreProduct(i) {
+      var copy = JSON.parse(JSON.stringify(config.storeProducts[i]));
+      copy.id = Math.max.apply(null, config.storeProducts.map(function(p){ return p.id; })) + 1;
+      copy.name = copy.name + ' (Copy)';
+      config.storeProducts.splice(i + 1, 0, copy);
+      renderStoreProducts();
+      saveConfig();
+    }
+
+    function moveStoreProduct(i, dir) {
+      var j = i + dir;
+      if (j < 0 || j >= config.storeProducts.length) return;
+      var tmp = config.storeProducts[i];
+      config.storeProducts[i] = config.storeProducts[j];
+      config.storeProducts[j] = tmp;
+      renderStoreProducts();
+      saveConfig();
+    }
+
+    function updateStoreProduct(i, key, val) {
+      config.storeProducts[i][key] = val;
+      saveConfig();
+    }
+
+    function updateStoreProductSizes(i, val) {
+      if (!val.trim()) {
+        config.storeProducts[i].sizes = null;
+      } else {
+        config.storeProducts[i].sizes = val.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+      }
+      saveConfig();
+    }
+
+    function addStoreProductColor(i) {
+      var p = config.storeProducts[i];
+      if (!p.colors) { p.colors = []; p.colorNames = []; }
+      p.colors.push('#000000');
+      p.colorNames.push('Black');
+      renderStoreProducts();
+      saveConfig();
+    }
+
+    function removeStoreProductColor(i, ci) {
+      config.storeProducts[i].colors.splice(ci, 1);
+      config.storeProducts[i].colorNames.splice(ci, 1);
+      if (config.storeProducts[i].colors.length === 0) {
+        config.storeProducts[i].colors = null;
+        config.storeProducts[i].colorNames = null;
+      }
+      renderStoreProducts();
+      saveConfig();
+    }
+
+    function updateStoreProductColor(i, ci, val) {
+      config.storeProducts[i].colors[ci] = val;
+      saveConfig();
+    }
+
+    function updateStoreProductColorName(i, ci, val) {
+      config.storeProducts[i].colorNames[ci] = val;
+      saveConfig();
+    }
+
+    renderStoreProducts();
 
     /* ══════════════════════════════════════
        HERO BACKGROUND FILTERS
