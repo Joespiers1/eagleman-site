@@ -92,6 +92,8 @@
       <div class="r"><label>Font Weight</label>
         <select id="fw" onchange="draw()"><option value="700" selected>Bold</option><option value="900">Black</option><option value="400">Regular</option></select>
       </div>
+      <div class="r"><label>Horizontal Scale <span class="rv" id="rv-hscale">100</span>%</label><input type="range" id="hscale" min="50" max="200" value="100" oninput="draw();rvU('hscale')"></div>
+      <div class="r"><label>Vertical Scale <span class="rv" id="rv-vscale">100</span>%</label><input type="range" id="vscale" min="50" max="200" value="100" oninput="draw();rvU('vscale')"></div>
     </div>
 
     <!-- Wordmark-only controls -->
@@ -101,6 +103,8 @@
         <div class="r"><label>Size <span class="rv" id="rv-fs2">38</span></label><input type="range" id="fs2" min="16" max="70" value="38" oninput="draw();rvU('fs2')"></div>
         <div class="r"><label>Y Position <span class="rv" id="rv-l2y">105</span></label><input type="range" id="l2y" min="50" max="180" value="105" oninput="draw();rvU('l2y')"></div>
         <div class="r"><label>Spacing <span class="rv" id="rv-ls2">10</span></label><input type="range" id="ls2" min="0" max="24" value="10" oninput="draw();rvU('ls2')"></div>
+        <div class="r"><label>Horizontal Scale <span class="rv" id="rv-hscale2">100</span>%</label><input type="range" id="hscale2" min="50" max="200" value="100" oninput="draw();rvU('hscale2')"></div>
+        <div class="r"><label>Vertical Scale <span class="rv" id="rv-vscale2">100</span>%</label><input type="range" id="vscale2" min="50" max="200" value="100" oninput="draw();rvU('vscale2')"></div>
       </div>
       <div class="s"><h4>Canvas</h4>
         <div class="r"><label>Width <span class="rv" id="rv-cw">500</span></label><input type="range" id="cw" min="300" max="900" value="500" oninput="draw();rvU('cw')"></div>
@@ -248,6 +252,15 @@ function draw(){
   if(t.indexOf('wm')===0) drawWM(); else drawMono(t);
 }
 
+// Generate text with scale transform
+function scaledText(x,y,anchor,font,fw,fs,fill,ls,text,hscale,vscale){
+  var sx=(hscale||100)/100, sy=(vscale||100)/100;
+  var tx=anchor==='middle'?x:x;
+  // To scale around the text's anchor point, translate to origin, scale, translate back
+  var transform='translate('+tx+','+y+') scale('+sx+','+sy+') translate(-'+tx+',-'+y+')';
+  return '<text x="'+x+'" y="'+y+'" text-anchor="'+(anchor||'start')+'" font-family="'+font+'" font-weight="'+fw+'" font-size="'+fs+'" fill="'+fill+'" letter-spacing="'+ls+'" transform="'+transform+'">'+text+'</text>';
+}
+
 function drawWM(){
   var W=g('cw'),H=g('ch'),cx=W/2;
   var t=g('type');
@@ -258,9 +271,9 @@ function drawWM(){
   // V2 is a special inline layout
   if(t==='wm-v2'){
     var midY=H*0.72;
-    s+=dWrap('line1','<text x="10" y="'+midY+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>');
+    s+=dWrap('line1',scaledText(10,midY,'start',g('font'),g('fw'),g('fs'),cL1,g('ls'),g('letters'),g('hscale'),g('vscale')));
     s+=dWrap('diamond','<rect x="'+(W*0.44)+'" y="'+(midY-g('fs')*0.45)+'" width="'+(g('fs')*0.22)+'" height="'+(g('fs')*0.22)+'" fill="'+cA+'" transform="rotate(45,'+(W*0.44+g('fs')*0.11)+','+(midY-g('fs')*0.34)+')"/>');
-    s+=dWrap('line2','<text x="'+(W*0.49)+'" y="'+midY+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+'</text>');
+    s+=dWrap('line2',scaledText(W*0.49,midY,'start',g('font'),g('fw'),g('fs2'),'url(#lg)',g('ls2'),g('l2'),g('hscale2'),g('vscale2')));
     s+=dWrap('underline','<rect x="0" y="'+(H-6)+'" width="'+W+'" height="1.5" fill="'+cB+'" opacity="0.3"/>');
     s+='</svg>';
     vp.innerHTML=s+'<span class="drag-hint">Drag elements to reposition</span>';applyF();return;
@@ -270,9 +283,9 @@ function drawWM(){
   if(t==='wm-v1'){
     var l1y=42+g('ty');
     s+=dWrap('v1star',star(22,l1y-14,14,cS));
-    s+=dWrap('line1','<text x="52" y="'+l1y+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>');
+    s+=dWrap('line1',scaledText(52,l1y,'start',g('font'),g('fw'),g('fs'),cL1,g('ls'),g('letters'),g('hscale'),g('vscale')));
     s+=dWrap('sepline','<rect x="52" y="'+(l1y+7)+'" width="200" height="2" fill="'+cA+'"/>');
-    s+=dWrap('line2','<text x="52" y="'+g('l2y')+'" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+'</text>');
+    s+=dWrap('line2',scaledText(52,g('l2y'),'start',g('font'),g('fw'),g('fs2'),'url(#lg)',g('ls2'),g('l2'),g('hscale2'),g('vscale2')));
     s+='</svg>';
     vp.innerHTML=s+'<span class="drag-hint">Drag elements to reposition</span>';applyF();return;
   }
@@ -283,7 +296,7 @@ function drawWM(){
 
   var l1y=50+g('ty');
   var offsetX = g('dLeft')==='1' ? 15 : 0;
-  s+=dWrap('line1','<text x="'+(cx+offsetX)+'" y="'+l1y+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs')+'" fill="'+cL1+'" letter-spacing="'+g('ls')+'">'+g('letters')+'</text>');
+  s+=dWrap('line1',scaledText(cx+offsetX,l1y,'middle',g('font'),g('fw'),g('fs'),cL1,g('ls'),g('letters'),g('hscale'),g('vscale')));
 
   // Stars between lines
   var numStars = g('star')==='1' ? 3 : 0;
@@ -309,7 +322,7 @@ function drawWM(){
   if(g('dSep')==='1'){var sepY=(l1y+g('l2y'))/2;s+=dWrap('sepline','<rect x="'+(g('dLeft')==='1'?22:40)+'" y="'+sepY+'" width="140" height="1.5" fill="'+cB+'" opacity="0.4"/>');}
 
   // Line 2
-  s+=dWrap('line2','<text x="'+(cx+offsetX)+'" y="'+g('l2y')+'" text-anchor="middle" font-family="'+g('font')+'" font-weight="'+g('fw')+'" font-size="'+g('fs2')+'" fill="url(#lg)" letter-spacing="'+g('ls2')+'">'+g('l2')+'</text>');
+  s+=dWrap('line2',scaledText(cx+offsetX,g('l2y'),'middle',g('font'),g('fw'),g('fs2'),'url(#lg)',g('ls2'),g('l2'),g('hscale2'),g('vscale2')));
 
   if(g('dBot')==='1') s+=dWrap('botline','<rect x="40" y="'+(H-8)+'" width="'+(W-80)+'" height="3" fill="'+cA+'"/>');
 
@@ -395,7 +408,7 @@ function drawMono(type){
   }
 
   // Letters
-  s+=dWrap('letters','<text x="'+cx+'" y="'+textY+'" text-anchor="middle" font-family="'+font+'" font-weight="'+fw+'" font-size="'+fs+'" fill="url(#lg)" letter-spacing="'+ls+'">'+letters+'</text>');
+  s+=dWrap('letters',scaledText(cx,textY,'middle',font,fw,fs,'url(#lg)',ls,letters,g('hscale'),g('vscale')));
 
   s+='</svg>';
   vp.innerHTML=s+'<span class="drag-hint">Drag elements to reposition</span>';
