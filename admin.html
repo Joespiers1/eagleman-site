@@ -1554,6 +1554,29 @@
             </div>
           </div>
 
+          <!-- Videos -->
+          <div class="editor-section" id="editor-videos">
+            <div class="editor-section-header">
+              <h4>&#127909; Videos / Media</h4>
+              <span class="chevron">&#9660;</span>
+            </div>
+            <div class="editor-section-body">
+              <div class="form-group">
+                <label>Section Title</label>
+                <input type="text" id="edit-videos-title" value="Watch &amp; Share" oninput="liveSync()">
+              </div>
+              <div class="form-group">
+                <label>Section Subtitle</label>
+                <input type="text" id="edit-videos-sub" value="Commentary the mainstream media doesn't want you to see." oninput="liveSync()">
+              </div>
+              <div style="border-top:1px solid var(--admin-border);margin-top:12px;padding-top:12px;">
+                <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--admin-muted);margin-bottom:10px;">Video Cards</label>
+                <div id="video-cards-list"></div>
+                <button class="btn-sm" onclick="addVideoCard()" style="margin-top:8px;">+ Add Video</button>
+              </div>
+            </div>
+          </div>
+
           <!-- Newsletter -->
           <div class="editor-section" id="editor-newsletter">
             <div class="editor-section-header">
@@ -2322,6 +2345,10 @@
         config.sectionVisibility[sec] = item.querySelector('input[type="checkbox"]').checked;
       });
 
+      // Videos
+      config.videosTitle = getVal('edit-videos-title');
+      config.videosSub = getVal('edit-videos-sub');
+
       // Hero background config
       config.heroBg = getHeroBgConfig();
 
@@ -2676,6 +2703,7 @@
           'editor-hero': 'home',
           'editor-about': 'about',
           'editor-feed': 'feed',
+          'editor-videos': 'videos',
           'editor-newsletter': 'newsletter',
           'editor-footer': 'contact'
         };
@@ -2727,6 +2755,8 @@
 
       config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
       config.navLogoUrl = document.getElementById('edit-navlogo-url').value;
+      config.videosTitle = getVal('edit-videos-title');
+      config.videosSub = getVal('edit-videos-sub');
       config.heroBg = getHeroBgConfig();
       config.images = imageData;
       config.filters = filterData;
@@ -3009,6 +3039,67 @@
     if (config.navLogoUrl) updateNavLogoPreview();
     if (imageData.navlogo) showImagePreview('navlogo', imageData.navlogo);
     renderNavItems();
+
+    /* ══════════════════════════════════════
+       VIDEO CARDS MANAGER
+       ══════════════════════════════════════ */
+    var defaultVideos = [
+      { title: "Astronaut Victor Glover's Heartwarming Moment", date: 'April 11, 2026', desc: 'This moment is pure GOLD. Astronaut Victor Glover was incredibly kind and gentle with a little girl who has Down syndrome...', url: 'https://x.com/GuntherEagleman/status/2043100481451368728' },
+      { title: 'Peak Liberal Brain Rot Caught on Camera', date: 'April 11, 2026', desc: 'Woman signs petition to stop deporting a man charged with shooting and killing an 18-year-old girl...', url: 'https://x.com/GuntherEagleman/status/2042999812916723873' },
+      { title: '"That Rage Is Just Not Normal"', date: 'April 11, 2026', desc: "Woman reflects on her past extreme reactions to Trump-related symbols and realizes her former anger wasn't normal...", url: 'https://x.com/GuntherEagleman/status/2042999004200304739' }
+    ];
+
+    if (!config.videos) config.videos = JSON.parse(JSON.stringify(defaultVideos));
+    if (!config.videosTitle) config.videosTitle = 'Watch & Share';
+    if (!config.videosSub) config.videosSub = "Commentary the mainstream media doesn't want you to see.";
+
+    function renderVideoCards() {
+      var list = document.getElementById('video-cards-list');
+      list.innerHTML = '';
+      config.videos.forEach(function(vid, i) {
+        var card = document.createElement('div');
+        card.style.cssText = 'background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:10px;padding:14px;margin-bottom:10px;';
+        card.innerHTML =
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+            '<span style="font-size:0.8rem;font-weight:700;color:var(--admin-accent);">Video ' + (i+1) + '</span>' +
+            '<div style="display:flex;gap:4px;">' +
+              '<button class="btn-icon" title="Move Up" onclick="moveVideo('+i+',-1)">&uarr;</button>' +
+              '<button class="btn-icon" title="Move Down" onclick="moveVideo('+i+',1)">&darr;</button>' +
+              '<button class="btn-icon danger" title="Remove" onclick="removeVideo('+i+')">&times;</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="margin-bottom:6px;"><label style="font-size:0.7rem;color:var(--admin-muted);">Title</label>' +
+          '<input type="text" value="' + escHtml(vid.title) + '" onchange="updateVideo('+i+',\'title\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+          '<div style="margin-bottom:6px;"><label style="font-size:0.7rem;color:var(--admin-muted);">X Post URL</label>' +
+          '<input type="text" value="' + escHtml(vid.url) + '" onchange="updateVideo('+i+',\'url\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+          '<div style="margin-bottom:6px;"><label style="font-size:0.7rem;color:var(--admin-muted);">Description</label>' +
+          '<input type="text" value="' + escHtml(vid.desc) + '" onchange="updateVideo('+i+',\'desc\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>' +
+          '<div><label style="font-size:0.7rem;color:var(--admin-muted);">Date</label>' +
+          '<input type="text" value="' + escHtml(vid.date) + '" onchange="updateVideo('+i+',\'date\',this.value)" style="width:100%;padding:6px 8px;background:var(--admin-surface);border:1px solid var(--admin-border);border-radius:5px;color:var(--admin-text);font-size:0.8rem;"></div>';
+        list.appendChild(card);
+      });
+    }
+
+    function escHtml(s) { return (s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+    function updateVideo(i, key, val) { config.videos[i][key] = val; liveSync(); }
+    function addVideoCard() {
+      config.videos.push({ title: 'New Video', date: 'Date', desc: 'Description...', url: 'https://x.com/GuntherEagleman/status/' });
+      renderVideoCards();
+      liveSync();
+    }
+    function removeVideo(i) { config.videos.splice(i, 1); renderVideoCards(); liveSync(); }
+    function moveVideo(i, dir) {
+      var j = i + dir;
+      if (j < 0 || j >= config.videos.length) return;
+      var tmp = config.videos[i]; config.videos[i] = config.videos[j]; config.videos[j] = tmp;
+      renderVideoCards(); liveSync();
+    }
+
+    // Load
+    document.getElementById('edit-videos-title').value = config.videosTitle;
+    document.getElementById('edit-videos-sub').value = config.videosSub;
+    renderVideoCards();
 
     /* ══════════════════════════════════════
        HERO BACKGROUND FILTERS

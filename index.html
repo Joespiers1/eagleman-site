@@ -1611,6 +1611,41 @@
           if (socials[3] && c.socialTS) socials[3].href = c.socialTS;
         }
 
+        // Apply videos
+        if (cfg.videosTitle) {
+          var vt = document.querySelector('.videos .section-title');
+          if (vt) vt.textContent = cfg.videosTitle;
+        }
+        if (cfg.videosSub) {
+          var vs = document.querySelector('.videos .section-subtitle');
+          if (vs) vs.textContent = cfg.videosSub;
+        }
+        if (cfg.videos && cfg.videos.length) {
+          var vGrid = document.querySelector('.video-grid');
+          if (vGrid) {
+            vGrid.innerHTML = '';
+            cfg.videos.forEach(function(vid) {
+              var card = document.createElement('a');
+              card.className = 'video-card';
+              card.href = vid.url || '#';
+              card.target = '_blank';
+              card.rel = 'noopener';
+              card.innerHTML =
+                '<div class="video-thumb">' +
+                  '<svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>' +
+                  '<div style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);padding:3px 8px;border-radius:4px;font-size:0.65rem;font-weight:700;color:#fff;">VIDEO</div>' +
+                '</div>' +
+                '<div class="video-info">' +
+                  '<h4>' + (vid.title || '') + '</h4>' +
+                  '<p class="video-date">' + (vid.date || '') + '</p>' +
+                  '<p style="font-size:0.8rem;color:#8899AA;margin-bottom:12px;line-height:1.5;">' + (vid.desc || '') + '</p>' +
+                  '<span class="btn-watch">Watch on X</span>' +
+                '</div>';
+              vGrid.appendChild(card);
+            });
+          }
+        }
+
         // Apply section visibility & order
         if (cfg.sectionVisibility) {
           var sectionMap = {
