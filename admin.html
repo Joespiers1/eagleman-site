@@ -2013,7 +2013,10 @@
           <div class="form-section">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
               <h3>Store Products</h3>
-              <button class="btn-sm primary" onclick="addStoreProduct()">+ Add Product</button>
+              <div style="display:flex;gap:8px;">
+                <button class="btn-sm" onclick="resetStoreProducts()" style="border-color:var(--admin-red);color:var(--admin-red);">Reset to Defaults</button>
+                <button class="btn-sm primary" onclick="addStoreProduct()">+ Add Product</button>
+              </div>
             </div>
             <p style="color:var(--admin-muted);font-size:0.85rem;margin-bottom:20px;">
               Manage products displayed on your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>. Changes save automatically.
@@ -3125,7 +3128,25 @@
     /* ══════════════════════════════════════
        STORE PRODUCTS MANAGER
        ══════════════════════════════════════ */
-    if (!config.storeProducts) config.storeProducts = [];
+    var DEFAULT_STORE_PRODUCTS = [
+      { id:1, name:'Eagleman Patriot Cap', category:'hats', price:34.99, badge:'hot', desc:'Structured six-panel cap with embroidered Eagleman eagle crest. Adjustable snapback. One size fits all.', colors:['#0A1628','#BF0A30','#FFFFFF','#556B2F'], colorNames:['Navy','Red','White','Camo'], sizes:null, image:null },
+      { id:2, name:'America First Tee', category:'shirts', price:29.99, badge:'new', desc:'Premium cotton tee with bold "America First" front print and Eagleman shield on sleeve. Soft, pre-shrunk fabric.', colors:['#0A1628','#1a1a1a','#FFFFFF'], colorNames:['Navy','Black','White'], sizes:['S','M','L','XL','2XL','3XL'], image:null },
+      { id:3, name:'Eagle Shield Hoodie', category:'hoodies', price:54.99, badge:null, desc:'Heavyweight fleece hoodie with oversized Eagleman eagle shield on back. Kangaroo pocket, ribbed cuffs. Built for rallies and cold nights.', colors:['#0A1628','#1a1a1a'], colorNames:['Navy','Black'], sizes:['S','M','L','XL','2XL','3XL'], image:null },
+      { id:4, name:"Don't Tread On Me Flag", category:'flags', price:24.99, badge:null, desc:'3x5 ft heavy-duty nylon flag with brass grommets. Double-stitched edges. Flies proud indoors or out.', colors:null, colorNames:null, sizes:null, image:null },
+      { id:5, name:'GE Sticker Pack (10)', category:'stickers', price:9.99, badge:null, desc:'10 weatherproof vinyl die-cut stickers featuring Eagleman logos, slogans, and the GE shield. Laptop, bumper, water bottle ready.', colors:null, colorNames:null, sizes:null, image:null },
+      { id:6, name:'Truth Over Feelings Tee', category:'shirts', price:29.99, badge:'new', desc:'"Truth Over Feelings" bold typographic print. 100% ring-spun cotton. Comfortable fit that makes a statement.', colors:['#1a1a1a','#BF0A30','#FFFFFF'], colorNames:['Black','Red','White'], sizes:['S','M','L','XL','2XL','3XL'], image:null },
+      { id:7, name:'Patriot Dad Hat', category:'hats', price:27.99, badge:null, desc:'Relaxed-fit unstructured dad hat with embroidered GE monogram. Adjustable strap. Low-key patriot style.', colors:['#0A1628','#1a1a1a','#556B2F'], colorNames:['Navy','Black','Olive'], sizes:null, image:null },
+      { id:8, name:'USA Eagle 3x5 Flag', category:'flags', price:29.99, badge:'hot', desc:'Custom Eagleman eagle design on stars and stripes. Premium polyester, brass grommets, fade-resistant ink.', colors:null, colorNames:null, sizes:null, image:null },
+      { id:9, name:"Freedom Isn't Free Hoodie", category:'hoodies', price:54.99, badge:null, desc:'"Freedom Isn\'t Free" across the chest with eagle wing details. Midweight fleece. Perfect for every season.', colors:['#1a1a1a','#556B2F'], colorNames:['Black','Military Green'], sizes:['S','M','L','XL','2XL'], image:null },
+      { id:10, name:'Eagleman Koozie 4-Pack', category:'accessories', price:14.99, badge:null, desc:'Neoprene can koozies featuring 4 different Eagleman designs. Keeps your drinks cold at cookouts and watch parties.', colors:null, colorNames:null, sizes:null, image:null },
+      { id:11, name:'We The People Tee', category:'shirts', price:29.99, badge:null, desc:'"We The People" in bold distressed print with American flag texture. Vintage feel, modern fit.', colors:['#0A1628','#1a1a1a','#8B4513'], colorNames:['Navy','Black','Brown'], sizes:['S','M','L','XL','2XL','3XL'], image:null },
+      { id:12, name:'GE Patriot Wristband', category:'accessories', price:4.99, badge:null, desc:'Silicone wristband with debossed GE logo. Red, white, and blue available. Sold individually.', colors:['#BF0A30','#FFFFFF','#002868'], colorNames:['Red','White','Blue'], sizes:null, image:null }
+    ];
+
+    if (!config.storeProducts || config.storeProducts.length === 0) {
+      config.storeProducts = JSON.parse(JSON.stringify(DEFAULT_STORE_PRODUCTS));
+      saveConfig();
+    }
 
     var CATEGORIES = ['hats','shirts','hoodies','flags','accessories','stickers'];
 
@@ -3294,6 +3315,13 @@
 
     function updateStoreProductColorName(i, ci, val) {
       config.storeProducts[i].colorNames[ci] = val;
+      saveConfig();
+    }
+
+    function resetStoreProducts() {
+      if (!confirm('Reset all products to defaults? This will replace your current product list.')) return;
+      config.storeProducts = JSON.parse(JSON.stringify(DEFAULT_STORE_PRODUCTS));
+      renderStoreProducts();
       saveConfig();
     }
 
