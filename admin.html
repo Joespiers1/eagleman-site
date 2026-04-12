@@ -961,26 +961,20 @@
       text-align: right;
     }
 
-    /* ── Live Preview Panel ── */
+    /* ── Live Preview Panel (Bottom Split) ── */
     .preview-panel {
       display: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 45%;
-      height: 100vh;
-      z-index: 200;
-      background: var(--admin-bg);
-      border-left: 2px solid var(--admin-accent);
       flex-direction: column;
+      background: var(--admin-bg);
+      border-top: 2px solid var(--admin-accent);
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
-    .preview-panel.open {
-      display: flex;
-    }
+    .preview-panel.open { display: flex; }
 
     .preview-panel .preview-toolbar {
-      padding: 10px 16px;
+      padding: 6px 16px;
       background: var(--admin-surface);
       border-bottom: 1px solid var(--admin-border);
       display: flex;
@@ -990,22 +984,19 @@
     }
 
     .preview-panel .preview-toolbar h4 {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--admin-accent);
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .preview-panel .device-btns {
-      display: flex;
-      gap: 4px;
-    }
+    .preview-panel .device-btns { display: flex; gap: 4px; }
 
     .preview-panel .device-btn {
-      padding: 4px 10px;
+      padding: 3px 10px;
       border-radius: 4px;
-      font-size: 0.7rem;
+      font-size: 0.65rem;
       font-weight: 600;
       border: 1px solid var(--admin-border);
       background: var(--admin-surface2);
@@ -1024,72 +1015,47 @@
       border: none;
       background: #0A1628;
       width: 100%;
-      display: block;
     }
 
-    /* When preview is open, collapse sidebar and split screen */
-    body.preview-active .sidebar {
-      width: 48px;
-      overflow: hidden;
-    }
-
-    body.preview-active .sidebar .sidebar-header,
-    body.preview-active .sidebar .sidebar-footer,
-    body.preview-active .sidebar .nav-section-label,
-    body.preview-active .sidebar .nav-item span:not(.nav-icon) {
+    /* Drag handle */
+    .drag-handle {
       display: none;
+      height: 8px;
+      background: var(--admin-surface);
+      cursor: ns-resize;
+      flex-shrink: 0;
+      position: relative;
+      border-top: 1px solid var(--admin-border);
+      border-bottom: 1px solid var(--admin-accent);
     }
 
-    body.preview-active .sidebar .nav-item {
-      justify-content: center;
-      padding: 12px 0;
+    .drag-handle::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 3px;
+      background: var(--admin-muted);
+      border-radius: 2px;
     }
 
-    body.preview-active .sidebar .nav-icon {
-      margin: 0;
-    }
+    .drag-handle.open { display: block; }
 
+    /* When preview is open, switch main to vertical flex */
     body.preview-active .main {
-      margin-left: 48px;
-      width: calc(55% - 48px);
+      display: flex;
+      flex-direction: column;
     }
 
     body.preview-active .main .main-header {
-      padding: 12px 16px;
-    }
-
-    body.preview-active .main .main-header h1 {
-      font-size: 1rem;
+      flex-shrink: 0;
     }
 
     body.preview-active .main .main-body {
-      padding: 16px;
-    }
-
-    body.preview-active .preview-panel {
-      width: 45%;
-    }
-
-    /* Make form elements smaller in preview mode */
-    body.preview-active .form-row {
-      grid-template-columns: 1fr;
-    }
-
-    body.preview-active .img-preview img {
-      max-height: 120px;
-    }
-
-    body.preview-active .img-uploader {
-      padding: 12px;
-    }
-
-    body.preview-active .img-uploader .upload-icon {
-      font-size: 1.2rem;
-      margin-bottom: 4px;
-    }
-
-    body.preview-active .img-uploader .upload-text {
-      font-size: 0.75rem;
+      flex: 1;
+      overflow-y: auto;
     }
 
     /* ── Responsive ── */
@@ -1914,21 +1880,21 @@
         </div>
 
       </div>
-    </main>
-
-    <!-- Live Preview Panel -->
-    <div class="preview-panel" id="preview-panel">
-      <div class="preview-toolbar">
-        <h4>Live Preview</h4>
-        <div class="device-btns">
-          <button class="device-btn active" onclick="setDevice('100%',this)">Desktop</button>
-          <button class="device-btn" onclick="setDevice('768px',this)">Tablet</button>
-          <button class="device-btn" onclick="setDevice('375px',this)">Mobile</button>
-          <button class="device-btn" onclick="togglePreview()" style="margin-left:8px;color:var(--admin-red);border-color:var(--admin-red);">&times; Close</button>
+      <!-- Drag Handle + Live Preview (inside main, stacks vertically) -->
+      <div class="drag-handle" id="drag-handle"></div>
+      <div class="preview-panel" id="preview-panel">
+        <div class="preview-toolbar">
+          <h4>Live Preview</h4>
+          <div class="device-btns">
+            <button class="device-btn active" onclick="setDevice('100%',this)">Desktop</button>
+            <button class="device-btn" onclick="setDevice('768px',this)">Tablet</button>
+            <button class="device-btn" onclick="setDevice('375px',this)">Mobile</button>
+            <button class="device-btn" onclick="togglePreview()" style="margin-left:8px;color:var(--admin-red);border-color:var(--admin-red);">&times; Close</button>
+          </div>
         </div>
+        <iframe id="preview-iframe" src="index.html" style="width:100%;"></iframe>
       </div>
-      <iframe id="preview-iframe" src="index.html" style="width:100%;"></iframe>
-    </div>
+    </main>
   </div>
 
   <!-- ═══ NEW PAGE MODAL ═══ -->
@@ -2531,22 +2497,27 @@
        ══════════════════════════════════════ */
     var previewOpen = false;
 
+    var previewHeight = 350; // default preview height in px
+
     function togglePreview() {
       previewOpen = !previewOpen;
-      document.getElementById('preview-panel').classList.toggle('open', previewOpen);
+      var panel = document.getElementById('preview-panel');
+      var handle = document.getElementById('drag-handle');
+      panel.classList.toggle('open', previewOpen);
+      handle.classList.toggle('open', previewOpen);
       document.body.classList.toggle('preview-active', previewOpen);
       var btn = document.getElementById('btn-preview-toggle');
       btn.textContent = previewOpen ? '\u2716 Close Preview' : '\uD83D\uDC41 Preview';
-      if (previewOpen) refreshPreview();
+      if (previewOpen) {
+        panel.style.height = previewHeight + 'px';
+        refreshPreview();
+      }
     }
 
     function refreshPreview() {
       var iframe = document.getElementById('preview-iframe');
       if (iframe && previewOpen) {
-        // Instead of full reload, post config to iframe for instant update
-        try {
-          iframe.contentWindow.location.reload();
-        } catch(e) {}
+        try { iframe.contentWindow.location.reload(); } catch(e) {}
       }
     }
 
@@ -2557,6 +2528,65 @@
       document.querySelectorAll('.device-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
     }
+
+    /* ── Resizable drag handle ── */
+    (function() {
+      var handle = document.getElementById('drag-handle');
+      var panel = document.getElementById('preview-panel');
+      var dragging = false, startY = 0, startH = 0;
+
+      handle.addEventListener('mousedown', function(e) {
+        dragging = true;
+        startY = e.clientY;
+        startH = panel.offsetHeight;
+        document.body.style.cursor = 'ns-resize';
+        document.body.style.userSelect = 'none';
+        // Prevent iframe from stealing mouse events
+        panel.querySelector('iframe').style.pointerEvents = 'none';
+      });
+
+      document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        var delta = startY - e.clientY;
+        var newH = Math.max(150, Math.min(window.innerHeight - 200, startH + delta));
+        panel.style.height = newH + 'px';
+        previewHeight = newH;
+      });
+
+      document.addEventListener('mouseup', function() {
+        if (!dragging) return;
+        dragging = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        panel.querySelector('iframe').style.pointerEvents = '';
+      });
+    })();
+
+    /* ══════════════════════════════════════
+       SECTION SYNC — clicking editor section scrolls preview
+       ══════════════════════════════════════ */
+    document.querySelectorAll('.editor-section-header').forEach(function(header) {
+      header.addEventListener('click', function() {
+        if (!previewOpen) return;
+        var sectionMap = {
+          'editor-navbar': 'home',
+          'editor-hero': 'home',
+          'editor-about': 'about',
+          'editor-feed': 'feed',
+          'editor-newsletter': 'newsletter',
+          'editor-footer': 'contact'
+        };
+        var id = header.parentElement.id;
+        var target = sectionMap[id];
+        if (target) {
+          try {
+            var iframe = document.getElementById('preview-iframe');
+            var el = iframe.contentDocument.getElementById(target);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          } catch(e) {}
+        }
+      });
+    });
 
     /* ══════════════════════════════════════
        LIVE SYNC — auto-save on every input change
