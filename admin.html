@@ -2480,7 +2480,10 @@
     function refreshPreview() {
       var iframe = document.getElementById('preview-iframe');
       if (iframe && previewOpen) {
-        iframe.contentWindow.location.reload();
+        // Instead of full reload, post config to iframe for instant update
+        try {
+          iframe.contentWindow.location.reload();
+        } catch(e) {}
       }
     }
 
@@ -2491,6 +2494,72 @@
       document.querySelectorAll('.device-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
     }
+
+    /* ══════════════════════════════════════
+       LIVE SYNC — auto-save on every input change
+       ══════════════════════════════════════ */
+    var liveTimer = null;
+
+    function gatherAndSync() {
+      // Gather all content fields into config (same as save handler)
+      config.content.heroH1 = getVal('edit-hero-h1');
+      config.content.heroSub = getVal('edit-hero-sub');
+      config.content.heroCta1 = getVal('edit-hero-cta1');
+      config.content.heroCta1Url = getVal('edit-hero-cta1-url');
+      config.content.heroCta2 = getVal('edit-hero-cta2');
+      config.content.heroCta2Url = getVal('edit-hero-cta2-url');
+      config.content.heroImg = getVal('edit-hero-img');
+      config.content.aboutLabel = getVal('edit-about-label');
+      config.content.aboutH2 = getVal('edit-about-h2');
+      config.content.aboutP1 = getVal('edit-about-p1');
+      config.content.aboutP2 = getVal('edit-about-p2');
+      config.content.aboutImg = getVal('edit-about-img');
+      config.content.feedTitle = getVal('edit-feed-title');
+      config.content.feedSub = getVal('edit-feed-sub');
+      config.content.feedUsername = getVal('edit-feed-username');
+      config.content.feedLimit = getVal('edit-feed-limit');
+      config.content.nlTitle = getVal('edit-nl-title');
+      config.content.nlDesc = getVal('edit-nl-desc');
+      config.content.nlSuccess = getVal('edit-nl-success');
+      config.content.footerTagline = getVal('edit-footer-tagline');
+      config.content.footerCopy = getVal('edit-footer-copy');
+      config.content.footerDisclaimer = getVal('edit-footer-disclaimer');
+      config.content.socialX = getVal('edit-social-x');
+      config.content.socialYT = getVal('edit-social-yt');
+      config.content.socialRumble = getVal('edit-social-rumble');
+      config.content.socialTS = getVal('edit-social-ts');
+
+      config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
+      config.navLogoUrl = document.getElementById('edit-navlogo-url').value;
+      config.images = imageData;
+      config.filters = filterData;
+
+      // Write to localStorage (no toast)
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+
+      // Refresh preview iframe
+      refreshPreview();
+    }
+
+    function liveSync() {
+      clearTimeout(liveTimer);
+      liveTimer = setTimeout(gatherAndSync, 300);
+    }
+
+    // Attach liveSync to all inputs/selects/textareas in the content editor
+    document.querySelectorAll('#panel-content input, #panel-content textarea, #panel-content select').forEach(function(el) {
+      el.addEventListener('input', liveSync);
+      el.addEventListener('change', liveSync);
+    });
+
+    // Also auto-open preview when switching to content editor
+    var origSwitchPanel = switchPanel;
+    switchPanel = function(name) {
+      origSwitchPanel(name);
+      if (name === 'content' && !previewOpen) {
+        togglePreview();
+      }
+    };
 
     /* ══════════════════════════════════════
        SECTION EDIT BUTTONS → Content panel
