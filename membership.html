@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Membership — Gunther Eagleman</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Join the Inner Circle — Gunther Eagleman">
+  <meta property="og:description" content="Get exclusive content, early access, and direct connection to Gunther.">
+  <meta property="og:image" content="/ge-logo.png">
+  <meta property="og:type" content="website">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════
+       RESET & BASE
+       ══════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0A1628;
+      color: #FFFFFF;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { cursor: pointer; font-family: inherit; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #C9A84C;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #8899AA;
+      max-width: 600px;
+    }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ══════════════════════════════════════
+       NAVBAR
+       ══════════════════════════════════════ */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 16px 0;
+      transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
+    }
+
+    .navbar.scrolled {
+      background: rgba(10, 22, 40, 0.97);
+      box-shadow: 0 1px 0 #C9A84C;
+      padding: 10px 0;
+      backdrop-filter: blur(12px);
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.7);
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: #C9A84C; }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: #C9A84C;
+      transition: width 0.25s;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after { width: 100%; }
+
+    /* Mobile hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+      z-index: 1001;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 26px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 22, 40, 0.98);
+      z-index: 999;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+    }
+
+    .mobile-menu.open { display: flex; }
+
+    .mobile-menu a {
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #fff;
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a:hover { color: #C9A84C; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+    }
+
+    /* ══════════════════════════════════════
+       HERO
+       ══════════════════════════════════════ */
+    .membership-hero {
+      padding: 140px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .membership-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #BF0A30 0%, #0A1628 50%);
+      opacity: 0.12;
+    }
+
+    .membership-hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .membership-hero h1 {
+      font-size: 3rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    .membership-hero h1 .accent { color: #C9A84C; }
+
+    .membership-hero p {
+      font-size: 1.15rem;
+      color: #8899AA;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════
+       PRICING TOGGLE
+       ══════════════════════════════════════ */
+    .pricing-toggle-section {
+      padding: 40px 0 20px;
+      text-align: center;
+    }
+
+    .toggle-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      background: #0F1D33;
+      border-radius: 50px;
+      padding: 6px;
+      border: 1px solid rgba(201, 168, 76, 0.15);
+    }
+
+    .toggle-option {
+      padding: 10px 28px;
+      border-radius: 50px;
+      border: none;
+      background: transparent;
+      color: #8899AA;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.25s;
+      position: relative;
+    }
+
+    .toggle-option.active {
+      background: #C9A84C;
+      color: #0A1628;
+    }
+
+    .savings-badge {
+      display: inline-block;
+      background: #BF0A30;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      letter-spacing: 0.3px;
+      vertical-align: middle;
+    }
+
+    /* ══════════════════════════════════════
+       TIER CARDS
+       ══════════════════════════════════════ */
+    .tiers-section {
+      padding: 40px 0 80px;
+    }
+
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .tier-card {
+      background: #0F1D33;
+      border-radius: 12px;
+      padding: 36px 28px;
+      border: 1px solid rgba(201, 168, 76, 0.12);
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .tier-card:hover {
+      border-color: rgba(201, 168, 76, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .tier-card.featured {
+      border: 2px solid #C9A84C;
+      transform: scale(1.04);
+      box-shadow: 0 16px 60px rgba(201, 168, 76, 0.15);
+      z-index: 2;
+    }
+
+    .tier-card.featured:hover {
+      transform: scale(1.04) translateY(-4px);
+    }
+
+    .tier-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #C9A84C;
+      color: #0A1628;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 5px 18px;
+      border-radius: 50px;
+      white-space: nowrap;
+    }
+
+    .tier-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #C9A84C;
+      margin-bottom: 8px;
+    }
+
+    .tier-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .tier-price {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+    }
+
+    .tier-price .currency { font-size: 1.4rem; vertical-align: top; margin-right: 2px; }
+    .tier-price .period { font-size: 0.9rem; font-weight: 500; color: #8899AA; letter-spacing: 0; }
+
+    .tier-annual-note {
+      font-size: 0.8rem;
+      color: #8899AA;
+      margin-bottom: 24px;
+      min-height: 20px;
+    }
+
+    .tier-divider {
+      height: 1px;
+      background: rgba(201, 168, 76, 0.12);
+      margin: 20px 0;
+    }
+
+    .tier-features {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+
+    .tier-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .tier-features .check {
+      color: #C9A84C;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .tier-includes {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8899AA;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+    }
+
+    .btn-join {
+      display: block;
+      width: 100%;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+      text-align: center;
+    }
+
+    .btn-join-primary {
+      background: #BF0A30;
+      color: #fff;
+    }
+
+    .btn-join-primary:hover {
+      background: #d40b36;
+      box-shadow: 0 6px 20px rgba(191, 10, 48, 0.4);
+    }
+
+    .btn-join-gold {
+      background: #C9A84C;
+      color: #0A1628;
+    }
+
+    .btn-join-gold:hover {
+      background: #d4b45a;
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.4);
+    }
+
+    .btn-join-outline {
+      background: transparent;
+      color: #C9A84C;
+      border: 1px solid rgba(201, 168, 76, 0.4);
+    }
+
+    .btn-join-outline:hover {
+      background: #C9A84C;
+      color: #0A1628;
+    }
+
+    @media (max-width: 900px) {
+      .tiers-grid {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+        margin: 0 auto;
+      }
+      .tier-card.featured {
+        transform: none;
+      }
+      .tier-card.featured:hover {
+        transform: translateY(-4px);
+      }
+    }
+
+    /* ══════════════════════════════════════
+       COMPARISON TABLE
+       ══════════════════════════════════════ */
+    .comparison-section {
+      padding: 60px 0 80px;
+    }
+
+    .comparison-section .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .comparison-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+      border: 1px solid rgba(201, 168, 76, 0.12);
+    }
+
+    .comparison-table {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+    }
+
+    .comparison-table thead th {
+      background: #0F1D33;
+      padding: 18px 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+    }
+
+    .comparison-table thead th:first-child {
+      text-align: left;
+      color: #8899AA;
+    }
+
+    .comparison-table thead th.col-featured {
+      color: #C9A84C;
+    }
+
+    .comparison-table tbody td {
+      padding: 14px 20px;
+      font-size: 0.9rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .comparison-table tbody td:first-child {
+      text-align: left;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
+    }
+
+    .comparison-table tbody tr:hover {
+      background: rgba(201, 168, 76, 0.03);
+    }
+
+    .table-check {
+      color: #C9A84C;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .table-x {
+      color: #445566;
+      font-size: 1.1rem;
+    }
+
+    /* ══════════════════════════════════════
+       MEMBERS PREVIEW
+       ══════════════════════════════════════ */
+    .preview-section {
+      padding: 60px 0 80px;
+    }
+
+    .preview-section .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+    }
+
+    .preview-card {
+      background: #0F1D33;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 168, 76, 0.08);
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .preview-card:hover {
+      border-color: rgba(201, 168, 76, 0.2);
+    }
+
+    .preview-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: linear-gradient(135deg, #0F1D33, #1a2d4a);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .preview-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      backdrop-filter: blur(8px);
+      background: rgba(10, 22, 40, 0.6);
+    }
+
+    .preview-thumb .blur-text {
+      color: rgba(255,255,255,0.15);
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 20px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .lock-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      gap: 10px;
+    }
+
+    .lock-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(201, 168, 76, 0.15);
+      border: 2px solid rgba(201, 168, 76, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .lock-cta {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #C9A84C;
+    }
+
+    .preview-info {
+      padding: 20px;
+    }
+
+    .preview-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .preview-info p {
+      font-size: 0.8rem;
+      color: #8899AA;
+    }
+
+    @media (max-width: 768px) {
+      .preview-grid {
+        grid-template-columns: 1fr;
+        max-width: 440px;
+        margin: 0 auto;
+      }
+    }
+
+    /* ══════════════════════════════════════
+       STATS BAR
+       ══════════════════════════════════════ */
+    .stats-bar {
+      padding: 60px 0;
+      border-top: 1px solid rgba(201, 168, 76, 0.1);
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .stats-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #C9A84C;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #8899AA;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-row { gap: 30px; }
+      .stat-number { font-size: 1.5rem; }
+    }
+
+    /* ══════════════════════════════════════
+       FAQ ACCORDION
+       ══════════════════════════════════════ */
+    .faq-section {
+      padding: 80px 0 100px;
+    }
+
+    .faq-section .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+    }
+
+    .faq-question {
+      width: 100%;
+      padding: 20px 0;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: color 0.2s;
+    }
+
+    .faq-question:hover { color: #C9A84C; }
+
+    .faq-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 400;
+      color: #C9A84C;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      background: #C9A84C;
+      color: #0A1628;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.35s ease;
+    }
+
+    .faq-answer-inner {
+      padding: 0 0 20px;
+      font-size: 0.95rem;
+      color: #8899AA;
+      line-height: 1.7;
+    }
+
+    /* ══════════════════════════════════════
+       FOOTER
+       ══════════════════════════════════════ */
+    .footer {
+      background: #060D1A;
+      padding: 60px 0 30px;
+      border-top: 1px solid rgba(201, 168, 76, 0.15);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand p {
+      color: #8899AA;
+      font-size: 0.9rem;
+      margin-top: 16px;
+      max-width: 300px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .footer-nav h5,
+    .footer-social h5 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #C9A84C;
+      margin-bottom: 16px;
+    }
+
+    .footer-nav ul { list-style: none; }
+
+    .footer-nav li { margin-bottom: 10px; }
+
+    .footer-nav a {
+      font-size: 0.9rem;
+      color: #8899AA;
+      transition: color 0.2s;
+    }
+
+    .footer-nav a:hover { color: #fff; }
+
+    .social-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.05);
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #8899AA;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      background: #C9A84C;
+      color: #0A1628;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-bottom .tagline {
+      font-weight: 700;
+      color: #C9A84C;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .footer-bottom .copyright {
+      font-size: 0.8rem;
+      color: #556677;
+      margin-bottom: 4px;
+    }
+
+    .footer-bottom .disclaimer {
+      font-size: 0.75rem;
+      color: #445566;
+    }
+
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .membership-hero h1 { font-size: 2.2rem; }
+      .section-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════ NAVBAR ══════ -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container">
+      <a href="/" class="nav-logo">
+        <img src="/logo-nav.png" alt="Gunther Eagleman" style="height: 42px; width: auto;">
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#about">About</a></li>
+        <li><a href="/#videos">Videos</a></li>
+        <li><a href="/store.html">Store</a></li>
+        <li><a href="/support.html">Support</a></li>
+        <li><a href="/membership.html" class="active">Membership</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#videos">Videos</a>
+    <a href="/store.html">Store</a>
+    <a href="/support.html">Support</a>
+    <a href="/membership.html">Membership</a>
+  </div>
+
+  <!-- ══════ HERO ══════ -->
+  <section class="membership-hero">
+    <div class="membership-hero-content reveal">
+      <p class="section-label">Exclusive Access</p>
+      <h1>Join the <span class="accent">Inner Circle</span></h1>
+      <p>Get exclusive content, early access, and direct connection to Gunther</p>
+    </div>
+  </section>
+
+  <!-- ══════ PRICING TOGGLE ══════ -->
+  <section class="pricing-toggle-section reveal">
+    <div class="toggle-wrapper">
+      <button class="toggle-option active" id="toggleMonthly" onclick="setPricing('monthly')">Monthly</button>
+      <button class="toggle-option" id="toggleAnnual" onclick="setPricing('annual')">Annual <span class="savings-badge">Save 20%</span></button>
+    </div>
+  </section>
+
+  <!-- ══════ TIER CARDS ══════ -->
+  <section class="tiers-section">
+    <div class="container">
+      <div class="tiers-grid">
+
+        <!-- Patriot -->
+        <div class="tier-card reveal">
+          <p class="tier-name">Patriot</p>
+          <h3 class="tier-title">Patriot</h3>
+          <div class="tier-price" id="price-patriot"><span class="currency">$</span>7<span class="period">/mo</span></div>
+          <p class="tier-annual-note" id="note-patriot">&nbsp;</p>
+          <div class="tier-divider"></div>
+          <ul class="tier-features">
+            <li><span class="check">&#10003;</span> Exclusive weekly newsletter</li>
+            <li><span class="check">&#10003;</span> Early access to videos (24hr before public)</li>
+            <li><span class="check">&#10003;</span> Members-only comment section</li>
+            <li><span class="check">&#10003;</span> Patriot badge on profile</li>
+            <li><span class="check">&#10003;</span> Ad-free experience</li>
+          </ul>
+          <button class="btn-join btn-join-outline" onclick="alert('Stripe subscriptions coming soon!')">Join Now</button>
+        </div>
+
+        <!-- Eagle (Featured) -->
+        <div class="tier-card featured reveal">
+          <span class="tier-badge">Most Popular</span>
+          <p class="tier-name">Eagle</p>
+          <h3 class="tier-title">Eagle</h3>
+          <div class="tier-price" id="price-eagle"><span class="currency">$</span>15<span class="period">/mo</span></div>
+          <p class="tier-annual-note" id="note-eagle">&nbsp;</p>
+          <div class="tier-divider"></div>
+          <p class="tier-includes">Everything in Patriot, plus:</p>
+          <ul class="tier-features">
+            <li><span class="check">&#10003;</span> Monthly live Q&amp;A with Gunther</li>
+            <li><span class="check">&#10003;</span> Behind-the-scenes content</li>
+            <li><span class="check">&#10003;</span> Exclusive merchandise discounts (15%)</li>
+            <li><span class="check">&#10003;</span> Access to private community</li>
+            <li><span class="check">&#10003;</span> Monthly "State of the Nation" briefing</li>
+          </ul>
+          <button class="btn-join btn-join-gold" onclick="alert('Stripe subscriptions coming soon!')">Join Now</button>
+        </div>
+
+        <!-- Founding Father -->
+        <div class="tier-card reveal">
+          <p class="tier-name">Founding Father</p>
+          <h3 class="tier-title">Founding Father</h3>
+          <div class="tier-price" id="price-founder"><span class="currency">$</span>25<span class="period">/mo</span></div>
+          <p class="tier-annual-note" id="note-founder">&nbsp;</p>
+          <div class="tier-divider"></div>
+          <p class="tier-includes">Everything in Eagle, plus:</p>
+          <ul class="tier-features">
+            <li><span class="check">&#10003;</span> Direct message access to Gunther</li>
+            <li><span class="check">&#10003;</span> Quarterly video call (group of 10)</li>
+            <li><span class="check">&#10003;</span> Name on Founders Wall</li>
+            <li><span class="check">&#10003;</span> Free exclusive merch quarterly</li>
+            <li><span class="check">&#10003;</span> Input on future content topics</li>
+          </ul>
+          <button class="btn-join btn-join-primary" onclick="alert('Stripe subscriptions coming soon!')">Join Now</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ FEATURE COMPARISON TABLE ══════ -->
+  <section class="comparison-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Full Breakdown</p>
+        <h2 class="section-title">Compare Plans</h2>
+      </div>
+      <div class="comparison-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Patriot</th>
+              <th class="col-featured">Eagle</th>
+              <th>Founding Father</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Exclusive weekly newsletter</td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Early access to videos (24hr)</td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Members-only comments</td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Profile badge</td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Ad-free experience</td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Monthly live Q&amp;A with Gunther</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Behind-the-scenes content</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Merchandise discounts (15%)</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Private community access</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>"State of the Nation" briefing</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Direct message access</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Quarterly video call (group of 10)</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Name on Founders Wall</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Free exclusive merch quarterly</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Input on future content topics</td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-x">&#10007;</span></td>
+              <td><span class="table-check">&#10003;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ MEMBERS-ONLY CONTENT PREVIEW ══════ -->
+  <section class="preview-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Members Only</p>
+        <h2 class="section-title">What Members Get</h2>
+        <p class="section-subtitle" style="margin: 0 auto;">A glimpse at the exclusive content waiting inside.</p>
+      </div>
+      <div class="preview-grid">
+
+        <div class="preview-card">
+          <div class="preview-thumb">
+            <div class="blur-text">Behind the camera setup... preparation notes and research binder... recording schedule breakdown...</div>
+            <div class="lock-overlay">
+              <div class="lock-icon">&#128274;</div>
+              <span class="lock-cta">Unlock with Membership</span>
+            </div>
+          </div>
+          <div class="preview-info">
+            <h4>Behind the Scenes: How I Prepare for Every Post</h4>
+            <p>Exclusive &bull; 12 min read</p>
+          </div>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-thumb">
+            <div class="blur-text">Economic indicators are shifting... border policy update... analysis of recent legislative action...</div>
+            <div class="lock-overlay">
+              <div class="lock-icon">&#128274;</div>
+              <span class="lock-cta">Unlock with Membership</span>
+            </div>
+          </div>
+          <div class="preview-info">
+            <h4>State of the Nation: April 2026 Briefing</h4>
+            <p>Exclusive &bull; 18 min video</p>
+          </div>
+        </div>
+
+        <div class="preview-card">
+          <div class="preview-thumb">
+            <div class="blur-text">Question from member: What's the real impact... policy analysis... historical precedent and current data...</div>
+            <div class="lock-overlay">
+              <div class="lock-icon">&#128274;</div>
+              <span class="lock-cta">Unlock with Membership</span>
+            </div>
+          </div>
+          <div class="preview-info">
+            <h4>Live Q&amp;A Recording: Immigration Deep Dive</h4>
+            <p>Exclusive &bull; 45 min recording</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ SOCIAL PROOF / STATS BAR ══════ -->
+  <section class="stats-bar reveal">
+    <div class="container">
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-number">2,500+</div>
+          <div class="stat-label">Members</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Exclusive Videos</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">12</div>
+          <div class="stat-label">Live Q&amp;As This Year</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ FAQ ══════ -->
+  <section class="faq-section reveal">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Questions?</p>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I cancel anytime?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Yes, absolutely. You can cancel your membership at any time with no penalties or hidden fees. Your access will continue through the end of your current billing period.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>What payment methods do you accept?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">We accept all major credit and debit cards (Visa, Mastercard, American Express, Discover) through our secure Stripe payment processor.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>When do I get access?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Immediately after subscribing. Once your payment is confirmed, you'll have full access to all content and features included in your membership tier.</div>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            <span>Can I upgrade or downgrade my plan?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">Yes, you can upgrade or downgrade your membership at any time. When upgrading, you'll get immediate access to the new tier's features. When downgrading, the change takes effect at your next billing cycle.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ FOOTER ══════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">
+            <img src="/logo-banner.svg" alt="Gunther Eagleman" style="height: 32px; width: auto;">
+          </div>
+          <p>America First political commentator. Unfiltered truth. No apologies.</p>
+        </div>
+        <div class="footer-nav">
+          <h5>Navigation</h5>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/#about">About</a></li>
+            <li><a href="/#videos">Videos</a></li>
+            <li><a href="/store.html">Store</a></li>
+            <li><a href="/support.html">Support</a></li>
+            <li><a href="/membership.html">Membership</a></li>
+          </ul>
+        </div>
+        <div class="footer-social">
+          <h5>Follow Gunther</h5>
+          <div class="social-links">
+            <a href="https://x.com/GuntherEagleman" target="_blank" rel="noopener" class="social-link" title="X (Twitter)">X</a>
+            <a href="https://www.youtube.com/@Gunther_Eagleman" target="_blank" rel="noopener" class="social-link" title="YouTube">YT</a>
+            <a href="#" class="social-link" title="Rumble">R</a>
+            <a href="#" class="social-link" title="Truth Social">TS</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="tagline">God Bless America</p>
+        <p class="copyright">&copy; 2025 Gunther Eagleman. All Rights Reserved.</p>
+        <p class="disclaimer">This site is the official platform for Gunther Eagleman's political commentary.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ══════════════════════════════════════════
+       MOBILE NAV
+       ══════════════════════════════════════════ */
+    var toggle = document.getElementById('navToggle');
+    var mobileMenu = document.getElementById('mobileMenu');
+
+    toggle.addEventListener('click', function() {
+      toggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+
+    /* ══════════════════════════════════════════
+       PRICING TOGGLE
+       ══════════════════════════════════════════ */
+    var currentPricing = 'monthly';
+
+    var prices = {
+      patriot:  { monthly: { amount: '7',  period: '/mo', note: '&nbsp;' },
+                  annual:  { amount: '67', period: '/yr', note: '$5.58/mo — billed annually' } },
+      eagle:    { monthly: { amount: '15', period: '/mo', note: '&nbsp;' },
+                  annual:  { amount: '144', period: '/yr', note: '$12/mo — billed annually' } },
+      founder:  { monthly: { amount: '25', period: '/mo', note: '&nbsp;' },
+                  annual:  { amount: '240', period: '/yr', note: '$20/mo — billed annually' } }
+    };
+
+    function setPricing(mode) {
+      currentPricing = mode;
+
+      document.getElementById('toggleMonthly').classList.toggle('active', mode === 'monthly');
+      document.getElementById('toggleAnnual').classList.toggle('active', mode === 'annual');
+
+      ['patriot', 'eagle', 'founder'].forEach(function(tier) {
+        var p = prices[tier][mode];
+        document.getElementById('price-' + tier).innerHTML =
+          '<span class="currency">$</span>' + p.amount + '<span class="period">' + p.period + '</span>';
+        document.getElementById('note-' + tier).innerHTML = p.note;
+      });
+    }
+
+    /* ══════════════════════════════════════════
+       FAQ ACCORDION
+       ══════════════════════════════════════════ */
+    function toggleFaq(btn) {
+      var item = btn.parentElement;
+      var answer = item.querySelector('.faq-answer');
+      var inner = answer.querySelector('.faq-answer-inner');
+      var isOpen = item.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(function(el) {
+        el.classList.remove('open');
+        el.querySelector('.faq-answer').style.maxHeight = '0';
+      });
+
+      // Open clicked (if it was closed)
+      if (!isOpen) {
+        item.classList.add('open');
+        answer.style.maxHeight = inner.scrollHeight + 'px';
+      }
+    }
+
+    /* ══════════════════════════════════════════
+       REVEAL ON SCROLL (IntersectionObserver)
+       ══════════════════════════════════════════ */
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+
+    /* ══════════════════════════════════════════
+       ADMIN CONFIG — theme reader
+       ══════════════════════════════════════════ */
+    (function() {
+      try {
+        var raw = localStorage.getItem('eagleman_admin');
+        if (!raw) return;
+        var cfg = JSON.parse(raw);
+
+        // Apply theme if set
+        if (cfg.theme) {
+          var t = cfg.theme;
+          var style = document.createElement('style');
+          style.textContent = '' +
+            'body { background: ' + (t.navy||'') + '; color: ' + (t.white||'') + '; }' +
+            '.nav-links a:hover, .nav-links a.active, .section-label, .footer-nav h5, .footer-social h5, .tier-name, .tier-features .check, .table-check, .faq-question:hover, .faq-icon, .lock-cta, .stat-number { color: ' + (t.gold||'') + '; }' +
+            '.nav-links a::after { background: ' + (t.gold||'') + '; }' +
+            '.navbar.scrolled { box-shadow: 0 1px 0 ' + (t.gold||'') + '; }' +
+            '.toggle-option.active, .btn-join-gold, .social-link:hover { background: ' + (t.gold||'') + '; }' +
+            '.tier-card.featured { border-color: ' + (t.gold||'') + '; }' +
+            '.tier-badge { background: ' + (t.gold||'') + '; }' +
+            '.btn-join-primary { background: ' + (t.red||'') + '; }' +
+            '.footer { background: ' + (t.dark||'') + '; border-top-color: ' + (t.gold||'') + '; }' +
+            '.footer-bottom .tagline { color: ' + (t.gold||'') + '; }';
+          document.head.appendChild(style);
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+</body>
+</html>
