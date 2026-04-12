@@ -1474,6 +1474,44 @@
           }
         }
 
+        // Apply hero background image
+        var hb = cfg.heroBg;
+        var heroImgUrl = (cfg.images && cfg.images.herobg) || (hb && hb.url);
+        if (heroImgUrl && hb) {
+          var heroEl = document.querySelector('.hero');
+          if (heroEl) {
+            // Create background image layer
+            var bgLayer = document.createElement('div');
+            bgLayer.style.cssText = 'position:absolute;inset:0;z-index:0;background-image:url(' + heroImgUrl + ');background-size:' + (hb.size||'cover') + ';background-position:' + (hb.position||'center center') + ';background-repeat:no-repeat;';
+            // Apply filters
+            var f = 'brightness('+ ((hb.brightness||100)/100) +') contrast('+ ((hb.contrast||100)/100) +') saturate('+ ((hb.saturate||100)/100) +')';
+            if (hb.blur > 0) f += ' blur(' + hb.blur + 'px)';
+            if (hb.grayscale > 0) f += ' grayscale(' + (hb.grayscale/100) + ')';
+            if (hb.sepia > 0) f += ' sepia(' + (hb.sepia/100) + ')';
+            if (hb.hue > 0) f += ' hue-rotate(' + hb.hue + 'deg)';
+            if (hb.invert > 0) f += ' invert(' + (hb.invert/100) + ')';
+            bgLayer.style.filter = f;
+
+            // Dark overlay
+            var overlay = document.createElement('div');
+            overlay.style.cssText = 'position:absolute;inset:0;z-index:1;background:rgba(10,22,40,' + ((hb.overlay||60)/100) + ');';
+
+            // Insert before hero content
+            heroEl.style.position = 'relative';
+            heroEl.insertBefore(overlay, heroEl.firstChild);
+            heroEl.insertBefore(bgLayer, heroEl.firstChild);
+
+            // Ensure hero content is above
+            var heroContent = heroEl.querySelector('.hero-content');
+            if (heroContent) heroContent.style.position = 'relative';
+            if (heroContent) heroContent.style.zIndex = '3';
+
+            // Hide star field when bg image is present
+            var starField = heroEl.querySelector('.star-field');
+            if (starField) starField.style.display = 'none';
+          }
+        }
+
         // Apply content changes
         if (cfg.content) {
           var c = cfg.content;

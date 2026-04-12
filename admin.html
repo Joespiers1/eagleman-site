@@ -1348,6 +1348,106 @@
                   </div>
                 </div>
               </div>
+
+              <!-- Hero Background Image -->
+              <div class="form-group" style="border-top:1px solid var(--admin-border);padding-top:16px;margin-top:16px;">
+                <label style="font-size:0.9rem;font-weight:700;color:var(--admin-text);margin-bottom:12px;display:block;">Hero Background Image</label>
+                <div class="img-preview" id="preview-herobg-img">
+                  <img src="" alt="Preview" id="preview-herobg-img-el">
+                  <div class="img-overlay">
+                    <button class="btn-img" onclick="document.getElementById('upload-herobg-img').click()">Replace</button>
+                    <button class="btn-img danger" onclick="removeImage('herobg')">Remove</button>
+                  </div>
+                </div>
+                <div class="img-uploader" id="uploader-herobg-img">
+                  <input type="file" id="upload-herobg-img" accept="image/*" onchange="handleImageUpload(this, 'herobg')">
+                  <div class="upload-icon">&#127748;</div>
+                  <div class="upload-text"><strong>Click to upload</strong> a background image<br>High-res recommended (1920x1080+)</div>
+                </div>
+                <input type="text" id="edit-herobg-url" placeholder="Or paste image URL" style="margin-top:8px;" oninput="if(this.value)showImagePreview('herobg',this.value)">
+
+                <!-- Background position -->
+                <div style="margin-top:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;color:var(--admin-muted);">Position</label>
+                  <select id="herobg-position" style="width:100%;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;margin-top:4px;">
+                    <option value="center center" selected>Center</option>
+                    <option value="center top">Top</option>
+                    <option value="center bottom">Bottom</option>
+                    <option value="left center">Left</option>
+                    <option value="right center">Right</option>
+                  </select>
+                </div>
+
+                <!-- Background size -->
+                <div style="margin-top:8px;">
+                  <label style="font-size:0.75rem;font-weight:600;color:var(--admin-muted);">Size</label>
+                  <select id="herobg-size" style="width:100%;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;margin-top:4px;">
+                    <option value="cover" selected>Cover (fill)</option>
+                    <option value="contain">Contain (fit)</option>
+                    <option value="100% auto">Stretch Width</option>
+                    <option value="auto 100%">Stretch Height</option>
+                  </select>
+                </div>
+
+                <!-- Overlay opacity -->
+                <div style="margin-top:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;color:var(--admin-muted);">Dark Overlay Opacity <span style="float:right;color:var(--admin-muted);font-size:0.7rem;" id="val-herobg-overlay">60%</span></label>
+                  <input type="range" id="herobg-overlay" min="0" max="90" value="60" oninput="document.getElementById('val-herobg-overlay').textContent=this.value+'%'" style="width:100%;margin-top:4px;">
+                </div>
+
+                <!-- Filter presets -->
+                <div style="margin-top:16px;border-top:1px solid var(--admin-border);padding-top:12px;">
+                  <label style="font-size:0.8rem;font-weight:700;color:var(--admin-text);margin-bottom:8px;display:block;">Image Filters</label>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+                    <button class="filter-preset active" onclick="applyHeroBgFilter('none',this)">None</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('cinematic',this)">Cinematic</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('dramatic',this)">Dramatic</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('bw',this)">B&amp;W</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('sepia',this)">Sepia</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('patriot',this)">Patriot</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('moody',this)">Moody</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('warm',this)">Warm</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('cool',this)">Cool</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('highcontrast',this)">High Contrast</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('faded',this)">Faded</button>
+                    <button class="filter-preset" onclick="applyHeroBgFilter('duotone',this)">Duotone</button>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="filter-slider">
+                      <label>Brightness <span class="filter-value" id="val-herobg-brightness">100%</span></label>
+                      <input type="range" min="30" max="170" value="100" id="herobg-brightness" oninput="document.getElementById('val-herobg-brightness').textContent=this.value+'%'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Contrast <span class="filter-value" id="val-herobg-contrast">100%</span></label>
+                      <input type="range" min="30" max="200" value="100" id="herobg-contrast" oninput="document.getElementById('val-herobg-contrast').textContent=this.value+'%'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Saturation <span class="filter-value" id="val-herobg-saturate">100%</span></label>
+                      <input type="range" min="0" max="200" value="100" id="herobg-saturate" oninput="document.getElementById('val-herobg-saturate').textContent=this.value+'%'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Blur <span class="filter-value" id="val-herobg-blur">0px</span></label>
+                      <input type="range" min="0" max="20" value="0" id="herobg-blur" oninput="document.getElementById('val-herobg-blur').textContent=this.value+'px'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Grayscale <span class="filter-value" id="val-herobg-grayscale">0%</span></label>
+                      <input type="range" min="0" max="100" value="0" id="herobg-grayscale" oninput="document.getElementById('val-herobg-grayscale').textContent=this.value+'%'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Sepia <span class="filter-value" id="val-herobg-sepia">0%</span></label>
+                      <input type="range" min="0" max="100" value="0" id="herobg-sepia" oninput="document.getElementById('val-herobg-sepia').textContent=this.value+'%'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Hue Rotate <span class="filter-value" id="val-herobg-hue">0&deg;</span></label>
+                      <input type="range" min="0" max="360" value="0" id="herobg-hue" oninput="document.getElementById('val-herobg-hue').textContent=this.value+'&deg;'">
+                    </div>
+                    <div class="filter-slider">
+                      <label>Invert <span class="filter-value" id="val-herobg-invert">0%</span></label>
+                      <input type="range" min="0" max="100" value="0" id="herobg-invert" oninput="document.getElementById('val-herobg-invert').textContent=this.value+'%'">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -2222,6 +2322,9 @@
         config.sectionVisibility[sec] = item.querySelector('input[type="checkbox"]').checked;
       });
 
+      // Hero background config
+      config.heroBg = getHeroBgConfig();
+
       // Navbar config
       config.navItems = config.navItems;
       config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
@@ -2624,6 +2727,7 @@
 
       config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
       config.navLogoUrl = document.getElementById('edit-navlogo-url').value;
+      config.heroBg = getHeroBgConfig();
       config.images = imageData;
       config.filters = filterData;
 
@@ -2906,7 +3010,112 @@
     if (imageData.navlogo) showImagePreview('navlogo', imageData.navlogo);
     renderNavItems();
 
-    /* Navbar save is now merged into the main save handler above */
+    /* ══════════════════════════════════════
+       HERO BACKGROUND FILTERS
+       ══════════════════════════════════════ */
+    var heroBgPresets = {
+      none:        {brightness:100,contrast:100,saturate:100,blur:0,grayscale:0,sepia:0,hue:0,invert:0},
+      cinematic:   {brightness:90,contrast:130,saturate:80,blur:0,grayscale:0,sepia:10,hue:0,invert:0},
+      dramatic:    {brightness:80,contrast:150,saturate:70,blur:0,grayscale:0,sepia:0,hue:0,invert:0},
+      bw:          {brightness:100,contrast:120,saturate:0,blur:0,grayscale:100,sepia:0,hue:0,invert:0},
+      sepia:       {brightness:100,contrast:100,saturate:60,blur:0,grayscale:0,sepia:70,hue:0,invert:0},
+      patriot:     {brightness:105,contrast:120,saturate:140,blur:0,grayscale:0,sepia:0,hue:0,invert:0},
+      moody:       {brightness:70,contrast:120,saturate:60,blur:1,grayscale:20,sepia:15,hue:0,invert:0},
+      warm:        {brightness:105,contrast:105,saturate:120,blur:0,grayscale:0,sepia:25,hue:10,invert:0},
+      cool:        {brightness:100,contrast:110,saturate:90,blur:0,grayscale:0,sepia:0,hue:200,invert:0},
+      highcontrast:{brightness:110,contrast:170,saturate:110,blur:0,grayscale:0,sepia:0,hue:0,invert:0},
+      faded:       {brightness:120,contrast:85,saturate:50,blur:0,grayscale:15,sepia:10,hue:0,invert:0},
+      duotone:     {brightness:100,contrast:130,saturate:0,blur:0,grayscale:100,sepia:100,hue:180,invert:0}
+    };
+
+    function applyHeroBgFilter(name, btn) {
+      var p = heroBgPresets[name];
+      if (!p) return;
+      document.getElementById('herobg-brightness').value = p.brightness;
+      document.getElementById('herobg-contrast').value = p.contrast;
+      document.getElementById('herobg-saturate').value = p.saturate;
+      document.getElementById('herobg-blur').value = p.blur;
+      document.getElementById('herobg-grayscale').value = p.grayscale;
+      document.getElementById('herobg-sepia').value = p.sepia;
+      document.getElementById('herobg-hue').value = p.hue;
+      document.getElementById('herobg-invert').value = p.invert;
+      // Update display values
+      document.getElementById('val-herobg-brightness').textContent = p.brightness + '%';
+      document.getElementById('val-herobg-contrast').textContent = p.contrast + '%';
+      document.getElementById('val-herobg-saturate').textContent = p.saturate + '%';
+      document.getElementById('val-herobg-blur').textContent = p.blur + 'px';
+      document.getElementById('val-herobg-grayscale').textContent = p.grayscale + '%';
+      document.getElementById('val-herobg-sepia').textContent = p.sepia + '%';
+      document.getElementById('val-herobg-hue').textContent = p.hue + '\u00B0';
+      document.getElementById('val-herobg-invert').textContent = p.invert + '%';
+      // Highlight active preset
+      var btns = btn.parentElement.querySelectorAll('.filter-preset');
+      btns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      // Apply to preview image
+      updateHeroBgPreview();
+      liveSync();
+    }
+
+    function updateHeroBgPreview() {
+      var img = document.getElementById('preview-herobg-img-el');
+      if (!img || !img.src) return;
+      img.style.filter = getHeroBgFilterCSS();
+    }
+
+    function getHeroBgFilterCSS() {
+      var b = parseInt(document.getElementById('herobg-brightness').value) || 100;
+      var c = parseInt(document.getElementById('herobg-contrast').value) || 100;
+      var s = parseInt(document.getElementById('herobg-saturate').value) || 100;
+      var bl = parseInt(document.getElementById('herobg-blur').value) || 0;
+      var g = parseInt(document.getElementById('herobg-grayscale').value) || 0;
+      var se = parseInt(document.getElementById('herobg-sepia').value) || 0;
+      var h = parseInt(document.getElementById('herobg-hue').value) || 0;
+      var inv = parseInt(document.getElementById('herobg-invert').value) || 0;
+      return 'brightness('+(b/100)+') contrast('+(c/100)+') saturate('+(s/100)+') blur('+bl+'px) grayscale('+(g/100)+') sepia('+(se/100)+') hue-rotate('+h+'deg) invert('+(inv/100)+')';
+    }
+
+    function getHeroBgConfig() {
+      return {
+        url: document.getElementById('edit-herobg-url').value || '',
+        position: document.getElementById('herobg-position').value,
+        size: document.getElementById('herobg-size').value,
+        overlay: parseInt(document.getElementById('herobg-overlay').value) || 60,
+        brightness: parseInt(document.getElementById('herobg-brightness').value) || 100,
+        contrast: parseInt(document.getElementById('herobg-contrast').value) || 100,
+        saturate: parseInt(document.getElementById('herobg-saturate').value) || 100,
+        blur: parseInt(document.getElementById('herobg-blur').value) || 0,
+        grayscale: parseInt(document.getElementById('herobg-grayscale').value) || 0,
+        sepia: parseInt(document.getElementById('herobg-sepia').value) || 0,
+        hue: parseInt(document.getElementById('herobg-hue').value) || 0,
+        invert: parseInt(document.getElementById('herobg-invert').value) || 0
+      };
+    }
+
+    function loadHeroBgConfig() {
+      var hb = config.heroBg || {};
+      if (hb.url) document.getElementById('edit-herobg-url').value = hb.url;
+      if (hb.position) document.getElementById('herobg-position').value = hb.position;
+      if (hb.size) document.getElementById('herobg-size').value = hb.size;
+      if (hb.overlay !== undefined) { document.getElementById('herobg-overlay').value = hb.overlay; document.getElementById('val-herobg-overlay').textContent = hb.overlay + '%'; }
+      ['brightness','contrast','saturate','blur','grayscale','sepia','hue','invert'].forEach(function(k) {
+        if (hb[k] !== undefined) {
+          document.getElementById('herobg-' + k).value = hb[k];
+          var unit = k === 'blur' ? 'px' : k === 'hue' ? '\u00B0' : '%';
+          document.getElementById('val-herobg-' + k).textContent = hb[k] + unit;
+        }
+      });
+      if (imageData.herobg) showImagePreview('herobg', imageData.herobg);
+      else if (hb.url) showImagePreview('herobg', hb.url);
+      updateHeroBgPreview();
+    }
+    loadHeroBgConfig();
+
+    // Wire herobg sliders to live preview
+    document.querySelectorAll('[id^="herobg-"]').forEach(function(el) {
+      el.addEventListener('input', function() { updateHeroBgPreview(); liveSync(); });
+      el.addEventListener('change', function() { updateHeroBgPreview(); liveSync(); });
+    });
   </script>
 </body>
 </html>
