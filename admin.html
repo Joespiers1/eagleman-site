@@ -3017,41 +3017,79 @@
       { label: 'Live Feed', href: '#feed' },
       { label: 'Issues', href: '#issues' },
       { label: 'Videos', href: '#videos' },
-      { label: 'Newsletter', href: '#newsletter' }
+      { label: 'Newsletter', href: '#newsletter' },
+      { label: 'Store', href: '/store.html' },
+      { label: 'Support', href: '/support.html' },
+      { label: 'Membership', href: '/membership.html' }
     ];
 
     if (!config.navItems) config.navItems = JSON.parse(JSON.stringify(defaultNavItems));
+    // Migrate old configs: ensure items have children array
+    config.navItems.forEach(function(item) { if (!item.children) item.children = []; });
     if (!config.navLogoHeight) config.navLogoHeight = 42;
     if (!config.navLogoUrl) config.navLogoUrl = '';
 
     function renderNavItems() {
       var list = document.getElementById('nav-items-list');
       list.innerHTML = '';
+      var inputStyle = 'flex:1;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;';
+
       config.navItems.forEach(function(item, i) {
+        // Parent item row
+        var hasChildren = item.children && item.children.length > 0;
         var row = document.createElement('div');
-        row.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:8px;';
+        row.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:' + (hasChildren ? '4' : '8') + 'px;';
         row.innerHTML =
-          '<input type="text" value="' + item.label + '" placeholder="Label" style="flex:1;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;" onchange="updateNavItem(' + i + ',\'label\',this.value)">' +
-          '<input type="text" value="' + item.href + '" placeholder="#section" style="flex:1;padding:7px 10px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:var(--admin-text);font-size:0.85rem;" onchange="updateNavItem(' + i + ',\'href\',this.value)">' +
+          '<span style="color:var(--admin-accent);font-size:0.7rem;width:16px;text-align:center;flex-shrink:0;">' + (hasChildren ? '&#9660;' : '&#9679;') + '</span>' +
+          '<input type="text" value="' + escHtml(item.label) + '" placeholder="Label" style="' + inputStyle + '" onchange="updateNavItem(' + i + ',\'label\',this.value)">' +
+          '<input type="text" value="' + escHtml(item.href) + '" placeholder="#section or /page.html" style="' + inputStyle + '" onchange="updateNavItem(' + i + ',\'href\',this.value)">' +
           '<button class="btn-icon" title="Move Up" onclick="moveNavItem(' + i + ',-1)" style="flex-shrink:0">&uarr;</button>' +
           '<button class="btn-icon" title="Move Down" onclick="moveNavItem(' + i + ',1)" style="flex-shrink:0">&darr;</button>' +
-          '<button class="btn-icon danger" title="Remove" onclick="removeNavItem(' + i + ')" style="flex-shrink:0">&times;</button>';
+          '<button class="btn-icon" title="Remove" onclick="removeNavItem(' + i + ')" style="flex-shrink:0">&times;</button>';
         list.appendChild(row);
+
+        // Children (submenu items)
+        if (item.children) {
+          item.children.forEach(function(child, ci) {
+            var childRow = document.createElement('div');
+            childRow.style.cssText = 'display:flex;gap:6px;align-items:center;margin-bottom:4px;margin-left:28px;padding-left:12px;border-left:2px solid var(--admin-accent);';
+            childRow.innerHTML =
+              '<input type="text" value="' + escHtml(child.label) + '" placeholder="Label" style="' + inputStyle + '" onchange="updateNavChild(' + i + ',' + ci + ',\'label\',this.value)">' +
+              '<input type="text" value="' + escHtml(child.href) + '" placeholder="/page.html" style="' + inputStyle + '" onchange="updateNavChild(' + i + ',' + ci + ',\'href\',this.value)">' +
+              '<button class="btn-icon" title="Move to top level" onclick="promoteNavChild(' + i + ',' + ci + ')" style="flex-shrink:0;font-size:0.7rem;">&#8593;Top</button>' +
+              '<button class="btn-icon" title="Move Up" onclick="moveNavChild(' + i + ',' + ci + ',-1)" style="flex-shrink:0">&uarr;</button>' +
+              '<button class="btn-icon" title="Move Down" onclick="moveNavChild(' + i + ',' + ci + ',1)" style="flex-shrink:0">&darr;</button>' +
+              '<button class="btn-icon danger" title="Remove" onclick="removeNavChild(' + i + ',' + ci + ')" style="flex-shrink:0">&times;</button>';
+            list.appendChild(childRow);
+          });
+        }
+
+        // Add submenu button (after children)
+        if (hasChildren || true) {
+          var subBtnRow = document.createElement('div');
+          subBtnRow.style.cssText = 'margin-left:28px;margin-bottom:8px;';
+          subBtnRow.innerHTML = '<button style="background:none;border:1px dashed var(--admin-border);border-radius:5px;padding:4px 10px;color:var(--admin-muted);font-size:0.7rem;cursor:pointer;" onclick="addNavChild(' + i + ')" onmouseenter="this.style.borderColor=\'var(--admin-accent)\';this.style.color=\'var(--admin-accent)\'" onmouseleave="this.style.borderColor=\'var(--admin-border)\';this.style.color=\'var(--admin-muted)\'">+ Add Sub-item</button>' +
+            '<button style="background:none;border:none;padding:4px 10px;color:var(--admin-muted);font-size:0.7rem;cursor:pointer;" onclick="demoteNavItem(' + i + ')" title="Move this item into the one above as a submenu item" onmouseenter="this.style.color=\'var(--admin-accent)\'" onmouseleave="this.style.color=\'var(--admin-muted)\'">' + (i > 0 ? '&#8594; Make sub-item of &ldquo;' + escHtml(config.navItems[i-1].label) + '&rdquo;' : '') + '</button>';
+          list.appendChild(subBtnRow);
+        }
       });
     }
 
     function updateNavItem(i, key, val) {
       config.navItems[i][key] = val;
+      liveSync();
     }
 
     function addNavItem() {
-      config.navItems.push({ label: 'New Link', href: '#' });
+      config.navItems.push({ label: 'New Link', href: '#', children: [] });
       renderNavItems();
+      liveSync();
     }
 
     function removeNavItem(i) {
       config.navItems.splice(i, 1);
       renderNavItems();
+      liveSync();
     }
 
     function moveNavItem(i, dir) {
@@ -3061,6 +3099,55 @@
       config.navItems[i] = config.navItems[j];
       config.navItems[j] = tmp;
       renderNavItems();
+      liveSync();
+    }
+
+    // Demote a top-level item into the previous item's children
+    function demoteNavItem(i) {
+      if (i < 1) return;
+      var item = config.navItems.splice(i, 1)[0];
+      if (!config.navItems[i-1].children) config.navItems[i-1].children = [];
+      config.navItems[i-1].children.push({ label: item.label, href: item.href });
+      renderNavItems();
+      liveSync();
+    }
+
+    // Submenu child CRUD
+    function updateNavChild(i, ci, key, val) {
+      config.navItems[i].children[ci][key] = val;
+      liveSync();
+    }
+
+    function addNavChild(i) {
+      if (!config.navItems[i].children) config.navItems[i].children = [];
+      config.navItems[i].children.push({ label: 'New Sub-item', href: '#' });
+      renderNavItems();
+      liveSync();
+    }
+
+    function removeNavChild(i, ci) {
+      config.navItems[i].children.splice(ci, 1);
+      renderNavItems();
+      liveSync();
+    }
+
+    function moveNavChild(i, ci, dir) {
+      var children = config.navItems[i].children;
+      var j = ci + dir;
+      if (j < 0 || j >= children.length) return;
+      var tmp = children[ci];
+      children[ci] = children[j];
+      children[j] = tmp;
+      renderNavItems();
+      liveSync();
+    }
+
+    // Promote a child to top-level (inserts after parent)
+    function promoteNavChild(i, ci) {
+      var child = config.navItems[i].children.splice(ci, 1)[0];
+      config.navItems.splice(i + 1, 0, { label: child.label, href: child.href, children: [] });
+      renderNavItems();
+      liveSync();
     }
 
     function updateNavLogoPreview() {

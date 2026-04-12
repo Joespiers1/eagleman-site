@@ -163,6 +163,60 @@
     .nav-links a:hover::after,
     .nav-links a.active::after { width: 100%; }
 
+    /* Dropdown submenus */
+    .nav-links li {
+      position: relative;
+    }
+
+    .nav-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-top: 12px;
+      z-index: 100;
+    }
+
+    .nav-links li:hover .nav-dropdown { display: block; }
+
+    .nav-dropdown-inner {
+      background: rgba(10, 22, 40, 0.97);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(201, 168, 76, 0.15);
+      border-radius: 8px;
+      padding: 8px 0;
+      min-width: 180px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .nav-dropdown a {
+      display: block;
+      padding: 8px 20px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .nav-dropdown a::after { display: none; }
+
+    .nav-dropdown a:hover {
+      background: rgba(201, 168, 76, 0.1);
+    }
+
+    .nav-has-children > a::after { display: none; }
+
+    .nav-has-children > a .dropdown-arrow {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 0.6rem;
+      vertical-align: middle;
+      transition: transform 0.2s;
+    }
+
+    .nav-has-children:hover > a .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+
     /* Mobile hamburger */
     .nav-toggle {
       display: none;
@@ -1485,7 +1539,16 @@
             navUl.innerHTML = '';
             cfg.navItems.forEach(function(item) {
               var li = document.createElement('li');
-              li.innerHTML = '<a href="' + item.href + '">' + item.label + '</a>';
+              var hasChildren = item.children && item.children.length > 0;
+              if (hasChildren) {
+                li.className = 'nav-has-children';
+                li.innerHTML = '<a href="' + item.href + '">' + item.label + ' <span class="dropdown-arrow">&#9660;</span></a>' +
+                  '<div class="nav-dropdown"><div class="nav-dropdown-inner">' +
+                  item.children.map(function(c) { return '<a href="' + c.href + '">' + c.label + '</a>'; }).join('') +
+                  '</div></div>';
+              } else {
+                li.innerHTML = '<a href="' + item.href + '">' + item.label + '</a>';
+              }
               navUl.appendChild(li);
             });
           }
@@ -1503,6 +1566,23 @@
                 document.body.style.overflow = '';
               });
               mobMenu.appendChild(a);
+              // Add children to mobile menu as indented items
+              if (item.children && item.children.length) {
+                item.children.forEach(function(c) {
+                  var ca = document.createElement('a');
+                  ca.href = c.href;
+                  ca.textContent = c.label;
+                  ca.style.fontSize = '1rem';
+                  ca.style.opacity = '0.7';
+                  ca.style.paddingLeft = '20px';
+                  ca.addEventListener('click', function() {
+                    document.getElementById('nav-toggle').classList.remove('open');
+                    mobMenu.classList.remove('open');
+                    document.body.style.overflow = '';
+                  });
+                  mobMenu.appendChild(ca);
+                });
+              }
             });
           }
         }
