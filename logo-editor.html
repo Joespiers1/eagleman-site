@@ -148,6 +148,9 @@
       <div class="r"><label>Left Bar</label><select id="dLeft" onchange="draw()"><option value="0">Hide</option><option value="1">Show</option></select></div>
       <div class="r"><label>Separator</label><select id="dSep" onchange="draw()"><option value="0">Hide</option><option value="1">Show</option></select></div>
       <div class="r"><label>Tagline</label><input type="text" id="tag" value="" placeholder="AMERICA FIRST" oninput="draw()"></div>
+      <div class="r"><label>Tagline Size <span class="rv" id="rv-tagFs">10</span></label><input type="range" id="tagFs" min="6" max="30" value="10" oninput="draw();rvU('tagFs')"></div>
+      <div class="r"><label>Tagline Spacing <span class="rv" id="rv-tagLs">4</span></label><input type="range" id="tagLs" min="0" max="16" value="4" oninput="draw();rvU('tagLs')"></div>
+      <div class="r"><label>Tagline Y Position <span class="rv" id="rv-tagY">0</span></label><input type="range" id="tagY" min="-30" max="30" value="0" oninput="draw();rvU('tagY')"></div>
     </div>
 
     <div class="s"><h4>Filters</h4>
@@ -327,7 +330,7 @@ function drawWM(){
   if(g('dBot')==='1') s+=dWrap('botline','<rect x="40" y="'+(H-8)+'" width="'+(W-80)+'" height="3" fill="'+cA+'"/>');
 
   var tg=g('tag');
-  if(tg) s+=dWrap('tagline','<text x="'+(cx+offsetX)+'" y="'+(H-2)+'" text-anchor="middle" font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="10" fill="'+cA+'" letter-spacing="4">'+tg+'</text>');
+  if(tg) s+=dWrap('tagline','<text x="'+(cx+offsetX)+'" y="'+(H-2+g('tagY'))+'" text-anchor="middle" font-family="\'Trebuchet MS\',sans-serif" font-weight="700" font-size="'+g('tagFs')+'" fill="'+cA+'" letter-spacing="'+g('tagLs')+'">'+tg+'</text>');
 
   s+='</svg>';
   vp.innerHTML=s+'<span class="drag-hint">Drag elements to reposition</span>';
