@@ -736,12 +736,18 @@
       border-radius: 12px;
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
     }
 
     .video-card:hover {
       transform: translateY(-6px);
       box-shadow: 0 12px 32px rgba(201, 168, 76, 0.15);
     }
+
+    .video-card .twitter-tweet { margin: 0 !important; width: 100% !important; }
+    .video-card iframe { border-radius: 12px !important; }
 
     .video-thumb {
       position: relative;
@@ -1156,36 +1162,22 @@
       </div>
       <div class="video-grid reveal">
         <div class="video-card">
-          <div class="video-thumb">
-            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="video-info">
-            <h4>The Border Crisis They're Hiding From You</h4>
-            <p class="video-date">Coming Soon</p>
-            <a href="#" class="btn-watch">Watch Now</a>
-          </div>
+          <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none">
+            <a href="https://x.com/GuntherEagleman/status/2043100481451368728"></a>
+          </blockquote>
         </div>
         <div class="video-card">
-          <div class="video-thumb">
-            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="video-info">
-            <h4>Why Free Speech Is Under Attack</h4>
-            <p class="video-date">Coming Soon</p>
-            <a href="#" class="btn-watch">Watch Now</a>
-          </div>
+          <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none">
+            <a href="https://x.com/GuntherEagleman/status/2042999812916723873"></a>
+          </blockquote>
         </div>
         <div class="video-card">
-          <div class="video-thumb">
-            <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </div>
-          <div class="video-info">
-            <h4>America First: What It Really Means</h4>
-            <p class="video-date">Coming Soon</p>
-            <a href="#" class="btn-watch">Watch Now</a>
-          </div>
+          <blockquote class="twitter-tweet" data-theme="dark" data-conversation="none">
+            <a href="https://x.com/GuntherEagleman/status/2042999004200304739"></a>
+          </blockquote>
         </div>
       </div>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
   </section>
 
