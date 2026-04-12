@@ -245,7 +245,7 @@ function preset(n){
 function draw(){
   hU();
   var t=g('type');
-  if(t==='wm') drawWM(); else drawMono(t);
+  if(t.indexOf('wm')===0) drawWM(); else drawMono(t);
 }
 
 function drawWM(){
