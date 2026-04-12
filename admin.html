@@ -961,6 +961,75 @@
       text-align: right;
     }
 
+    /* ── Live Preview Panel ── */
+    .preview-panel {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100vh;
+      z-index: 200;
+      background: var(--admin-bg);
+      border-left: 2px solid var(--admin-accent);
+      flex-direction: column;
+    }
+
+    .preview-panel.open {
+      display: flex;
+    }
+
+    .preview-panel .preview-toolbar {
+      padding: 10px 16px;
+      background: var(--admin-surface);
+      border-bottom: 1px solid var(--admin-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preview-panel .preview-toolbar h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--admin-accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .preview-panel .device-btns {
+      display: flex;
+      gap: 4px;
+    }
+
+    .preview-panel .device-btn {
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      border: 1px solid var(--admin-border);
+      background: var(--admin-surface2);
+      color: var(--admin-muted);
+      cursor: pointer;
+    }
+
+    .preview-panel .device-btn.active,
+    .preview-panel .device-btn:hover {
+      border-color: var(--admin-accent);
+      color: var(--admin-accent);
+    }
+
+    .preview-panel iframe {
+      flex: 1;
+      border: none;
+      background: #fff;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .preview-panel.open ~ .main .main-body {
+      margin-right: 50%;
+    }
+
     /* ── Responsive ── */
     @media (max-width: 1024px) {
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1064,7 +1133,9 @@
       <div class="main-header">
         <h1 id="panel-title">Dashboard</h1>
         <div class="header-actions">
-          <button class="btn-sm" id="btn-undo">Undo</button>
+          <button class="btn-sm" id="btn-undo" title="Undo (Ctrl+Z)">&#8630; Undo</button>
+          <button class="btn-sm" id="btn-redo" title="Redo (Ctrl+Y)">&#8631; Redo</button>
+          <button class="btn-sm" id="btn-preview-toggle" onclick="togglePreview()">&#128065; Preview</button>
           <button class="btn-sm primary" id="btn-save">Save Changes</button>
         </div>
       </div>
@@ -1782,6 +1853,20 @@
 
       </div>
     </main>
+
+    <!-- Live Preview Panel -->
+    <div class="preview-panel" id="preview-panel">
+      <div class="preview-toolbar">
+        <h4>Live Preview</h4>
+        <div class="device-btns">
+          <button class="device-btn active" onclick="setDevice('100%',this)">Desktop</button>
+          <button class="device-btn" onclick="setDevice('768px',this)">Tablet</button>
+          <button class="device-btn" onclick="setDevice('375px',this)">Mobile</button>
+          <button class="device-btn" onclick="togglePreview()" style="margin-left:8px;color:var(--admin-red);border-color:var(--admin-red);">&times; Close</button>
+        </div>
+      </div>
+      <iframe id="preview-iframe" src="index.html" style="width:100%;"></iframe>
+    </div>
   </div>
 
   <!-- ═══ NEW PAGE MODAL ═══ -->
@@ -2109,7 +2194,22 @@
         config.sectionVisibility[sec] = item.querySelector('input[type="checkbox"]').checked;
       });
 
+      // Navbar config
+      config.navItems = config.navItems;
+      config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
+      config.navLogoUrl = document.getElementById('edit-navlogo-url').value;
+
+      // Images & filters
+      config.images = imageData;
+      config.filters = filterData;
+
+      // Push to undo stack
+      pushUndo();
+
       saveConfig();
+
+      // Refresh live preview
+      refreshPreview();
     });
 
     /* ══════════════════════════════════════
@@ -2313,13 +2413,84 @@
     });
 
     /* ══════════════════════════════════════
-       UNDO (simple: reload from saved)
+       UNDO / REDO SYSTEM
        ══════════════════════════════════════ */
-    document.getElementById('btn-undo').addEventListener('click', function() {
-      config = loadConfig();
+    var undoStack = [];
+    var redoStack = [];
+    var MAX_UNDO = 30;
+
+    // Take a snapshot of current config
+    function pushUndo() {
+      undoStack.push(JSON.stringify(config));
+      if (undoStack.length > MAX_UNDO) undoStack.shift();
+      redoStack = []; // clear redo on new action
+    }
+
+    function doUndo() {
+      if (undoStack.length === 0) { showToast('Nothing to undo'); return; }
+      redoStack.push(JSON.stringify(config));
+      config = JSON.parse(undoStack.pop());
+      imageData = config.images || {};
+      filterData = config.filters || {};
       populateFields();
-      showToast('Reverted to last saved state');
+      renderNavItems();
+      loadSavedImages();
+      showToast('Undone');
+      refreshPreview();
+    }
+
+    function doRedo() {
+      if (redoStack.length === 0) { showToast('Nothing to redo'); return; }
+      undoStack.push(JSON.stringify(config));
+      config = JSON.parse(redoStack.pop());
+      imageData = config.images || {};
+      filterData = config.filters || {};
+      populateFields();
+      renderNavItems();
+      loadSavedImages();
+      showToast('Redone');
+      refreshPreview();
+    }
+
+    document.getElementById('btn-undo').addEventListener('click', doUndo);
+    document.getElementById('btn-redo').addEventListener('click', doRedo);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) { e.preventDefault(); doUndo(); }
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) { e.preventDefault(); doRedo(); }
     });
+
+    // Push initial state
+    pushUndo();
+
+    /* ══════════════════════════════════════
+       LIVE PREVIEW
+       ══════════════════════════════════════ */
+    var previewOpen = false;
+
+    function togglePreview() {
+      previewOpen = !previewOpen;
+      document.getElementById('preview-panel').classList.toggle('open', previewOpen);
+      var btn = document.getElementById('btn-preview-toggle');
+      btn.textContent = previewOpen ? '\u2716 Close Preview' : '\uD83D\uDC41 Preview';
+      if (previewOpen) refreshPreview();
+    }
+
+    function refreshPreview() {
+      var iframe = document.getElementById('preview-iframe');
+      if (iframe && previewOpen) {
+        iframe.contentWindow.location.reload();
+      }
+    }
+
+    function setDevice(width, btn) {
+      var iframe = document.getElementById('preview-iframe');
+      iframe.style.width = width;
+      iframe.style.maxWidth = '100%';
+      document.querySelectorAll('.device-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
 
     /* ══════════════════════════════════════
        SECTION EDIT BUTTONS → Content panel
@@ -2573,15 +2744,7 @@
     if (imageData.navlogo) showImagePreview('navlogo', imageData.navlogo);
     renderNavItems();
 
-    // Override save to include images, filters, and navbar config
-    var origSave = document.getElementById('btn-save');
-    origSave.addEventListener('click', function() {
-      config.images = imageData;
-      config.filters = filterData;
-      config.navItems = config.navItems;
-      config.navLogoHeight = parseInt(document.getElementById('edit-navlogo-height').value) || 42;
-      config.navLogoUrl = document.getElementById('edit-navlogo-url').value;
-    });
+    /* Navbar save is now merged into the main save handler above */
   </script>
 </body>
 </html>
