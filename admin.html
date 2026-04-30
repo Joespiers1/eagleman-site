@@ -741,6 +741,93 @@
 
     .editor-section.open .editor-section-body { display: block; }
 
+    .editor-section.section-hidden { display: none; }
+
+    .editor-section-header .btn-remove-section {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: none;
+      color: var(--admin-muted);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .editor-section-header .btn-remove-section:hover {
+      border-color: var(--admin-red);
+      color: var(--admin-red);
+      background: rgba(220, 38, 38, 0.1);
+    }
+
+    .add-section-bar {
+      border: 2px dashed var(--admin-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-top: 8px;
+      position: relative;
+    }
+    .add-section-bar:hover {
+      border-color: var(--admin-accent);
+      background: rgba(201, 168, 76, 0.05);
+    }
+    .add-section-bar .add-label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--admin-muted);
+    }
+    .add-section-bar:hover .add-label { color: var(--admin-accent); }
+
+    .add-section-dropdown {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--admin-surface);
+      border: 1px solid var(--admin-border);
+      border-radius: 10px;
+      padding: 8px 0;
+      min-width: 240px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      z-index: 100;
+      margin-bottom: 8px;
+    }
+    .add-section-dropdown.open { display: block; }
+    .add-section-dropdown .add-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--admin-text);
+      cursor: pointer;
+      transition: background 0.15s;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .add-section-dropdown .add-option:hover { background: var(--admin-surface2); }
+    .add-section-dropdown .add-option .add-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+    .add-section-dropdown .empty-msg {
+      padding: 12px 16px;
+      font-size: 0.8rem;
+      color: var(--admin-muted);
+      text-align: center;
+    }
+
     /* ── Modal ── */
     .modal-overlay {
       display: none;
@@ -1171,6 +1258,7 @@
           <button class="btn-sm" id="btn-redo" title="Redo (Ctrl+Y)">&#8631; Redo</button>
           <button class="btn-sm" id="btn-preview-toggle" onclick="togglePreview()">&#128065; Preview</button>
           <button class="btn-sm primary" id="btn-save">Save Changes</button>
+          <button class="btn-sm" id="btn-publish" style="background:#1a7a3a;color:#fff;border-color:#1a7a3a;">Publish to Site</button>
         </div>
       </div>
 
@@ -1358,8 +1446,9 @@
               <!-- Hero Background Image -->
               <div class="form-group" style="border-top:1px solid var(--admin-border);padding-top:16px;margin-top:16px;">
                 <label style="font-size:0.9rem;font-weight:700;color:var(--admin-text);margin-bottom:12px;display:block;">Hero Background Image</label>
-                <div class="img-preview" id="preview-herobg-img">
+                <div class="img-preview" id="preview-herobg-img" style="position:relative;">
                   <img src="" alt="Preview" id="preview-herobg-img-el">
+                  <div id="preview-herobg-overlay" style="position:absolute;top:0;left:0;width:100%;height:100%;background:#000;opacity:0.6;pointer-events:none;border-radius:inherit;"></div>
                   <div class="img-overlay">
                     <button class="btn-img" onclick="document.getElementById('upload-herobg-img').click()">Replace</button>
                     <button class="btn-img danger" onclick="removeImage('herobg')">Remove</button>
@@ -1398,7 +1487,7 @@
                 <!-- Overlay opacity -->
                 <div style="margin-top:12px;">
                   <label style="font-size:0.75rem;font-weight:600;color:var(--admin-muted);">Dark Overlay Opacity <span style="float:right;color:var(--admin-muted);font-size:0.7rem;" id="val-herobg-overlay">60%</span></label>
-                  <input type="range" id="herobg-overlay" min="0" max="90" value="60" oninput="document.getElementById('val-herobg-overlay').textContent=this.value+'%'" style="width:100%;margin-top:4px;">
+                  <input type="range" id="herobg-overlay" min="0" max="90" value="60" oninput="document.getElementById('val-herobg-overlay').textContent=this.value+'%';updateHeroBgPreview();" style="width:100%;margin-top:4px;">
                 </div>
 
                 <!-- Filter presets -->
@@ -1560,6 +1649,25 @@
             </div>
           </div>
 
+          <!-- Issues -->
+          <div class="editor-section" id="editor-issues">
+            <div class="editor-section-header">
+              <h4>&#128204; Issues / Topics</h4>
+              <span class="chevron">&#9660;</span>
+            </div>
+            <div class="editor-section-body">
+              <div class="form-group">
+                <label>Section Title</label>
+                <input type="text" id="edit-issues-title" value="What Gunther Covers">
+              </div>
+              <div class="form-group">
+                <label>Section Subtitle</label>
+                <input type="text" id="edit-issues-sub" value="The issues that matter to real Americans.">
+              </div>
+              <p style="font-size:0.8rem;color:var(--admin-muted);margin-top:8px;">Topic pills link to the <a href="/issues.html" target="_blank" style="color:var(--admin-accent);">Issues page</a> with full tweet collections.</p>
+            </div>
+          </div>
+
           <!-- Videos -->
           <div class="editor-section" id="editor-videos">
             <div class="editor-section-header">
@@ -1580,6 +1688,64 @@
                 <div id="video-cards-list"></div>
                 <button class="btn-sm" onclick="addVideoCard()" style="margin-top:8px;">+ Add Video</button>
               </div>
+            </div>
+          </div>
+
+          <!-- Exclusive Content -->
+          <div class="editor-section" id="editor-premium">
+            <div class="editor-section-header">
+              <h4>&#128274; Exclusive Content</h4>
+              <span class="chevron">&#9660;</span>
+            </div>
+            <div class="editor-section-body">
+              <div class="form-group">
+                <label>Section Label</label>
+                <input type="text" id="edit-premium-label" value="Exclusive Content">
+              </div>
+              <div class="form-group">
+                <label>Headline</label>
+                <input type="text" id="edit-premium-title" value="The Inner Circle">
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="edit-premium-desc">Premium analysis, behind-the-scenes access, and unfiltered takes you won't find anywhere else.</textarea>
+              </div>
+              <div class="form-group">
+                <label>CTA Button Text</label>
+                <input type="text" id="edit-premium-cta" value="Unlock All Content — Join Now">
+              </div>
+              <div class="form-group">
+                <label>CTA Link</label>
+                <input type="text" id="edit-premium-cta-url" value="/membership.html">
+              </div>
+              <div class="form-group">
+                <label>Price Text</label>
+                <input type="text" id="edit-premium-price" value="Starting at $7/mo • Cancel anytime">
+              </div>
+              <div style="border-top:1px solid var(--admin-border);padding-top:16px;margin-top:16px;">
+                <label style="display:block;font-size:0.8rem;font-weight:600;color:var(--admin-muted);margin-bottom:10px;">Preview Cards</label>
+                <div id="premium-cards-list"></div>
+                <button class="btn-sm" onclick="addPremiumCard()" style="margin-top:8px;">+ Add Card</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Store Preview -->
+          <div class="editor-section" id="editor-store-preview">
+            <div class="editor-section-header">
+              <h4>&#128722; Store Preview</h4>
+              <span class="chevron">&#9660;</span>
+            </div>
+            <div class="editor-section-body">
+              <div class="form-group">
+                <label>Headline</label>
+                <input type="text" id="edit-store-preview-title" value="Gear Up, Patriot">
+              </div>
+              <div class="form-group">
+                <label>Subtitle</label>
+                <input type="text" id="edit-store-preview-sub" value="Rep the movement. American-made, unapologetically patriotic.">
+              </div>
+              <p style="font-size:0.8rem;color:var(--admin-muted);margin-top:8px;">Products are pulled from your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>. Manage products in the Store Products panel.</p>
             </div>
           </div>
 
@@ -1646,6 +1812,12 @@
               </div>
             </div>
           </div>
+          <!-- Add Section Button -->
+          <div class="add-section-bar" id="add-section-bar">
+            <span class="add-label">+ Add Section</span>
+            <div class="add-section-dropdown" id="add-section-dropdown"></div>
+          </div>
+
         </div>
 
         <!-- ═══ SECTIONS MANAGER ═══ -->
@@ -1705,6 +1877,28 @@
                   <span class="toggle-slider"></span>
                 </label>
                 <button class="btn-icon" title="Edit" data-edit="videos">&#9998;</button>
+              </div>
+            </li>
+            <li class="section-item" data-section="premium" draggable="true">
+              <span class="drag-handle">&#9776;</span>
+              <span class="section-name">Exclusive Content</span>
+              <div class="section-actions">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <button class="btn-icon" title="Edit" data-edit="premium">&#9998;</button>
+              </div>
+            </li>
+            <li class="section-item" data-section="store-preview" draggable="true">
+              <span class="drag-handle">&#9776;</span>
+              <span class="section-name">Store Preview</span>
+              <div class="section-actions">
+                <label class="toggle-switch">
+                  <input type="checkbox" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+                <button class="btn-icon" title="Edit" data-edit="store-preview">&#9998;</button>
               </div>
             </li>
             <li class="section-item" data-section="newsletter" draggable="true">
@@ -1998,6 +2192,29 @@
           </div>
 
           <div class="form-section">
+            <h3>GitHub Deploy (One-Click Publish)</h3>
+            <p style="color:var(--admin-muted);font-size:0.85rem;margin-bottom:12px;">
+              Connect to GitHub so "Publish to Site" pushes your config directly to the repo and triggers auto-deploy.
+              <a href="https://github.com/settings/tokens/new?scopes=repo&description=Eagleman+Admin" target="_blank" style="color:var(--admin-accent);">Generate a token here</a> (check "repo" scope).
+            </p>
+            <div class="form-row">
+              <div class="form-group">
+                <label>GitHub Token</label>
+                <input type="password" id="set-github-token" placeholder="ghp_xxxxxxxxxxxx">
+              </div>
+              <div class="form-group">
+                <label>Repo (owner/name)</label>
+                <input type="text" id="set-github-repo" value="Joespiers1/eagleman-site">
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:8px;">
+              <label>Branch</label>
+              <input type="text" id="set-github-branch" value="main" style="max-width:200px;">
+            </div>
+            <button class="btn-sm primary" id="btn-save-github" style="margin-top:8px;">Save GitHub Settings</button>
+          </div>
+
+          <div class="form-section">
             <h3>Data</h3>
             <div style="display: flex; gap: 10px;">
               <button class="btn-sm" id="btn-export">Export Config (JSON)</button>
@@ -2010,12 +2227,41 @@
 
         <!-- ═══ STORE PRODUCTS PANEL ═══ -->
         <div class="panel" id="panel-store">
-          <!-- Card Grid View -->
+
+          <!-- Printful Sync Banner -->
+          <div id="printful-banner" style="background:linear-gradient(135deg,rgba(26,122,58,0.15),rgba(201,168,76,0.1));border:1px solid rgba(26,122,58,0.3);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <span style="font-size:1.2rem;">&#9889;</span>
+                <strong style="font-size:0.95rem;">Printful Auto-Sync</strong>
+                <span id="printful-status-badge" style="font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;background:rgba(201,168,76,0.2);color:var(--admin-accent);">Checking...</span>
+              </div>
+              <p style="font-size:0.8rem;color:var(--admin-muted);max-width:500px;">Products sync automatically from your <a href="https://www.printful.com/dashboard/my-products" target="_blank" style="color:var(--admin-accent);">Printful store</a>. Add products on Printful and they appear on the site within 5 minutes.</p>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-sm" id="btn-sync-printful" onclick="syncFromPrintful()" style="background:rgba(26,122,58,0.2);border-color:rgba(26,122,58,0.4);color:#1a7a3a;">&#8635; Sync Now</button>
+              <a href="https://www.printful.com/dashboard/my-products" target="_blank" class="btn-sm" style="display:flex;align-items:center;gap:6px;">Open Printful &#8599;</a>
+            </div>
+          </div>
+
+          <!-- Printful Products (auto-synced, read-only) -->
+          <div id="printful-products-section" style="display:none;margin-bottom:28px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <h4 style="font-size:0.9rem;font-weight:700;color:var(--admin-accent);">&#128230; Printful Products</h4>
+              <span id="printful-product-count" style="font-size:0.75rem;color:var(--admin-muted);"></span>
+            </div>
+            <div id="printful-products-grid"></div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid var(--admin-border);margin-bottom:20px;" id="store-divider">
+
+          <!-- Card Grid View (manual products) -->
           <div id="store-grid-view">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
               <div>
                 <p style="color:var(--admin-muted);font-size:0.85rem;">
-                  <span id="store-product-count">0</span> products on your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>
+                  <span id="store-product-count">0</span> manual products on your <a href="/store.html" target="_blank" style="color:var(--admin-accent);">Store page</a>
+                  <span style="font-size:0.75rem;color:var(--admin-muted);display:block;margin-top:4px;">These show as fallbacks when Printful is not connected, or alongside Printful products.</span>
                 </p>
               </div>
               <div style="display:flex;gap:8px;">
@@ -2121,8 +2367,8 @@
         socialX: 'https://x.com/GuntherEagleman',
         socialYT: '', socialRumble: '', socialTS: ''
       },
-      sections: ['home','about','feed','issues','videos','newsletter','footer'],
-      sectionVisibility: { home:true, about:true, feed:true, issues:true, videos:true, newsletter:true, footer:true },
+      sections: ['home','about','feed','issues','videos','premium','store-preview','newsletter','footer'],
+      sectionVisibility: { home:true, about:true, feed:true, issues:true, videos:true, premium:true, 'store-preview':true, newsletter:true, footer:true },
       pages: [{ name: 'Home', file: 'index.html', status: 'live' }],
       widgets: ['x-feed','newsletter','videos'],
       storeProducts: [],
@@ -2267,6 +2513,17 @@
       setVal('edit-feed-sub', c.feedSub);
       setVal('edit-feed-username', c.feedUsername);
       setVal('edit-feed-limit', c.feedLimit);
+      setVal('edit-issues-title', c.issuesTitle);
+      setVal('edit-issues-sub', c.issuesSub);
+      setVal('edit-premium-label', c.premiumLabel);
+      setVal('edit-premium-title', c.premiumTitle);
+      setVal('edit-premium-desc', c.premiumDesc);
+      setVal('edit-premium-cta', c.premiumCta);
+      setVal('edit-premium-cta-url', c.premiumCtaUrl);
+      setVal('edit-premium-price', c.premiumPrice);
+      loadPremiumCards();
+      setVal('edit-store-preview-title', c.storePreviewTitle);
+      setVal('edit-store-preview-sub', c.storePreviewSub);
       setVal('edit-nl-title', c.nlTitle);
       setVal('edit-nl-desc', c.nlDesc);
       setVal('edit-nl-success', c.nlSuccess);
@@ -2343,6 +2600,17 @@
       config.content.feedSub = getVal('edit-feed-sub');
       config.content.feedUsername = getVal('edit-feed-username');
       config.content.feedLimit = getVal('edit-feed-limit');
+      config.content.issuesTitle = getVal('edit-issues-title');
+      config.content.issuesSub = getVal('edit-issues-sub');
+      config.content.premiumLabel = getVal('edit-premium-label');
+      config.content.premiumTitle = getVal('edit-premium-title');
+      config.content.premiumDesc = getVal('edit-premium-desc');
+      config.content.premiumCta = getVal('edit-premium-cta');
+      config.content.premiumCtaUrl = getVal('edit-premium-cta-url');
+      config.content.premiumPrice = getVal('edit-premium-price');
+      config.content.premiumCards = getPremiumCards();
+      config.content.storePreviewTitle = getVal('edit-store-preview-title');
+      config.content.storePreviewSub = getVal('edit-store-preview-sub');
       config.content.nlTitle = getVal('edit-nl-title');
       config.content.nlDesc = getVal('edit-nl-desc');
       config.content.nlSuccess = getVal('edit-nl-success');
@@ -2444,8 +2712,11 @@
       document.getElementById('color-gold').value = p.gold;
       document.getElementById('color-white').value = p.white;
       document.getElementById('color-dark').value = p.dark;
+      config.theme = p;
       updateSwatches();
-      showToast('Preset "' + name + '" applied — click Save to keep');
+      saveConfig();
+      refreshPreview();
+      showToast('Preset "' + name + '" applied!');
     }
 
     /* ══════════════════════════════════════
@@ -2486,6 +2757,254 @@
         return closest;
       }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
+
+    /* ══════════════════════════════════════
+       PREMIUM CARDS
+       ══════════════════════════════════════ */
+    function getPremiumCards() {
+      var cards = [];
+      document.querySelectorAll('#premium-cards-list .premium-card-edit').forEach(function(el) {
+        cards.push({
+          tag: el.querySelector('.pc-tag').value,
+          title: el.querySelector('.pc-title').value,
+          date: el.querySelector('.pc-date').value,
+          teaser: el.querySelector('.pc-teaser').value
+        });
+      });
+      return cards;
+    }
+
+    function renderPremiumCard(card, idx) {
+      var div = document.createElement('div');
+      div.className = 'premium-card-edit';
+      div.style.cssText = 'background:var(--admin-surface2);border:1px solid var(--admin-border);border-radius:8px;padding:12px;margin-bottom:8px;';
+      div.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">' +
+          '<strong style="font-size:0.8rem;color:var(--admin-muted);">Card ' + (idx + 1) + '</strong>' +
+          '<button class="btn-sm" style="border-color:var(--admin-red);color:var(--admin-red);padding:2px 8px;font-size:0.7rem;" onclick="this.closest(\'.premium-card-edit\').remove()">Remove</button>' +
+        '</div>' +
+        '<input class="pc-tag" type="text" placeholder="Tag (e.g. Deep Dive)" value="' + (card.tag || '') + '" style="width:100%;padding:8px;margin-bottom:6px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:#fff;font-size:0.85rem;">' +
+        '<input class="pc-title" type="text" placeholder="Title" value="' + (card.title || '') + '" style="width:100%;padding:8px;margin-bottom:6px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:#fff;font-size:0.85rem;">' +
+        '<input class="pc-date" type="text" placeholder="Date (e.g. April 10, 2026)" value="' + (card.date || '') + '" style="width:100%;padding:8px;margin-bottom:6px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:#fff;font-size:0.85rem;">' +
+        '<textarea class="pc-teaser" placeholder="Teaser text (shown blurred)" style="width:100%;padding:8px;background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:6px;color:#fff;font-size:0.85rem;min-height:60px;resize:vertical;">' + (card.teaser || '') + '</textarea>';
+      return div;
+    }
+
+    function addPremiumCard() {
+      var list = document.getElementById('premium-cards-list');
+      var idx = list.children.length;
+      list.appendChild(renderPremiumCard({ tag: '', title: '', date: '', teaser: '' }, idx));
+    }
+
+    function loadPremiumCards() {
+      var list = document.getElementById('premium-cards-list');
+      list.innerHTML = '';
+      var cards = (config.content && config.content.premiumCards) || [
+        { tag: 'Deep Dive', title: 'Border Crisis: The Numbers They\'re Hiding', date: 'April 10, 2026', teaser: 'The real story behind the latest border numbers...' },
+        { tag: 'Weekly Briefing', title: 'The Eagleman Report — Week of April 7', date: 'April 7, 2026', teaser: 'Weekly briefing for members... economic outlook analysis...' },
+        { tag: 'Q&A Replay', title: 'April Live Q&A: Your Questions Answered', date: 'April 5, 2026', teaser: 'Live Q&A recap with members... top questions answered...' }
+      ];
+      cards.forEach(function(card, i) {
+        list.appendChild(renderPremiumCard(card, i));
+      });
+    }
+    loadPremiumCards();
+
+    /* ══════════════════════════════════════
+       CONTENT EDITOR DRAG & DROP
+       ══════════════════════════════════════ */
+    (function() {
+      var contentPanel = document.getElementById('panel-content');
+      var editorSections = contentPanel.querySelectorAll('.editor-section');
+      var dragEditor = null;
+
+      editorSections.forEach(function(sec) {
+        sec.setAttribute('draggable', 'true');
+
+        // Add drag handle icon to header
+        var header = sec.querySelector('.editor-section-header h4');
+        if (header) {
+          var handle = document.createElement('span');
+          handle.style.cssText = 'cursor:grab;color:var(--admin-muted);margin-right:4px;font-size:0.8rem;';
+          handle.textContent = '\u2630';
+          handle.title = 'Drag to reorder';
+          header.insertBefore(handle, header.firstChild);
+        }
+
+        sec.addEventListener('dragstart', function(e) {
+          dragEditor = sec;
+          setTimeout(function() { sec.style.opacity = '0.4'; }, 0);
+        });
+        sec.addEventListener('dragend', function() {
+          sec.style.opacity = '1';
+          dragEditor = null;
+          // Sync order to sections panel
+          syncEditorToSections();
+        });
+      });
+
+      contentPanel.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        if (!dragEditor) return;
+        var afterEl = null;
+        var els = Array.from(contentPanel.querySelectorAll('.editor-section:not([style*="opacity: 0.4"])'));
+        var closest = { offset: Number.NEGATIVE_INFINITY };
+        els.forEach(function(child) {
+          var box = child.getBoundingClientRect();
+          var offset = e.clientY - box.top - box.height / 2;
+          if (offset < 0 && offset > closest.offset) {
+            closest = { offset: offset, element: child };
+          }
+        });
+        afterEl = closest.element;
+        if (!afterEl) {
+          contentPanel.appendChild(dragEditor);
+        } else {
+          contentPanel.insertBefore(dragEditor, afterEl);
+        }
+      });
+
+      // Map editor section IDs to section keys
+      var editorToSection = {
+        'editor-navbar': null, // navbar isn't a reorderable section
+        'editor-hero': 'home',
+        'editor-about': 'about',
+        'editor-feed': 'feed',
+        'editor-issues': 'issues',
+        'editor-videos': 'videos',
+        'editor-premium': 'premium',
+        'editor-store-preview': 'store-preview',
+        'editor-newsletter': 'newsletter',
+        'editor-footer': 'footer'
+      };
+
+      function syncEditorToSections() {
+        var order = [];
+        contentPanel.querySelectorAll('.editor-section:not(.section-hidden)').forEach(function(sec) {
+          var key = editorToSection[sec.id];
+          if (key) order.push(key);
+        });
+        var sectionList = document.getElementById('section-list');
+        order.forEach(function(key) {
+          var item = sectionList.querySelector('[data-section="' + key + '"]');
+          if (item) sectionList.appendChild(item);
+        });
+      }
+
+      // Section metadata for add/remove UI
+      var sectionMeta = {
+        'editor-hero':           { icon: '\u2605', label: 'Hero Section' },
+        'editor-about':          { icon: '\uD83D\uDC64', label: 'About Section' },
+        'editor-feed':           { icon: '\uD83D\uDCE1', label: 'Live Feed Section' },
+        'editor-issues':         { icon: '\uD83D\uDCCC', label: 'Issues / Topics' },
+        'editor-videos':         { icon: '\uD83C\uDFA5', label: 'Videos / Media' },
+        'editor-premium':        { icon: '\uD83D\uDD12', label: 'Exclusive Content' },
+        'editor-store-preview':  { icon: '\uD83D\uDED2', label: 'Store Preview' },
+        'editor-newsletter':     { icon: '\uD83D\uDCE7', label: 'Newsletter Section' },
+        'editor-footer':         { icon: '\uD83D\uDCBB', label: 'Footer' }
+      };
+
+      // Add remove buttons to each section header (except navbar)
+      editorSections.forEach(function(sec) {
+        if (sec.id === 'editor-navbar') return;
+        var header = sec.querySelector('.editor-section-header');
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'btn-remove-section';
+        removeBtn.title = 'Remove section';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          removeSection(sec.id);
+        });
+        header.appendChild(removeBtn);
+      });
+
+      function removeSection(editorId) {
+        var sec = document.getElementById(editorId);
+        if (!sec) return;
+        sec.classList.add('section-hidden');
+        sec.classList.remove('open');
+        // Uncheck in sections panel
+        var sectionKey = editorToSection[editorId];
+        if (sectionKey) {
+          var item = document.querySelector('#section-list [data-section="' + sectionKey + '"]');
+          if (item) {
+            var cb = item.querySelector('input[type="checkbox"]');
+            if (cb) cb.checked = false;
+          }
+        }
+        refreshAddDropdown();
+      }
+
+      function addSection(editorId) {
+        var sec = document.getElementById(editorId);
+        if (!sec) return;
+        sec.classList.remove('section-hidden');
+        // Check in sections panel
+        var sectionKey = editorToSection[editorId];
+        if (sectionKey) {
+          var item = document.querySelector('#section-list [data-section="' + sectionKey + '"]');
+          if (item) {
+            var cb = item.querySelector('input[type="checkbox"]');
+            if (cb) cb.checked = true;
+          }
+        }
+        refreshAddDropdown();
+        dropdown.classList.remove('open');
+      }
+
+      // Add Section dropdown
+      var addBar = document.getElementById('add-section-bar');
+      var dropdown = document.getElementById('add-section-dropdown');
+
+      addBar.addEventListener('click', function(e) {
+        if (e.target.closest('.add-option')) return;
+        dropdown.classList.toggle('open');
+        if (dropdown.classList.contains('open')) refreshAddDropdown();
+      });
+
+      // Close dropdown on outside click
+      document.addEventListener('click', function(e) {
+        if (!addBar.contains(e.target)) dropdown.classList.remove('open');
+      });
+
+      function refreshAddDropdown() {
+        dropdown.innerHTML = '';
+        var hiddenSections = contentPanel.querySelectorAll('.editor-section.section-hidden');
+        if (hiddenSections.length === 0) {
+          dropdown.innerHTML = '<div class="empty-msg">All sections are active</div>';
+          return;
+        }
+        hiddenSections.forEach(function(sec) {
+          var meta = sectionMeta[sec.id];
+          if (!meta) return;
+          var btn = document.createElement('button');
+          btn.className = 'add-option';
+          btn.innerHTML = '<span class="add-icon">' + meta.icon + '</span> ' + meta.label;
+          btn.addEventListener('click', function() {
+            addSection(sec.id);
+          });
+          dropdown.appendChild(btn);
+        });
+      }
+
+      // On load, sync hidden state from sections panel visibility
+      (function syncInitialVisibility() {
+        var sectionList = document.getElementById('section-list');
+        Object.keys(editorToSection).forEach(function(editorId) {
+          var sectionKey = editorToSection[editorId];
+          if (!sectionKey) return;
+          var item = sectionList.querySelector('[data-section="' + sectionKey + '"]');
+          if (item) {
+            var cb = item.querySelector('input[type="checkbox"]');
+            if (cb && !cb.checked) {
+              var sec = document.getElementById(editorId);
+              if (sec) sec.classList.add('section-hidden');
+            }
+          }
+        });
+      })();
+    })();
 
     /* ══════════════════════════════════════
        PAGES
@@ -2576,6 +3095,107 @@
       a.href = URL.createObjectURL(blob);
       a.download = 'eagleman-config.json';
       a.click();
+    });
+
+    /*
+     * GITHUB DEPLOY SETTINGS — persist token/repo/branch in localStorage
+     */
+    var GH_STORAGE_KEY = 'eagleman_github';
+    function loadGitHubSettings() {
+      try {
+        var s = JSON.parse(localStorage.getItem(GH_STORAGE_KEY) || '{}');
+        if (s.token) document.getElementById('set-github-token').value = s.token;
+        if (s.repo) document.getElementById('set-github-repo').value = s.repo;
+        if (s.branch) document.getElementById('set-github-branch').value = s.branch;
+        return s;
+      } catch(e) { return {}; }
+    }
+    function saveGitHubSettings() {
+      var s = {
+        token: document.getElementById('set-github-token').value.trim(),
+        repo: document.getElementById('set-github-repo').value.trim(),
+        branch: document.getElementById('set-github-branch').value.trim() || 'main'
+      };
+      localStorage.setItem(GH_STORAGE_KEY, JSON.stringify(s));
+      return s;
+    }
+    loadGitHubSettings();
+
+    document.getElementById('btn-save-github').addEventListener('click', function() {
+      saveGitHubSettings();
+      showToast('GitHub settings saved!');
+    });
+
+    /*
+     * PUBLISH TO SITE — push site-config.json to GitHub via API
+     * Falls back to file download if GitHub is not configured.
+     */
+    document.getElementById('btn-publish').addEventListener('click', async function() {
+      var btn = this;
+      var gh = saveGitHubSettings();
+
+      // Fallback: download file if no GitHub token
+      if (!gh.token) {
+        var blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'site-config.json';
+        a.click();
+        showToast('No GitHub token — file downloaded instead. Add token in Settings.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Publishing...';
+
+      try {
+        var repo = gh.repo;
+        var branch = gh.branch || 'main';
+        var filePath = 'site-config.json';
+        var apiBase = 'https://api.github.com/repos/' + repo + '/contents/' + filePath;
+        var content = btoa(unescape(encodeURIComponent(JSON.stringify(config, null, 2))));
+
+        // Get current file SHA (needed for updates)
+        var sha = null;
+        try {
+          var existing = await fetch(apiBase + '?ref=' + branch, {
+            headers: { 'Authorization': 'Bearer ' + gh.token }
+          });
+          if (existing.ok) {
+            var data = await existing.json();
+            sha = data.sha;
+          }
+        } catch(e) {}
+
+        // Commit the file
+        var body = {
+          message: 'Publish site config from admin panel',
+          content: content,
+          branch: branch
+        };
+        if (sha) body.sha = sha;
+
+        var res = await fetch(apiBase, {
+          method: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + gh.token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+          showToast('Published! Auto-deploy triggered — live in ~30 seconds.');
+        } else {
+          var err = await res.json();
+          showToast('GitHub error: ' + (err.message || res.status));
+        }
+      } catch(e) {
+        showToast('Publish failed: ' + e.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Publish to Site';
+      }
     });
 
     document.getElementById('btn-import').addEventListener('click', function() {
@@ -2866,22 +3486,91 @@
       vintage:  { brightness: 110, contrast: 90, saturate: 60, blur: 0 }
     };
 
+    async function uploadImageToGitHub(filename, base64Data, token, repo, branch) {
+      // Strip the data URL prefix (e.g. "data:image/jpeg;base64,")
+      var raw = base64Data.split(',')[1];
+      var filePath = 'images/' + filename;
+      var apiBase = 'https://api.github.com/repos/' + repo + '/contents/' + filePath;
+
+      // Check if file already exists (need SHA for update)
+      var sha = null;
+      try {
+        var existing = await fetch(apiBase + '?ref=' + branch, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        if (existing.ok) {
+          var data = await existing.json();
+          sha = data.sha;
+        }
+      } catch(e) {}
+
+      var body = {
+        message: 'Upload image: ' + filename,
+        content: raw,
+        branch: branch
+      };
+      if (sha) body.sha = sha;
+
+      var res = await fetch(apiBase, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        var err = await res.json();
+        throw new Error(err.message || res.status);
+      }
+
+      // Return the hosted URL path
+      return '/images/' + filename;
+    }
+
     function handleImageUpload(input, target) {
       var file = input.files[0];
       if (!file) return;
-      if (file.size > 2 * 1024 * 1024) {
-        showToast('Image must be under 2MB');
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('Image must be under 5MB');
         return;
       }
       var reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         var dataUrl = e.target.result;
+
+        // Always show preview immediately
         imageData[target] = dataUrl;
         showImagePreview(target, dataUrl);
-        // Also set the URL input
-        var urlInput = document.getElementById('edit-' + target + '-img') || document.getElementById('seo-og-image');
-        if (urlInput) urlInput.value = '';
-        showToast('Image uploaded — click Save to keep');
+
+        // Try to upload to GitHub automatically
+        var gh = loadGitHubSettings();
+        if (gh.token && gh.repo) {
+          showToast('Uploading image to GitHub...');
+          try {
+            // Clean filename: lowercase, no spaces
+            var ext = file.name.split('.').pop().toLowerCase() || 'jpg';
+            var safeName = target + '-' + Date.now() + '.' + ext;
+            var hostedUrl = await uploadImageToGitHub(safeName, dataUrl, gh.token, gh.repo, gh.branch || 'main');
+
+            // Update imageData to use the hosted URL instead of base64
+            imageData[target] = hostedUrl;
+            showImagePreview(target, hostedUrl);
+
+            // Also set the URL input if it exists
+            var urlInput = document.getElementById('edit-' + target + '-url') || document.getElementById('edit-' + target + '-img') || document.getElementById('seo-og-image');
+            if (urlInput) urlInput.value = hostedUrl;
+
+            showToast('Image uploaded to GitHub! Click Publish to go live.');
+          } catch(err) {
+            // Fall back to base64 with a warning
+            showToast('GitHub upload failed — image saved locally only. Check your GitHub token.');
+            console.error('GitHub image upload error:', err);
+          }
+        } else {
+          showToast('Image ready. Add GitHub token in Settings for auto-hosting.');
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -3508,6 +4197,98 @@
     renderStoreProducts();
 
     /* ══════════════════════════════════════
+       PRINTFUL SYNC
+       ══════════════════════════════════════ */
+    var printfulProducts = [];
+
+    function syncFromPrintful() {
+      var badge = document.getElementById('printful-status-badge');
+      var btn = document.getElementById('btn-sync-printful');
+      badge.textContent = 'Syncing...';
+      badge.style.background = 'rgba(201,168,76,0.2)';
+      badge.style.color = 'var(--admin-accent)';
+      btn.disabled = true;
+      btn.textContent = '⟳ Syncing...';
+
+      fetch('/.netlify/functions/printful-products')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          btn.disabled = false;
+          btn.textContent = '⟳ Sync Now';
+
+          if (data.error) {
+            badge.textContent = 'Not Connected';
+            badge.style.background = 'rgba(220,38,38,0.15)';
+            badge.style.color = '#dc2626';
+            document.getElementById('printful-products-section').style.display = 'none';
+            document.getElementById('store-divider').style.display = 'none';
+            return;
+          }
+
+          printfulProducts = data.products || [];
+          badge.textContent = 'Connected — ' + printfulProducts.length + ' product' + (printfulProducts.length !== 1 ? 's' : '');
+          badge.style.background = 'rgba(26,122,58,0.2)';
+          badge.style.color = '#1a7a3a';
+
+          if (printfulProducts.length > 0) {
+            document.getElementById('printful-products-section').style.display = 'block';
+            document.getElementById('store-divider').style.display = 'block';
+            document.getElementById('printful-product-count').textContent = printfulProducts.length + ' synced from Printful';
+            renderPrintfulGrid();
+          }
+        })
+        .catch(function() {
+          btn.disabled = false;
+          btn.textContent = '⟳ Sync Now';
+          badge.textContent = 'Error';
+          badge.style.background = 'rgba(220,38,38,0.15)';
+          badge.style.color = '#dc2626';
+        });
+    }
+
+    function renderPrintfulGrid() {
+      var grid = document.getElementById('printful-products-grid');
+      if (!grid || !printfulProducts.length) return;
+
+      grid.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">' +
+        printfulProducts.map(function(p) {
+          var colorDots = '';
+          if (p.colorNames && p.colorNames.length) {
+            colorDots = '<div style="display:flex;gap:4px;margin-top:6px;">' +
+              p.colorNames.slice(0, 5).map(function(name, ci) {
+                var c = (p.colors && p.colors[ci]) || '#333';
+                return '<span title="' + escHtml(name) + '" style="width:12px;height:12px;border-radius:50%;background:'+c+';border:1px solid rgba(255,255,255,0.15);"></span>';
+              }).join('') +
+              (p.colorNames.length > 5 ? '<span style="font-size:0.65rem;color:var(--admin-muted);line-height:12px;">+' + (p.colorNames.length-5) + '</span>' : '') +
+            '</div>';
+          }
+
+          var sizeBadge = p.sizes ? '<span style="font-size:0.65rem;color:var(--admin-muted);">' + p.sizes.length + ' sizes</span>' : '';
+
+          return '<div style="background:var(--admin-bg);border:1px solid var(--admin-border);border-radius:12px;overflow:hidden;position:relative;">' +
+            '<div style="position:absolute;top:8px;right:8px;z-index:2;"><span style="background:rgba(26,122,58,0.9);color:#fff;font-size:0.55rem;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase;letter-spacing:0.5px;">Printful</span></div>' +
+            '<div style="aspect-ratio:1;background:var(--admin-surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;">' +
+              (p.image ? '<img src="'+escHtml(p.image)+'" style="width:100%;height:100%;object-fit:cover;">' : '<span style="font-size:2.5rem;opacity:0.2;">&#9733;</span>') +
+            '</div>' +
+            '<div style="padding:12px;">' +
+              '<div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--admin-accent);margin-bottom:4px;">' + escHtml(p.category) + '</div>' +
+              '<div style="font-size:0.85rem;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + escHtml(p.name) + '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+                '<span style="font-size:1rem;font-weight:900;">$' + (p.price||0).toFixed(2) + '</span>' +
+                sizeBadge +
+              '</div>' +
+              colorDots +
+              '<a href="https://www.printful.com/dashboard/sync/update?id=' + p.printful_id + '" target="_blank" style="display:block;margin-top:8px;font-size:0.7rem;color:var(--admin-muted);text-align:center;">Edit on Printful &#8599;</a>' +
+            '</div>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+    }
+
+    // Auto-sync on panel load
+    syncFromPrintful();
+
+    /* ══════════════════════════════════════
        HERO BACKGROUND FILTERS
        ══════════════════════════════════════ */
     var heroBgPresets = {
@@ -3558,6 +4339,11 @@
       var img = document.getElementById('preview-herobg-img-el');
       if (!img || !img.src) return;
       img.style.filter = getHeroBgFilterCSS();
+      var overlayEl = document.getElementById('preview-herobg-overlay');
+      if (overlayEl) {
+        var overlayVal = parseInt(document.getElementById('herobg-overlay').value) || 0;
+        overlayEl.style.opacity = (overlayVal / 100).toFixed(2);
+      }
     }
 
     function getHeroBgFilterCSS() {
