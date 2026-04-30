@@ -21,7 +21,7 @@
     "heroCta1Url": "https://x.com/GuntherEagleman",
     "heroCta2": "Join the Movement",
     "heroCta2Url": "#newsletter",
-    "heroImg": "",
+    "heroImg": "/images/hero-1777571851741.png",
     "aboutLabel": "Who Is Gunther",
     "aboutH2": "A Fearless Voice for the American People",
     "aboutP1": "Texas-born and unapologetically patriotic, Gunther Eagleman is a former law enforcement officer turned America First political commentator. After relocating from California to Texas in 2007, he witnessed firsthand the policies destroying the American Dream — and decided to fight back.",
@@ -388,11 +388,6 @@
       "children": []
     },
     {
-      "label": "Support",
-      "href": "/support.html",
-      "children": []
-    },
-    {
       "label": "Membership",
       "href": "/membership.html",
       "children": []
@@ -438,7 +433,8 @@
   },
   "images": {
     "herobg": "/images/herobg-1777571032998.jpg",
-    "about": "/images/about-1777571578500.jpeg"
+    "about": "/images/about-1777571578500.jpeg",
+    "hero": "/images/hero-1777571851741.png"
   },
   "filters": {}
 }
