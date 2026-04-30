@@ -398,7 +398,7 @@
       "children": []
     }
   ],
-  "navLogoHeight": 42,
+  "navLogoHeight": 46,
   "navLogoUrl": "",
   "videos": [
     {
@@ -424,9 +424,9 @@
   "videosSub": "Commentary the mainstream media doesn't want you to see.",
   "heroBg": {
     "url": "",
-    "position": "center center",
+    "position": "center bottom",
     "size": "cover",
-    "overlay": 58,
+    "overlay": 39,
     "brightness": 100,
     "contrast": 100,
     "saturate": 100,
