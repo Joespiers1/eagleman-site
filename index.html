@@ -1033,6 +1033,46 @@
       .footer-grid { grid-template-columns: 1fr; text-align: center; }
       .social-links { justify-content: center; }
     }
+
+    /* ══════════════════════════════════════
+       SMALL PHONE (≤480px)
+       ══════════════════════════════════════ */
+    @media (max-width: 480px) {
+      .container { padding: 0 16px; }
+      .hero { padding: 100px 16px 60px; }
+      .hero h1 { font-size: 1.9rem; }
+      .hero .hero-sub { font-size: 0.85rem; }
+      .hero-avatar { width: 90px; height: 90px; }
+      .hero-buttons .btn { padding: 14px 28px; font-size: 0.85rem; }
+      .section-title { font-size: 1.5rem; }
+      .about { padding: 60px 0; }
+      .about-grid { gap: 24px; margin-bottom: 32px; }
+      .about-text h2 { font-size: 1.6rem; }
+      .about-text p { font-size: 0.95rem; }
+      .about-image .placeholder-icon { font-size: 2.5rem; }
+      .feed { padding: 60px 0; }
+      .issues { padding: 60px 0; }
+      .pill { padding: 12px 20px; font-size: 0.85rem; min-height: 44px; display: inline-flex; align-items: center; }
+      .video-section { padding: 60px 0; }
+      .btn-watch { padding: 12px 20px; font-size: 0.85rem; min-height: 44px; }
+      .btn-refresh { padding: 12px 24px; min-height: 44px; }
+      .video-thumb .play-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+      .newsletter { padding: 60px 0; }
+      .newsletter h2 { font-size: 1.5rem; }
+      .newsletter-form { grid-template-columns: 1fr; }
+      .newsletter-form input { min-height: 44px; }
+      .btn-subscribe { min-height: 48px; }
+      .social-link { width: 44px; height: 44px; font-size: 0.85rem; }
+      .premium { padding: 60px 0 !important; }
+      #store-preview-grid { grid-template-columns: 1fr !important; }
+      #store-preview { padding: 60px 0 !important; }
+      .footer { padding: 48px 0 24px; }
+    }
+
+    @media (max-width: 768px) {
+      #premium > .container > div:nth-child(2) { grid-template-columns: 1fr !important; }
+      #store-preview-grid { grid-template-columns: 1fr 1fr !important; }
+    }
   </style>
 </head>
 <body>
@@ -1273,6 +1313,134 @@
     </div>
   </section>
 
+  <!-- ═══════ PREMIUM CONTENT ═══════ -->
+  <section class="premium" id="premium" style="padding:100px 0;background:#060D1A;">
+    <div class="container">
+      <div class="reveal" style="text-align:center;margin-bottom:48px;">
+        <span class="section-label">&#9733; Exclusive Content</span>
+        <h2 class="section-title">The Inner Circle</h2>
+        <p class="section-subtitle" style="margin:0 auto;">Premium analysis, behind-the-scenes access, and unfiltered takes you won't find anywhere else.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1000px;margin:0 auto;">
+
+        <!-- Card 1: Locked Article -->
+        <div class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.15);border-radius:12px;overflow:hidden;position:relative;">
+          <div style="padding:20px;position:relative;min-height:160px;">
+            <div style="color:rgba(255,255,255,0.12);font-size:0.85rem;line-height:1.6;">The real story behind the latest border numbers... what the mainstream media won't show you... analysis of leaked internal documents reveals a pattern that...</div>
+            <div style="position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(10,22,40,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:rgba(201,168,76,0.15);border:2px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">&#128274;</div>
+              <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A84C;">Members Only</span>
+            </div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.7rem;color:#C9A84C;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Deep Dive</div>
+            <h4 style="font-size:0.95rem;font-weight:700;margin-bottom:4px;">Border Crisis: The Numbers They're Hiding</h4>
+            <p style="font-size:0.8rem;color:#667788;">April 10, 2026</p>
+          </div>
+        </div>
+
+        <!-- Card 2: Locked Article -->
+        <div class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.15);border-radius:12px;overflow:hidden;position:relative;">
+          <div style="padding:20px;position:relative;min-height:160px;">
+            <div style="color:rgba(255,255,255,0.12);font-size:0.85rem;line-height:1.6;">Weekly briefing for members... economic outlook analysis... upcoming legislative battles to watch... what I'm hearing from sources on the ground about...</div>
+            <div style="position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(10,22,40,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:rgba(201,168,76,0.15);border:2px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">&#128274;</div>
+              <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A84C;">Members Only</span>
+            </div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.7rem;color:#C9A84C;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Weekly Briefing</div>
+            <h4 style="font-size:0.95rem;font-weight:700;margin-bottom:4px;">The Eagleman Report — Week of April 7</h4>
+            <p style="font-size:0.8rem;color:#667788;">April 7, 2026</p>
+          </div>
+        </div>
+
+        <!-- Card 3: Locked Article -->
+        <div class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.15);border-radius:12px;overflow:hidden;position:relative;">
+          <div style="padding:20px;position:relative;min-height:160px;">
+            <div style="color:rgba(255,255,255,0.12);font-size:0.85rem;line-height:1.6;">Live Q&A recap with members... top questions answered... behind the scenes of last week's viral moment... exclusive footage and commentary that...</div>
+            <div style="position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(10,22,40,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">
+              <div style="width:48px;height:48px;border-radius:50%;background:rgba(201,168,76,0.15);border:2px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">&#128274;</div>
+              <span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A84C;">Members Only</span>
+            </div>
+          </div>
+          <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,0.05);">
+            <div style="font-size:0.7rem;color:#BF0A30;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Q&A Replay</div>
+            <h4 style="font-size:0.95rem;font-weight:700;margin-bottom:4px;">April Live Q&A: Your Questions Answered</h4>
+            <p style="font-size:0.8rem;color:#667788;">April 5, 2026</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="reveal" style="text-align:center;margin-top:40px;">
+        <a href="/membership.html" style="display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#C9A84C;color:#0A1628;font-size:0.95rem;font-weight:800;border-radius:8px;text-transform:uppercase;letter-spacing:0.8px;text-decoration:none;transition:all 0.25s;" onmouseover="this.style.background='#d4b35a';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#C9A84C';this.style.transform='none'">
+          &#128274; Unlock All Content — Join Now
+        </a>
+        <p style="color:#667788;font-size:0.85rem;margin-top:12px;">Starting at $7/mo &bull; Cancel anytime</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ STORE PREVIEW ═══════ -->
+  <section id="store-preview" style="padding:100px 0;">
+    <div class="container">
+      <div class="reveal" style="text-align:center;margin-bottom:48px;">
+        <span class="section-label">&#128722; Official Merchandise</span>
+        <h2 class="section-title" id="store-preview-title">Gear Up, Patriot</h2>
+        <p class="section-subtitle" style="margin:0 auto;" id="store-preview-sub">Rep the movement. American-made, unapologetically patriotic.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1000px;margin:0 auto;" id="store-preview-grid">
+
+        <a href="/store.html" class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.12);border-radius:12px;overflow:hidden;text-decoration:none;color:#fff;transition:border-color 0.3s,transform 0.3s;" onmouseover="this.style.borderColor='#C9A84C';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.transform='none'">
+          <div style="aspect-ratio:1;overflow:hidden;">
+            <img src="https://images.pexels.com/photos/4108469/pexels-photo-4108469.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Eagleman Patriot Cap" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+          </div>
+          <div style="padding:14px 16px;">
+            <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">Eagleman Patriot Cap</h4>
+            <p style="font-size:0.9rem;color:#C9A84C;font-weight:700;">$34.99</p>
+          </div>
+        </a>
+
+        <a href="/store.html" class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.12);border-radius:12px;overflow:hidden;text-decoration:none;color:#fff;transition:border-color 0.3s,transform 0.3s;" onmouseover="this.style.borderColor='#C9A84C';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.transform='none'">
+          <div style="aspect-ratio:1;overflow:hidden;">
+            <img src="https://images.pexels.com/photos/4066292/pexels-photo-4066292.jpeg?auto=compress&cs=tinysrgb&w=400" alt="America First Tee" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+          </div>
+          <div style="padding:14px 16px;">
+            <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">America First Tee</h4>
+            <p style="font-size:0.9rem;color:#C9A84C;font-weight:700;">$29.99</p>
+          </div>
+        </a>
+
+        <a href="/store.html" class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.12);border-radius:12px;overflow:hidden;text-decoration:none;color:#fff;transition:border-color 0.3s,transform 0.3s;" onmouseover="this.style.borderColor='#C9A84C';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.transform='none'">
+          <div style="aspect-ratio:1;overflow:hidden;">
+            <img src="https://images.pexels.com/photos/5952647/pexels-photo-5952647.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Eagle Shield Hoodie" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+          </div>
+          <div style="padding:14px 16px;">
+            <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">Eagle Shield Hoodie</h4>
+            <p style="font-size:0.9rem;color:#C9A84C;font-weight:700;">$54.99</p>
+          </div>
+        </a>
+
+        <a href="/store.html" class="reveal" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.12);border-radius:12px;overflow:hidden;text-decoration:none;color:#fff;transition:border-color 0.3s,transform 0.3s;" onmouseover="this.style.borderColor='#C9A84C';this.style.transform='translateY(-4px)'" onmouseout="this.style.borderColor='rgba(201,168,76,0.12)';this.style.transform='none'">
+          <div style="aspect-ratio:1;overflow:hidden;">
+            <img src="https://images.pexels.com/photos/4677662/pexels-photo-4677662.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Don't Tread On Me Flag" style="width:100%;height:100%;object-fit:cover;" loading="lazy">
+          </div>
+          <div style="padding:14px 16px;">
+            <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">Don't Tread On Me Flag</h4>
+            <p style="font-size:0.9rem;color:#C9A84C;font-weight:700;">$24.99</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="reveal" style="text-align:center;margin-top:40px;">
+        <a href="/store.html" id="store-preview-cta" style="display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#BF0A30;color:#fff;font-size:0.95rem;font-weight:800;border-radius:8px;text-transform:uppercase;letter-spacing:0.8px;text-decoration:none;border:2px solid #BF0A30;transition:all 0.25s;" onmouseover="this.style.background='#a00828'" onmouseout="this.style.background='#BF0A30'">
+          Shop All Merch &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════ NEWSLETTER ═══════ -->
   <section class="newsletter" id="newsletter">
     <div class="container">
@@ -1318,6 +1486,7 @@
             <li><a href="/store.html">Store</a></li>
             <li><a href="/support.html">Support</a></li>
             <li><a href="/membership.html">Membership</a></li>
+            <li><a href="/advertise.html">Advertise</a></li>
           </ul>
         </div>
         <div class="footer-social">
@@ -1412,12 +1581,50 @@
     }, { threshold: 0.12 });
     revealEls.forEach(function(el) { observer.observe(el); });
 
+    /* ═══ STORE PREVIEW — AUTO-SYNC FROM PRINTFUL ═══ */
+    (function() {
+      fetch('/.netlify/functions/printful-products')
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (!data || !data.products || data.products.length === 0) return;
+          var grid = document.getElementById('store-preview-grid');
+          if (!grid) return;
+          var products = data.products.slice(0, 4); // Show first 4
+          grid.innerHTML = products.map(function(p) {
+            return '<a href="/store.html" class="reveal visible" style="background:#0F1D33;border:1px solid rgba(201,168,76,0.12);border-radius:12px;overflow:hidden;text-decoration:none;color:#fff;transition:border-color 0.3s,transform 0.3s;" onmouseover="this.style.borderColor=\'#C9A84C\';this.style.transform=\'translateY(-4px)\'" onmouseout="this.style.borderColor=\'rgba(201,168,76,0.12)\';this.style.transform=\'none\'">' +
+              '<div style="aspect-ratio:1;overflow:hidden;">' +
+                (p.image ? '<img src="' + p.image + '" alt="' + (p.name||'') + '" style="width:100%;height:100%;object-fit:cover;" loading="lazy">' : '<div style="width:100%;height:100%;background:#0a1020;display:flex;align-items:center;justify-content:center;font-size:3rem;">&#9733;</div>') +
+              '</div>' +
+              '<div style="padding:14px 16px;">' +
+                '<h4 style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + (p.name||'Product') + '</h4>' +
+                '<p style="font-size:0.9rem;color:#C9A84C;font-weight:700;">$' + (p.price||0).toFixed(2) + '</p>' +
+              '</div>' +
+            '</a>';
+          }).join('');
+        })
+        .catch(function() {});
+    })();
+
     /* ═══ NEWSLETTER FORM ═══ */
     var form = document.getElementById('newsletter-form');
     var formSuccess = document.getElementById('form-success');
 
     // Google Sheets Apps Script URL
     var GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbz6xHaHAm7fJNypYLapV31uurLJNgtxcsfEBvImHwk7IieonaTPtKYe-gMtyUdtHxwt/exec';
+
+    /*
+     * ═══ BEEHIIV INTEGRATION ═══
+     * Steps to activate:
+     * 1. Create a free Beehiiv account at beehiiv.com
+     * 2. Create a publication (e.g. "The Eagleman Report")
+     * 3. Go to Settings → Integrations → API → generate a V2 API key
+     * 4. IMPORTANT: Beehiiv API requires server-side calls (API key must stay secret).
+     *    Set up a Netlify Function (see /netlify/functions/beehiiv-subscribe.js)
+     *    that proxies the subscribe request.
+     * 5. Replace the placeholder publication ID below.
+     */
+    var BEEHIIV_PUBLICATION_ID = ''; // Paste your Beehiiv publication ID here
+    var BEEHIIV_SUBSCRIBE_URL = '/.netlify/functions/beehiiv-subscribe';
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -1428,7 +1635,7 @@
         state: form.querySelector('[name="state"]').value
       };
 
-      // Send to Netlify Forms
+      // Send to Netlify Forms (backup collection)
       var data = new FormData(form);
       fetch('/', {
         method: 'POST',
@@ -1446,17 +1653,40 @@
         }).catch(function(){});
       }
 
+      // Send to Beehiiv (if configured)
+      if (BEEHIIV_PUBLICATION_ID) {
+        fetch(BEEHIIV_SUBSCRIBE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: payload.email,
+            utm_source: 'website',
+            utm_medium: 'newsletter_form',
+            referring_site: 'gunthereagleman.com',
+            custom_fields: [
+              { name: 'full_name', value: payload.fullName },
+              { name: 'city', value: payload.city },
+              { name: 'state', value: payload.state }
+            ]
+          })
+        }).catch(function(){});
+      }
+
       form.style.display = 'none';
       formSuccess.classList.add('show');
     });
 
     /* ═══ X FEED — Powered by Curator.io ═══ */
     /* ═══ APPLY ADMIN CONFIG ═══ */
+    /*
+     * Config loading priority:
+     * 1. localStorage (admin preview — local edits override for the editor)
+     * 2. /site-config.json (published config — what all visitors see)
+     * If neither exists, the HTML defaults are used.
+     */
     (function() {
-      try {
-        var raw = localStorage.getItem('eagleman_admin');
-        if (!raw) return;
-        var cfg = JSON.parse(raw);
+      function applyConfig(cfg) {
+        if (!cfg) return;
 
         // Helper: build CSS filter string from filter data
         function buildFilterCSS(f) {
@@ -1482,18 +1712,55 @@
           if (t.white) r.style.setProperty('--cfg-white', t.white);
           if (t.dark) r.style.setProperty('--cfg-dark', t.dark);
 
+          // Detect if background is light (for contrast adjustments)
+          function isLightColor(hex) {
+            if (!hex) return false;
+            hex = hex.replace('#', '');
+            if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+            var r = parseInt(hex.substring(0,2),16);
+            var g = parseInt(hex.substring(2,4),16);
+            var b = parseInt(hex.substring(4,6),16);
+            return (r * 299 + g * 587 + b * 114) / 1000 > 140;
+          }
+          var lightBg = isLightColor(t.navy);
+          var lightDark = isLightColor(t.dark);
+          var textColor = t.white || (lightBg ? '#1A1A1A' : '#FFFFFF');
+          var mutedColor = lightBg ? '#666666' : '#8899AA';
+          var cardBg = lightBg ? 'rgba(0,0,0,0.04)' : (t.navy||'#0A1628') + '20';
+          var cardBorder = lightBg ? 'rgba(0,0,0,0.1)' : 'rgba(201,168,76,0.15)';
+          var navBg = lightBg ? 'rgba(255,255,255,0.95)' : 'rgba(10,22,40,0.95)';
+          var navText = lightBg ? '#333333' : '#8899AA';
+          var overlayGrad = lightBg
+            ? 'radial-gradient(ellipse at center, transparent 0%, ' + (t.navy||'#F5F5F5') + ' 75%), linear-gradient(180deg, transparent 60%, ' + (t.navy||'#F5F5F5') + ' 100%)'
+            : 'radial-gradient(ellipse at center, transparent 0%, ' + (t.navy||'#0A1628') + ' 75%), linear-gradient(180deg, transparent 60%, ' + (t.navy||'#0A1628') + ' 100%)';
+          var outlineBtnHoverText = lightBg ? '#FFFFFF' : '#0A1628';
+          var subscribeBtnText = lightBg ? '#FFFFFF' : '#0A1628';
+          var pillHoverText = '#FFFFFF';
+          var mobileBg = lightBg ? 'rgba(255,255,255,0.98)' : 'rgba(10,22,40,0.98)';
+
           // Inject dynamic overrides
           var style = document.createElement('style');
           style.textContent = '' +
-            'body { background: ' + (t.navy||'') + '; color: ' + (t.white||'') + '; }' +
-            '.hero::after { background: radial-gradient(ellipse at center, transparent 0%, ' + (t.navy||'#0A1628') + ' 75%), linear-gradient(180deg, transparent 60%, ' + (t.navy||'#0A1628') + ' 100%); }' +
-            '.btn-primary, .btn-feed-follow, .btn-watch, .video-info .btn-watch { background: ' + (t.red||'') + '; }' +
+            'body { background: ' + (t.navy||'') + '; color: ' + textColor + '; }' +
+            '.hero::after { background: ' + overlayGrad + '; }' +
+            '.hero h1 { color: ' + textColor + '; }' +
+            '.hero .hero-sub { color: ' + mutedColor + '; }' +
+            '.hero .hero-sub .divider { background: ' + (t.gold||'') + '; }' +
+            '.section-title { color: ' + textColor + '; }' +
+            '.section-subtitle { color: ' + mutedColor + '; }' +
+            '.about-text h2 { color: ' + textColor + '; }' +
+            '.about-text p { color: ' + mutedColor + '; }' +
+            '.navbar, .navbar.scrolled { background: ' + navBg + '; }' +
+            '.nav-links a { color: ' + navText + '; }' +
+            '.mobile-menu { background: ' + mobileBg + '; }' +
+            '.mobile-menu a { color: ' + (lightBg ? '#333' : '#B0BEC5') + '; }' +
+            '.btn-primary, .btn-feed-follow, .btn-watch, .video-info .btn-watch { background: ' + (t.red||'') + '; color: #fff; }' +
             '.btn-primary { border-color: ' + (t.red||'') + '; }' +
             '.btn-primary:hover, .btn-feed-follow:hover { border-color: ' + (t.gold||'') + '; }' +
             '.btn-outline { color: ' + (t.gold||'') + '; border-color: ' + (t.gold||'') + '; }' +
-            '.btn-outline:hover { background: ' + (t.gold||'') + '; }' +
+            '.btn-outline:hover { background: ' + (t.gold||'') + '; color: ' + outlineBtnHoverText + '; }' +
             '.nav-links a:hover, .nav-links a.active, .section-label, .about-text h3, .footer-nav h5, .footer-social h5 { color: ' + (t.gold||'') + '; }' +
-            '.nav-links a::after, .navbar.scrolled { box-shadow: 0 1px 0 ' + (t.gold||'') + '; }' +
+            '.nav-links a::after, .navbar.scrolled { box-shadow: 0 1px 0 ' + (lightBg ? 'rgba(0,0,0,0.1)' : (t.gold||'')) + '; }' +
             '.nav-links a::after { background: ' + (t.gold||'') + '; }' +
             '.hero h1 .accent, .live-badge { color: ' + (t.red||'') + '; }' +
             '.pulse-dot { background: ' + (t.red||'') + '; }' +
@@ -1501,14 +1768,47 @@
             '.value-card .icon, .nav-logo .star, .footer-brand .footer-logo .star, .btn-refresh, .static-card a, .form-success { color: ' + (t.gold||'') + '; }' +
             '.value-card:hover, .hero-avatar { border-color: ' + (t.gold||'') + '; }' +
             '.hero-avatar { box-shadow: 0 0 40px ' + (t.gold||'') + '40; }' +
-            '.pill:hover { background: ' + (t.red||'') + '; border-color: ' + (t.red||'') + '; }' +
-            '.pill { border-color: ' + (t.gold||'') + '40; }' +
-            '.btn-subscribe { background: ' + (t.gold||'') + '; }' +
-            '.footer { border-top-color: ' + (t.gold||'') + '; }' +
-            '.social-link:hover { background: ' + (t.gold||'') + '; }' +
+            '.pill { border-color: ' + cardBorder + '; color: ' + textColor + '; background: ' + cardBg + '; }' +
+            '.pill:hover { background: ' + (t.red||'') + '; border-color: ' + (t.red||'') + '; color: ' + pillHoverText + '; }' +
+            '.btn-subscribe { background: ' + (t.gold||'') + '; color: ' + subscribeBtnText + '; }' +
+            '.footer { border-top-color: ' + (t.gold||'') + '; color: ' + (lightDark ? '#333' : '#fff') + '; }' +
+            '.footer-brand p, .footer-nav a, .footer-bottom .copyright, .footer-bottom .disclaimer { color: ' + (lightDark ? '#666' : '#8899AA') + '; }' +
+            '.social-link { color: ' + (lightDark ? '#666' : '#8899AA') + '; border-color: ' + (lightDark ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.1)') + '; }' +
+            '.social-link:hover { background: ' + (t.gold||'') + '; color: ' + outlineBtnHoverText + '; }' +
             '.feed, .videos, .footer { background: ' + (t.dark||'') + '; }' +
-            '.embed-container, .value-card, .about-image, .video-card, .tweet-card, .static-card { background: ' + (t.navy||'#0A1628') + '20; }' +
-            '.tweet-card, .static-card { border-left-color: ' + (t.gold||'') + '; }';
+            '.embed-container, .value-card, .about-image, .video-card, .tweet-card, .static-card { background: ' + cardBg + '; border-color: ' + cardBorder + '; }' +
+            '.value-card h4, .video-card h4 { color: ' + textColor + '; }' +
+            '.tweet-card, .static-card { border-left-color: ' + (t.gold||'') + '; }' +
+            '.newsletter-form input { background: ' + (lightBg ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.06)') + '; color: ' + textColor + '; border-color: ' + cardBorder + '; }' +
+            '.newsletter-form input::placeholder { color: ' + mutedColor + '; }' +
+            '.newsletter h2 { color: ' + textColor + '; }' +
+            // Logo — invert on light backgrounds so it stays readable
+            (lightBg ? '.nav-logo img, .footer-logo img { filter: brightness(0.2); }' : '') +
+            // Premium / Exclusive Content section
+            '#premium { background: ' + (t.dark||'') + ' !important; }' +
+            '#premium .section-title { color: ' + (lightDark ? '#1A1A1A' : '#FFFFFF') + ' !important; }' +
+            '#premium .section-label { color: ' + (t.gold||'') + ' !important; }' +
+            '#premium .section-subtitle { color: ' + (lightDark ? '#666' : '#8899AA') + ' !important; }' +
+            '#premium [style*="background:#0F1D33"] { background: ' + (lightDark ? 'rgba(0,0,0,0.06)' : '#0F1D33') + ' !important; border-color: ' + cardBorder + ' !important; }' +
+            '#premium h4 { color: ' + (lightDark ? '#1A1A1A' : '#FFFFFF') + ' !important; }' +
+            '#premium p { color: ' + (lightDark ? '#666' : '#667788') + ' !important; }' +
+            // Store Preview section
+            '#store-preview .section-title { color: ' + textColor + '; }' +
+            '#store-preview .section-subtitle { color: ' + mutedColor + '; }' +
+            '#store-preview [style*="background:#0F1D33"] { background: ' + cardBg + ' !important; border-color: ' + cardBorder + ' !important; }' +
+            '#store-preview h4 { color: ' + textColor + ' !important; }' +
+            '#store-preview p { color: ' + mutedColor + ' !important; }' +
+            // Issues section
+            '.issues .section-title { color: ' + textColor + '; }' +
+            '.issues .section-subtitle { color: ' + mutedColor + '; }' +
+            // About section image placeholder
+            '.about-image .placeholder-icon { color: ' + (lightBg ? '#ccc' : '#1a2d4d') + '; }' +
+            // Video card text
+            '.video-info h4 { color: ' + textColor + ' !important; }' +
+            '.video-date { color: ' + mutedColor + ' !important; }' +
+            '.video-card { border-color: ' + cardBorder + ' !important; }' +
+            // Hero overlay stronger on light mode to ensure subtitle readability
+            (lightBg ? '.hero .hero-sub { color: #555 !important; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }' : '');
           document.head.appendChild(style);
 
           // Typography
@@ -1686,6 +1986,70 @@
           var feedSub = document.querySelector('.feed .section-subtitle');
           if (feedSub && c.feedSub) feedSub.textContent = c.feedSub;
 
+          // Issues
+          var issuesTitle = document.querySelector('.issues .section-title');
+          if (issuesTitle && c.issuesTitle) issuesTitle.textContent = c.issuesTitle;
+          var issuesSub = document.querySelector('.issues .section-subtitle');
+          if (issuesSub && c.issuesSub) issuesSub.textContent = c.issuesSub;
+
+          // Premium / Exclusive Content
+          var premiumSection = document.getElementById('premium');
+          if (premiumSection && c.premiumLabel) {
+            var pl = premiumSection.querySelector('.section-label');
+            if (pl) pl.innerHTML = '&#9733; ' + c.premiumLabel;
+          }
+          if (premiumSection && c.premiumTitle) {
+            var pt = premiumSection.querySelector('.section-title');
+            if (pt) pt.textContent = c.premiumTitle;
+          }
+          if (premiumSection && c.premiumDesc) {
+            var pd = premiumSection.querySelector('.section-subtitle');
+            if (pd) pd.textContent = c.premiumDesc;
+          }
+          if (premiumSection && c.premiumCta) {
+            var pcta = premiumSection.querySelector('a[href*="membership"]');
+            if (pcta) pcta.innerHTML = '&#128274; ' + c.premiumCta;
+          }
+          if (premiumSection && c.premiumCtaUrl) {
+            var pctaLink = premiumSection.querySelector('a[href*="membership"]');
+            if (pctaLink) pctaLink.href = c.premiumCtaUrl;
+          }
+          if (premiumSection && c.premiumPrice) {
+            var pp = premiumSection.querySelector('a[href*="membership"] + p');
+            if (pp) pp.textContent = c.premiumPrice;
+          }
+          if (premiumSection && c.premiumCards && c.premiumCards.length > 0) {
+            var grid = premiumSection.querySelector('[style*="grid-template-columns"]');
+            if (grid) {
+              grid.innerHTML = '';
+              c.premiumCards.forEach(function(card) {
+                var div = document.createElement('div');
+                div.className = 'reveal visible';
+                div.style.cssText = 'background:#0F1D33;border:1px solid rgba(201,168,76,0.15);border-radius:12px;overflow:hidden;position:relative;';
+                div.innerHTML =
+                  '<div style="padding:20px;position:relative;min-height:160px;">' +
+                    '<div style="color:rgba(255,255,255,0.12);font-size:0.85rem;line-height:1.6;">' + (card.teaser || '') + '</div>' +
+                    '<div style="position:absolute;inset:0;backdrop-filter:blur(6px);background:rgba(10,22,40,0.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;">' +
+                      '<div style="width:48px;height:48px;border-radius:50%;background:rgba(201,168,76,0.15);border:2px solid rgba(201,168,76,0.4);display:flex;align-items:center;justify-content:center;font-size:1.2rem;">&#128274;</div>' +
+                      '<span style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A84C;">Members Only</span>' +
+                    '</div>' +
+                  '</div>' +
+                  '<div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,0.05);">' +
+                    '<div style="font-size:0.7rem;color:#C9A84C;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">' + (card.tag || '') + '</div>' +
+                    '<h4 style="font-size:0.95rem;font-weight:700;margin-bottom:4px;">' + (card.title || '') + '</h4>' +
+                    '<p style="font-size:0.8rem;color:#667788;">' + (card.date || '') + '</p>' +
+                  '</div>';
+                grid.appendChild(div);
+              });
+            }
+          }
+
+          // Store Preview
+          var spTitle = document.getElementById('store-preview-title');
+          if (spTitle && c.storePreviewTitle) spTitle.textContent = c.storePreviewTitle;
+          var spSub = document.getElementById('store-preview-sub');
+          if (spSub && c.storePreviewSub) spSub.textContent = c.storePreviewSub;
+
           var nlH2 = document.querySelector('.newsletter h2');
           if (nlH2 && c.nlTitle) nlH2.innerHTML = c.nlTitle.replace(/\n/g, '<br>');
 
@@ -1755,6 +2119,8 @@
             feed: document.getElementById('feed'),
             issues: document.getElementById('issues'),
             videos: document.getElementById('videos'),
+            premium: document.getElementById('premium'),
+            'store-preview': document.getElementById('store-preview'),
             newsletter: document.getElementById('newsletter'),
             footer: document.getElementById('contact')
           };
@@ -1774,6 +2140,8 @@
             feed: document.getElementById('feed'),
             issues: document.getElementById('issues'),
             videos: document.getElementById('videos'),
+            premium: document.getElementById('premium'),
+            'store-preview': document.getElementById('store-preview'),
             newsletter: document.getElementById('newsletter'),
             footer: document.getElementById('contact')
           };
@@ -1791,9 +2159,53 @@
           });
         }
 
-      } catch(e) {
-        // Config parsing failed, use defaults
+      } // end applyConfig
+
+      // Priority 1: localStorage (admin preview)
+      // Always fetch from GitHub first (source of truth)
+      // Strip any base64 image data before applying so only hosted /images/ paths are used
+      function stripBase64Images(cfg) {
+        if (cfg.images) {
+          Object.keys(cfg.images).forEach(function(k) {
+            var v = cfg.images[k];
+            if (v && (v.startsWith('data:') || v.startsWith('blob:'))) {
+              delete cfg.images[k];
+            }
+          });
+        }
+        if (cfg.heroBg && cfg.heroBg.url && (cfg.heroBg.url.startsWith('data:') || cfg.heroBg.url.startsWith('blob:'))) {
+          cfg.heroBg.url = '';
+        }
+        if (cfg.content) {
+          if (cfg.content.heroImg && (cfg.content.heroImg.startsWith('data:') || cfg.content.heroImg.startsWith('blob:'))) {
+            cfg.content.heroImg = '';
+          }
+          if (cfg.content.aboutImg && (cfg.content.aboutImg.startsWith('data:') || cfg.content.aboutImg.startsWith('blob:'))) {
+            cfg.content.aboutImg = '';
+          }
+        }
+        return cfg;
       }
+
+      fetch('/site-config.json?' + Date.now())
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(cfg) {
+          if (cfg) {
+            applyConfig(stripBase64Images(cfg));
+          } else {
+            // Fallback to localStorage only if remote fetch fails
+            var localRaw = localStorage.getItem('eagleman_admin');
+            if (localRaw) {
+              try { applyConfig(stripBase64Images(JSON.parse(localRaw))); } catch(e) {}
+            }
+          }
+        })
+        .catch(function() {
+          var localRaw = localStorage.getItem('eagleman_admin');
+          if (localRaw) {
+            try { applyConfig(stripBase64Images(JSON.parse(localRaw))); } catch(e) {}
+          }
+        });
     })();
   </script>
 
