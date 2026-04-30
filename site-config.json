@@ -21,12 +21,12 @@
     "heroCta1Url": "https://x.com/GuntherEagleman",
     "heroCta2": "Join the Movement",
     "heroCta2Url": "#newsletter",
-    "heroImg": "",
+    "heroImg": "/images/hero-1777571563554.jpg",
     "aboutLabel": "Who Is Gunther",
     "aboutH2": "A Fearless Voice for the American People",
     "aboutP1": "Texas-born and unapologetically patriotic, Gunther Eagleman is a former law enforcement officer turned America First political commentator. After relocating from California to Texas in 2007, he witnessed firsthand the policies destroying the American Dream — and decided to fight back.",
     "aboutP2": "Since 2021, Gunther has built a following of over 1.6 million on X by delivering the unfiltered truth the mainstream media refuses to cover. A devoted Christian, husband, and father, he stands firm on the values that built this nation.",
-    "aboutImg": "/images/about-1777571058035.jpeg",
+    "aboutImg": "/images/about-1777571578500.jpeg",
     "feedTitle": "The Unfiltered Truth",
     "feedSub": "Straight from Gunther's X feed — no filter, no spin.",
     "feedUsername": "GuntherEagleman",
@@ -438,7 +438,8 @@
   },
   "images": {
     "herobg": "/images/herobg-1777571032998.jpg",
-    "about": "/images/about-1777571058035.jpeg"
+    "about": "/images/about-1777571578500.jpeg",
+    "hero": "/images/hero-1777571563554.jpg"
   },
   "filters": {}
 }
